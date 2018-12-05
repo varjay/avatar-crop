@@ -198,9 +198,8 @@ export default {
 .choose {
   position: absolute;
   background-size: contain !important;
-  height: calc(100vw * 1.77777778);
+  height: calc(100vw * 1.77);
   width: 100%;
-  max-height: 100vh;
 }
 .loadPage {
   position: fixed;
@@ -215,9 +214,8 @@ export default {
   }
 }
 .loadpage-container {
-  height: calc(100vw * 1.7777777778);
+  height: calc(100vw * 1.77);
   width: 100%;
-  max-height: 100vh;
 }
 .bg {
   height: 100%;
