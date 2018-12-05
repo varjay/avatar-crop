@@ -20,14 +20,14 @@
         <!-- <li @click="persontype=''" :class="{curr:persontype === ''}"><em>配饰</em></li> -->
       </ul>
       <ul ref="personContent" class="person-content fix">
-        <li v-for="(d,i) in personData" @click="changePerson(i)">
+        <li v-for="(d,i) in personData" :key="'person'+i" @click="changePerson(i)">
           <div class="personbox" :style="'background:url('+baseurl+d.url+') no-repeat center;'"></div>
         </li>
       </ul>
     </div>
     <div class="content">
       <ul ref="content" class="fix" :class="currentSort">
-        <li v-for="(d,i) in sortData" @click="addbox(d,i)">
+        <li v-for="(d,i) in sortData" :key="i" @click="addbox(d,i)">
           <div v-if="currentSort === 'furniture'" class="box" :style="'background:url('+baseurl+d.burl+') no-repeat center;'"></div>
           <div v-else class="box" :style="'background:url('+baseurl+d.url+') no-repeat center;'"></div>
         </li>
@@ -130,8 +130,6 @@ export default {
         z: normalMax,
         scale: 1,
         rotate: 0,
-        top: 0,
-        left: 0,
         left: w / 2 - d.w / 2,
         top: w / 2 - d.h / 2,
       })

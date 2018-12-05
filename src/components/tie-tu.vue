@@ -86,7 +86,7 @@ export default {
     this.defaulthypotenuse = Math.sqrt(x * x + y * y)
   },
   methods: {
-    del: function(e) {
+    del: function() {
       if (this.tietu.sort === 'furniture') {
         this.$parent.mongs = -1
       }
@@ -143,7 +143,7 @@ export default {
         this.select = ''
       }, 200)
     },
-    scalestart(e) {},
+    scalestart() {},
     scalesmove(e) {
       // 计算 中心x轴 到 e的x轴 值
       var x =
@@ -161,7 +161,7 @@ export default {
         hypotenuse / this.defaulthypotenuse
       e.preventDefault()
     },
-    rotatetart(e) {
+    rotatetart() {
       this.offsetAngle =
         (Math.atan(
           this.$refs.tietu.offsetWidth /
@@ -185,34 +185,34 @@ export default {
       if (ye < y) {
         if (xe > x) {
           //对边长度
-          var opposite = y - ye
+          let opposite = y - ye
           //临边长度
-          var border = xe - x
+          let border = xe - x
           r = (Math.atan(border / opposite) * 180) / Math.PI
           r = r + 270 - this.offsetAngle + 90
         } else {
           //对边长度
-          var opposite =
+          let opposite =
             ye - this.$refs.tietu.offsetHeight / 2 - this.$refs.tietu.offsetTop
           //临边长度
-          var border = e.touches[0].clientX - x
+          let border = e.touches[0].clientX - x
           r = (Math.atan(opposite / border) * 180) / Math.PI
           r = r + 180 - this.offsetAngle + 90
         }
       } else {
         if (xe > x) {
           //对边长度
-          var opposite =
+          let opposite =
             ye - this.$refs.tietu.offsetHeight / 2 - this.$refs.tietu.offsetTop
           //临边长度
-          var border = e.touches[0].clientX - x
+          let border = e.touches[0].clientX - x
           r = (Math.atan(opposite / border) * 180) / Math.PI
           r = r - this.offsetAngle + 90
         } else {
           //对边长度
-          var opposite = ye - y
+          let opposite = ye - y
           //临边长度
-          var border = x - xe
+          let border = x - xe
           r = (Math.atan(border / opposite) * 180) / Math.PI
           r = r + 90 - this.offsetAngle + 90
         }
@@ -223,7 +223,7 @@ export default {
   },
   watch: {
     'tietu.d': {
-      handler: function(n, o) {
+      handler: function(n) {
         this.face = n.face
         this.hair = n.hair
         this.leg = n.leg
