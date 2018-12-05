@@ -1,9 +1,7 @@
 export default {
   bg: [
-    {name: '1', url: '/img/bg/1.jpg'},
-    {name: '2', url: '/img/bg/2.jpg'},
-    {name: '3', url: '/img/bg/3.jpg'},
-    {name: '4', url: '/img/bg/4.jpg'},
+    {name: '1', url: '/img/pr2/bg1.png'},
+    {name: '2', url: '/img/pr2/bg2.png'},
   ],
   furniture: [
     {

@@ -2,7 +2,8 @@
   <div id="load" class="loadPage" :class="{fly}">
     <div class="loadpage-container">
       <div class="choose" style="background:url(./img/pr1/choose.jpg) center no-repeat;">
-        <div></div>
+        <div @click="choose(1)" class="area1"></div>
+        <div @click="choose(2)" class="area2"></div>
       </div>
       <div v-if="bgShow" class="bg">
         <div class="bg1-container">
@@ -157,14 +158,6 @@ export default {
       setTimeout(() => {
         this.bgShow = 0
       }, 3000)
-      // this.$parent.loading = false
-      // clearInterval(window.times)
-      // try {
-      //   this.$parent.audio.play()
-      //   this.$parent.Play = 1
-      // } catch (e) {
-      //   1
-      // }
     },
     getLoadImg(arr) {
       var onloadarr = []
@@ -185,6 +178,17 @@ export default {
         }
       }
     },
+    choose(w) {
+      this.$parent.type = w
+      this.$parent.loading = false
+      clearInterval(window.times)
+      // try {
+      //   this.$parent.audio.play()
+      //   this.$parent.Play = 1
+      // } catch (e) {
+      //   1
+      // }
+    }
   },
   beforeDestroy() {
     clearInterval(window.times)
@@ -452,5 +456,14 @@ export default {
   100% {
     background-position-y: 10000px;
   }
+}
+.area1,
+.area2 {
+  height: 39%;
+  width: 100%;
+}
+.area2 {
+  position: absolute;
+  bottom: 0;
 }
 </style>

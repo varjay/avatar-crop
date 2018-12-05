@@ -80,6 +80,7 @@ export default {
       mySelfTxt: '',
       videoShow: 0,
       mongs: -1,
+      type: 1,
     }
   },
   created() {
