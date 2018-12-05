@@ -6,26 +6,23 @@
       </div>
       <div v-if="bgShow" class="bg">
         <div class="bg1-container">
-          <div class="bg1">
-            <em>妙趣横生的腕间花园</em>
-          </div>
+          <div class="bg1"></div>
         </div>
         <div class="bg1-container bg2">
           <div class="bg1">
             <div class="midd">
-              <em>献给童心不变的你！</em>
-            </div>
-            <div class="loadline">
-              <!-- 进渡条 -->
-              <div class="loading" v-if="!showBtn">
-                <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
-                <div class="loadbg homeImg" :style="'background:url(./img/FHome/loading.png) center no-repeat;background-size:auto 100%;'"></div>
-                <div class="upFlower" :style="'background: url(./img/FHome/h1.png) center no-repeat;background-size:100% auto;'"></div>
-              </div>
-              <!-- 按钮 -->
-              <div class="button" @click="inPage" v-else>
-                <em>定制你的OB圣诞贺卡</em><br><br>
-                <span>&lt; START &gt;</span>
+              <div class="loadline">
+                <!-- 进渡条 -->
+                <div class="loading" v-if="!showBtn">
+                  <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
+                  <div class="loadbg homeImg" :style="'background:url(./img/FHome/loading.png) center no-repeat;background-size:auto 100%;'"></div>
+                  <div class="upFlower" :style="'background: url(./img/FHome/h1.png) center no-repeat;background-size:100% auto;'"></div>
+                </div>
+                <!-- 按钮 -->
+                <div class="button" @click="inPage" v-else>
+                  <em>定制你的OB圣诞贺卡</em><br><br>
+                  <span>&lt; START &gt;</span>
+                </div>
               </div>
             </div>
           </div>
@@ -196,10 +193,10 @@ export default {
 </script>
 <style lang="less" scoped>
 .choose {
-  position: absolute;
-  background-size: contain !important;
   height: calc(100vw * 1.77);
   width: 100%;
+  position: absolute;
+  background-size: 100% !important;
 }
 .loadPage {
   position: fixed;
@@ -227,26 +224,14 @@ export default {
     height: 100%;
     overflow: hidden;
     background-size: 100vw !important;
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    // transform: scale(1.01);
-    em {
-      color: white;
-    }
   }
   .bg1 {
-    background: url('/img/pr1/bg1.jpg');
+    background: url("/img/pr1/bg1.jpg");
   }
   .bg2 {
     transform: rotateX(180deg);
     .bg1 {
-      background: url('/img/pr1/bg2.jpg');
-      // transform: scale(1.01);
-      em {
-        padding-top: 1.5vh;
-        display: block;
-      }
+      background: url("/img/pr1/bg2.jpg");
     }
     .midd {
       transform: rotateX(180deg);
@@ -256,7 +241,7 @@ export default {
 .bee {
   width: 8vw;
   height: 16vw;
-  background: url('/img/pr1/bee.png') no-repeat;
+  background: url("/img/pr1/bee.png") no-repeat;
   background-size: contain;
   position: absolute;
   transform: translateX(100vw);
@@ -264,7 +249,7 @@ export default {
 .fly {
   .bee {
     transition: 0.9s cubic-bezier(1, 1, 0, 0);
-    transform: translateX(-8vw);
+    transform: translateX(-5vw);
   }
   .bg1 {
     animation: pr1bg1 3s cubic-bezier(1, 1, 0, 0);
@@ -315,8 +300,7 @@ export default {
   position: absolute;
   width: 100vw;
   z-index: 10;
-  top: 10vh;
-  transform: rotateX(180deg);
+  bottom: 10vh;
   .loading {
     position: relative;
     // overflow: hidden;
