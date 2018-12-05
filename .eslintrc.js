@@ -1,14 +1,21 @@
 module.exports = {
   root: true,
-  env: {
-    node: true
+  globals: {
+    html2canvas: true,
+    baseurl: true,
+    state: true,
+    Vue: true,
+    em: true,
   },
-  extends: ["plugin:vue/essential", "@vue/prettier"],
+  env: {
+    node: true,
+  },
+  extends: ['plugin:vue/essential', '@vue/prettier'],
   rules: {
-    "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"
+    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
   },
   parserOptions: {
-    parser: "babel-eslint"
-  }
-};
+    parser: 'babel-eslint',
+  },
+}

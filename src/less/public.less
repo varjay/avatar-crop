@@ -1,0 +1,209 @@
+@import './var.less';
+@font-face {
+  font-family: 'iconfont';  /* project id 628892 */
+  src: url('//at.alicdn.com/t/font_628892_pargmunyihk6gvi.eot');
+  src: url('//at.alicdn.com/t/font_628892_pargmunyihk6gvi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_628892_pargmunyihk6gvi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_628892_pargmunyihk6gvi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_628892_pargmunyihk6gvi.svg#iconfont') format('svg');
+}
+@font-face {
+    font-family: 'happy';
+    src: url('/h5/family/font/1.ttf');
+}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-overflow-scrolling: touch;
+  -webkit-user-select: none;
+  user-select: none;
+}
+html{
+font-family: "PingFang SC", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+-ms-text-size-adjust: 100%;
+-webkit-text-size-adjust: 100%;
+}
+body {
+  line-height: 1;
+  color:#050505;
+}
+a{
+  text-decoration: none;
+}
+ol, ul, li{
+  list-style: none;
+}
+blockquote, q {
+  quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
+}
+i,em{
+  font-style: normal;
+}
+input[type=text]{
+  -webkit-appearance:none;
+  outline:none
+}
+
+/* remember to define focus styles! */
+:focus {
+  outline: 0;
+}
+
+/* remember to highlight inserts somehow! */
+ins {
+  text-decoration: none;
+}
+del {
+  text-decoration: line-through;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+//基础
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+.fix{
+  &:before,
+  &:after {
+    content:"";
+    display:table;
+  }
+  &:after {
+    clear:both;
+    overflow:hidden;
+  }
+}
+
+
+.tietu {
+  position: absolute;
+  &.select-create{
+    transition:.2s;
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  &.select-created{
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  &.select-destroy{
+    transition:.2s;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+.tietu span{
+  position: absolute;
+  display: block;
+  width: 5vw;
+  height: 5vw;
+  color: #000;
+  margin: -2.5vw -2.5vw;
+}
+.target {
+  box-shadow: 0 0 0 1px white;
+}
+.tietu .scale{
+  bottom: 0;
+  right: 0;
+  background-size: 100% !important;
+}
+.tietu .del{
+  top: 0;
+  left: 0;
+  background-size: 100% !important;
+}
+.tietu .rotate{
+  right: 0;
+  top: 0;
+  background-size: 100% !important;
+}
+.body img{
+  position: absolute;
+
+}
+.systemText,.inputText,.ending .text{
+  font-family: "happy", "PingFang SC", "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Heiti SC", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+}
+
+.like-enter-active, .like-leave-active {
+  transition: .3s;
+  transform:translateY(0);
+}
+.like-enter{
+  transition: .3s;
+  transform:translateY(100%);
+}
+.like-leave-to{
+  opacity: 0;
+}
+.takepicture-enter-active, .takepicture-leave-active {
+  transition: .5s;
+  opacity: 1;
+}
+.takepicture-enter, .takepicture-leave-to{
+  opacity: 0;
+}
+
+.app-ending{
+  height: calc(100vw * 1.60933);
+  margin-top: calc((100vh - (100vw * 1.60933)) / 2);
+  .draw{
+    -webkit-transform: scale(0.9);
+    transform: scale(.9);
+    // transition:1s;
+    pointer-events: none;
+  }
+  .search-container{
+    // transition:1s;
+    opacity: 0;
+    display: none;
+    pointer-events: none;
+  }
+  .rotate,.scale,.del,.take-picture{
+    opacity: 0;
+    display: none;
+  }
+  .target{
+    box-shadow: none;
+  }
+}
+.app-like{
+  .take-picture{
+    display: none;
+  }
+}
+.end-img{
+  position: fixed;
+  left: 0;
+  width: 100vw;
+  top:0;
+  margin-top: calc((100vh - (100vw * 1.60933)) / 2);
+}

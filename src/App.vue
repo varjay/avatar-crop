@@ -1,29 +1,41 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+  <div id="app" class="app" @touchmove="test">
+    <router-view></router-view>
   </div>
 </template>
 
-<style lang="less">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script>
+export default {
+  name: 'app',
+  components: {},
+  created() {
+    // console.log(this.$route)
+  },
+  methods: {
+    test(e) {
+      e.preventDefault()
+    },
+  },
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+</script>
+<style lang="less">
+@import './less/public.less';
+.app {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+}
+html,
+body {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+body > img {
+  position: fixed;
+  left: 0;
+  width: 100vw;
+  top: 0;
+  margin-top: calc((100vh - (100vw * 1.60933)) / 2);
 }
 </style>
