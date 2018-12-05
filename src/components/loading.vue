@@ -1,34 +1,41 @@
 <template>
-  <div id="load" class="loadPage">
+  <div id="load" class="loadPage" :class="{fly}">
     <div class="loadpage-container">
-      <div class="bg">
+      <div class="choose" style="background:url(./img/pr1/choose.jpg) center no-repeat;">
+        <div></div>
+      </div>
+      <div v-if="bgShow" class="bg">
         <div class="bg1-container">
-          <div class="bg1"></div>
+          <div class="bg1">
+            <em>妙趣横生的腕间花园</em>
+          </div>
         </div>
         <div class="bg1-container bg2">
           <div class="bg1">
             <div class="midd">
-              <div class="loadline">
-                <!-- 进渡条 -->
-                <div class="loading" v-if="!showBtn">
-                  <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
-                  <div class="loadbg homeImg" :style="'background:url(./img/FHome/loading.png) center no-repeat;background-size:auto 100%;'"></div>
-                  <div class="upFlower" :style="'background: url(./img/FHome/h1.png) center no-repeat;background-size:100% auto;'"></div>
-                </div>
-                <!-- 按钮 -->
-                <div class="button" @click="inPage" v-else>
-                  <em>定制你的OB圣诞贺卡</em><br><br>
-                  <span>&lt; START &gt;</span>
-                </div>
+              <em>献给童心不变的你！</em>
+            </div>
+            <div class="loadline">
+              <!-- 进渡条 -->
+              <div class="loading" v-if="!showBtn">
+                <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
+                <div class="loadbg homeImg" :style="'background:url(./img/FHome/loading.png) center no-repeat;background-size:auto 100%;'"></div>
+                <div class="upFlower" :style="'background: url(./img/FHome/h1.png) center no-repeat;background-size:100% auto;'"></div>
+              </div>
+              <!-- 按钮 -->
+              <div class="button" @click="inPage" v-else>
+                <em>定制你的OB圣诞贺卡</em><br><br>
+                <span>&lt; START &gt;</span>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="snow">
+      <div v-if="bgShow" class="snow">
         <div class="snowimg homeImg"></div>
       </div>
     </div>
+    <div class="bee"></div>
   </div>
 </template>
 <script>
@@ -43,6 +50,8 @@ export default {
       showBtn: false,
       homeImg: false,
       baseurl: '',
+      bgShow: 1,
+      fly: 0,
     }
   },
   computed: {
@@ -147,14 +156,18 @@ export default {
       //   },1000)
     },
     inPage() {
-      this.$parent.loading = false
-      clearInterval(window.times)
-      try {
-        this.$parent.audio.play()
-        this.$parent.Play = 1
-      } catch (e) {
-        1
-      }
+      this.fly = 1
+      setTimeout(() => {
+        this.bgShow = 0
+      }, 3000)
+      // this.$parent.loading = false
+      // clearInterval(window.times)
+      // try {
+      //   this.$parent.audio.play()
+      //   this.$parent.Play = 1
+      // } catch (e) {
+      //   1
+      // }
     },
     getLoadImg(arr) {
       var onloadarr = []
@@ -182,6 +195,13 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.choose {
+  position: absolute;
+  background-size: contain !important;
+  height: calc(100vw * 1.77777778);
+  width: 100%;
+  max-height: 100vh;
+}
 .loadPage {
   position: fixed;
   width: 100vw;
@@ -197,29 +217,63 @@ export default {
 .loadpage-container {
   height: calc(100vw * 1.7777777778);
   width: 100%;
+  max-height: 100vh;
 }
 .bg {
   height: 100%;
+  position: relative;
   .bg1-container {
     height: 50%;
   }
   .bg1 {
-    height: 50%;
+    height: 100%;
     overflow: hidden;
     background-size: 100vw !important;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    // transform: scale(1.01);
+    em {
+      color: white;
+    }
   }
   .bg1 {
-    background: url("/img/pr1/bg1.jpg");
-    animation: pr1bg1 5s infinite cubic-bezier(1, 1, 0, 0);
+    background: url('/img/pr1/bg1.jpg');
   }
   .bg2 {
     transform: rotateX(180deg);
     .bg1 {
-      background: url("/img/pr1/bg2.jpg");
+      background: url('/img/pr1/bg2.jpg');
+      // transform: scale(1.01);
+      em {
+        padding-top: 1.5vh;
+        display: block;
+      }
     }
     .midd {
       transform: rotateX(180deg);
     }
+  }
+}
+.bee {
+  width: 8vw;
+  height: 16vw;
+  background: url('/img/pr1/bee.png') no-repeat;
+  background-size: contain;
+  position: absolute;
+  transform: translateX(100vw);
+}
+.fly {
+  .bee {
+    transition: 0.9s cubic-bezier(1, 1, 0, 0);
+    transform: translateX(-8vw);
+  }
+  .bg1 {
+    animation: pr1bg1 3s cubic-bezier(1, 1, 0, 0);
+  }
+  .snow {
+    opacity: 0;
+    transition: 3s;
   }
 }
 .loadbg {
@@ -263,7 +317,8 @@ export default {
   position: absolute;
   width: 100vw;
   z-index: 10;
-  bottom: 10vh;
+  top: 10vh;
+  transform: rotateX(180deg);
   .loading {
     position: relative;
     // overflow: hidden;
@@ -341,6 +396,7 @@ export default {
   height: 100%;
   position: absolute;
   top: 0;
+  pointer-events: none;
   .snowimg {
     height: 100%;
     background: url('/img/pr1/snow.png');
@@ -361,12 +417,12 @@ export default {
     width: 100%;
     height: 100%;
   }
-  80% {
-    width: 100%;
-    width: 0;
-    height: 50%;
-    border-bottom-right-radius: 100%;
-  }
+  // 80% {
+  //   width: 100%;
+  //   width: 0;
+  //   height: 50%;
+  //   border-bottom-right-radius: 100%;
+  // }
   100% {
     width: 0;
     height: 0;
@@ -384,12 +440,12 @@ export default {
     width: 100%;
     height: 100%;
   }
-  80% {
-    width: 100%;
-    width: 0;
-    height: 50%;
-    border-bottom-right-radius: 100%;
-  }
+  // 80% {
+  //   width: 100%;
+  //   width: 0;
+  //   height: 50%;
+  //   border-bottom-right-radius: 100%;
+  // }
   100% {
     width: 0;
     height: 0;
