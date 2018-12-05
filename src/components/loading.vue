@@ -1,25 +1,34 @@
 <template>
-  <div id="load" class="loadPage" :style="'background: url(./img/FHome/bg.png) center top no-repeat;background-size:100% auto;'">
-    <div class="loadline">
-      <!-- 进渡条 -->
-      <div class="loading" v-if="!showBtn">
-        <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
-        <div class="loadbg homeImg" :style="'background:url(./img/FHome/loading.png) center no-repeat;background-size:auto 100%;'"></div>
-        <div class="upFlower" :style="'background: url(./img/FHome/h1.png) center no-repeat;background-size:100% auto;'"></div>
+  <div id="load" class="loadPage">
+    <div class="loadpage-container">
+      <div class="bg">
+        <div class="bg1-container">
+          <div class="bg1"></div>
+        </div>
+        <div class="bg1-container bg2">
+          <div class="bg1">
+            <div class="midd">
+              <div class="loadline">
+                <!-- 进渡条 -->
+                <div class="loading" v-if="!showBtn">
+                  <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
+                  <div class="loadbg homeImg" :style="'background:url(./img/FHome/loading.png) center no-repeat;background-size:auto 100%;'"></div>
+                  <div class="upFlower" :style="'background: url(./img/FHome/h1.png) center no-repeat;background-size:100% auto;'"></div>
+                </div>
+                <!-- 按钮 -->
+                <div class="button" @click="inPage" v-else>
+                  <em>定制你的OB圣诞贺卡</em><br><br>
+                  <span>&lt; START &gt;</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <!-- 按钮 -->
-      <div class="button homeImg" :style="'background: url(./img/FHome/go.png) center no-repeat;'" @click="inPage" v-else></div>
+      <div class="snow">
+        <div class="snowimg homeImg"></div>
+      </div>
     </div>
-    <div class="footLogo" :style="'background:url(./img/FHome/footTxt.png) center no-repeat;background-size:auto 100%;'"></div>
-    <template v-show="homeImg">
-      <!-- 流星 -->
-      <div class="Meteor1 homeImg" :style="'background:url(./img/FHome/y1.png) center no-repeat;background-size:auto 100%;'"></div>
-      <div class="Meteor2 homeImg" :style="'background:url(./img/FHome/y2.png) center no-repeat;background-size:auto 100%;'"></div>
-      <div class="Meteor3 homeImg" :style="'background:url(./img/FHome/y3.png) center no-repeat;background-size:auto 100%;'"></div>
-      <!-- 花辨 -->
-      <div class="Flower1 homeImg" :style="'background:url(./img/FHome/h1.png) center no-repeat;background-size:auto 100%;'"></div>
-      <div class="Flower2 homeImg" :style="'background:url(./img/FHome/h2.png) center no-repeat;background-size:auto 100%;'"></div>
-    </template>
   </div>
 </template>
 <script>
@@ -175,11 +184,42 @@ export default {
 <style lang="less" scoped>
 .loadPage {
   position: fixed;
-  height: 100vh;
   width: 100vw;
+  height: 100%;
   z-index: 21000;
+  display: flex;
+  align-items: center;
+  background: #f3f1f2;
   h3 {
     text-align: center;
+  }
+}
+.loadpage-container {
+  height: calc(100vw * 1.7777777778);
+  width: 100%;
+}
+.bg {
+  height: 100%;
+  .bg1-container {
+    height: 50%;
+  }
+  .bg1 {
+    height: 50%;
+    overflow: hidden;
+    background-size: 100vw !important;
+  }
+  .bg1 {
+    background: url("/img/pr1/bg1.jpg");
+    animation: pr1bg1 5s infinite cubic-bezier(1, 1, 0, 0);
+  }
+  .bg2 {
+    transform: rotateX(180deg);
+    .bg1 {
+      background: url("/img/pr1/bg2.jpg");
+    }
+    .midd {
+      transform: rotateX(180deg);
+    }
   }
 }
 .loadbg {
@@ -193,61 +233,6 @@ export default {
   width: 10vw;
   top: 0vh;
   left: 4vw;
-}
-.Meteor1 {
-  position: absolute;
-  width: 20vw;
-  height: 15vw;
-  top: 72vw;
-  left: 25vw;
-  transition: 0.5s;
-  animation: luxin1 2s infinite;
-  -webkit-animation: luxin1 2s infinite;
-  z-index: 2;
-}
-.Meteor2 {
-  position: absolute;
-  width: 30vw;
-  height: 21vw;
-  top: 20vw;
-  left: 40vw;
-  transition: 0.5s;
-  animation: luxin2 3s infinite;
-  -webkit-animation: luxin2 3s infinite;
-  z-index: 2;
-}
-.Meteor3 {
-  position: absolute;
-  width: 20vw;
-  height: 15vw;
-  top: 45vw;
-  left: 63vw;
-  transition: 0.5s;
-  animation: luxin3 2.2s infinite;
-  -webkit-animation: luxin3 2.2s infinite;
-  z-index: 2;
-}
-.Flower1 {
-  position: absolute;
-  width: 15vw;
-  height: 10vw;
-  top: 132vw;
-  left: 24vw;
-  transition: 0.5s;
-  animation: flower1 3.2s infinite ease-out;
-  -webkit-animation: flower1 3.2s infinite ease-out;
-  z-index: 3;
-}
-.Flower2 {
-  position: absolute;
-  width: 15vw;
-  height: 10vw;
-  top: 92vw;
-  left: 11vw;
-  transition: 0.5s;
-  animation: flower2 2.2s infinite ease-out;
-  -webkit-animation: flower2 2.2s infinite ease-out;
-  z-index: 3;
 }
 .logo {
   display: block;
@@ -278,7 +263,7 @@ export default {
   position: absolute;
   width: 100vw;
   z-index: 10;
-  top: 30vh;
+  bottom: 10vh;
   .loading {
     position: relative;
     // overflow: hidden;
@@ -340,250 +325,94 @@ export default {
 .button {
   display: block;
   margin: 0 auto;
-  width: 50vw;
+  width: 100%;
   height: 13vh;
-  background-size: auto 100% !important;
-  // border-radius: 18vw;
   text-align: center;
-  &:active {
-    -webkit-filter: brightness(1.3);
-    filter: brightness(1.3);
+  em {
+    font-size: 4.5vw;
+  }
+  span {
+    font-size: 6vw;
+    color: #ae726d;
   }
 }
-// 流星1
-@keyframes luxin1 {
-  0% {
-    opacity: 0;
-    top: 57vw;
-    left: 38vw;
-  }
-  50% {
-    opacity: 1;
-    top: 68vw;
-    left: 28vw;
-  }
-  100% {
-    opacity: 0;
-    top: 72vw;
-    left: 25vw;
-  }
-}
-
-@-webkit-keyframes luxin1 /*Safari and Chrome*/ {
-  0% {
-    opacity: 0;
-    top: 57vw;
-    left: 38vw;
-  }
-  50% {
-    opacity: 1;
-    top: 68vw;
-    left: 28vw;
-  }
-  100% {
-    opacity: 0;
-    top: 72vw;
-    left: 25vw;
-  }
-}
-// 流星2
-@keyframes luxin2 {
-  0% {
-    opacity: 0;
-    top: 5vw;
-    left: 54vw;
-  }
-  50% {
-    opacity: 1;
-    top: 27vw;
-    left: 34vw;
-  }
-  100% {
-    opacity: 0;
-    top: 32vw;
-    left: 30vw;
-  }
-}
-
-@-webkit-keyframes luxin2 /*Safari and Chrome*/ {
-  0% {
-    opacity: 0;
-    top: 5vw;
-    left: 54vw;
-  }
-  50% {
-    opacity: 1;
-    top: 27vw;
-    left: 34vw;
-  }
-  100% {
-    opacity: 0;
-    top: 32vw;
-    left: 30vw;
-  }
-}
-// 流星3
-@keyframes luxin3 {
-  0% {
-    opacity: 0;
-    top: 26vw;
-    left: 80vw;
-  }
-  50% {
-    opacity: 1;
-    top: 33vw;
-    left: 74vw;
-  }
-  100% {
-    opacity: 0;
-    top: 45vw;
-    left: 63vw;
-  }
-}
-
-@-webkit-keyframes luxin3 /*Safari and Chrome*/ {
-  0% {
-    opacity: 0;
-    top: 26vw;
-    left: 80vw;
-  }
-  50% {
-    opacity: 1;
-    top: 33vw;
-    left: 74vw;
-  }
-  100% {
-    opacity: 0;
-    top: 45vw;
-    left: 63vw;
-  }
-}
-// 花1
-@keyframes flower1 {
-  0% {
-    opacity: 0;
-    top: 90vw;
-    left: 24vw;
-  }
-  20% {
-    opacity: 1;
-    top: 102vw;
-    left: 19vw;
-  }
-  60% {
-    opacity: 1;
-    top: 121vw;
-    left: 24vw;
-  }
-  80% {
-    opacity: 1;
-    top: 127vw;
-    left: 19vw;
-  }
-  100% {
-    opacity: 0;
-    top: 132vw;
-    left: 24vw;
-  }
-}
-
-@-webkit-keyframes flower1 /*Safari and Chrome*/ {
-  0% {
-    opacity: 0;
-    top: 90vw;
-    left: 24vw;
-  }
-  20% {
-    opacity: 1;
-    top: 102vw;
-    left: 19vw;
-  }
-  60% {
-    opacity: 1;
-    top: 121vw;
-    left: 24vw;
-  }
-  80% {
-    opacity: 1;
-    top: 127vw;
-    left: 19vw;
-  }
-  100% {
-    opacity: 0;
-    top: 132vw;
-    left: 24vw;
-  }
-}
-// 花2
-@keyframes flower2 {
-  0% {
-    opacity: 0;
-    top: 70vw;
-    left: 11vw;
-  }
-  20% {
-    opacity: 1;
-    top: 77vw;
-    left: 16vw;
-  }
-  35% {
-    opacity: 1;
-    top: 80vw;
-    left: 11vw;
-  }
-  60% {
-    opacity: 1;
-    top: 83vw;
-    left: 16vw;
-  }
-  80% {
-    opacity: 1;
-    top: 86vw;
-    left: 11vw;
-  }
-  100% {
-    opacity: 0;
-    top: 92vw;
-    left: 11vw;
-  }
-}
-
-@-webkit-keyframes flower2 /*Safari and Chrome*/ {
-  0% {
-    opacity: 0;
-    top: 33vw;
-    left: 11vw;
-  }
-  20% {
-    opacity: 1;
-    top: 55vw;
-    left: 16vw;
-  }
-  35% {
-    opacity: 1;
-    top: 65vw;
-    left: 11vw;
-  }
-  60% {
-    opacity: 1;
-    top: 72vw;
-    left: 16vw;
-  }
-  80% {
-    opacity: 1;
-    top: 86vw;
-    left: 11vw;
-  }
-  100% {
-    opacity: 0;
-    top: 92vw;
-    left: 11vw;
-  }
-}
-.footLogo {
+.snow {
+  width: 100%;
+  height: 100%;
   position: absolute;
-  bottom: -1.5vw;
-  height: 29vw;
-  width: 100vw;
+  top: 0;
+  .snowimg {
+    height: 100%;
+    background: url('/img/pr1/snow.png');
+    background-size: cover;
+    background-position-y: 0;
+    animation: snow 80s infinite cubic-bezier(1, 1, 0, 0);
+  }
+}
+// 蜜蜂背景
+@keyframes pr1bg1 {
+  0% {
+    border-bottom-right-radius: 0;
+    width: 100%;
+    height: 100%;
+  }
+  30% {
+    border-bottom-right-radius: 100%;
+    width: 100%;
+    height: 100%;
+  }
+  80% {
+    width: 100%;
+    width: 0;
+    height: 50%;
+    border-bottom-right-radius: 100%;
+  }
+  100% {
+    width: 0;
+    height: 0;
+    border-bottom-right-radius: 100%;
+  }
+}
+@-webkit-keyframes pr1bg1 {
+  0% {
+    border-bottom-right-radius: 0;
+    width: 100%;
+    height: 100%;
+  }
+  30% {
+    border-bottom-right-radius: 100%;
+    width: 100%;
+    height: 100%;
+  }
+  80% {
+    width: 100%;
+    width: 0;
+    height: 50%;
+    border-bottom-right-radius: 100%;
+  }
+  100% {
+    width: 0;
+    height: 0;
+    border-bottom-right-radius: 100%;
+  }
+}
+
+// 雪花
+@keyframes snow {
+  0% {
+    background-position-y: 0;
+  }
+  100% {
+    background-position-y: 10000px;
+  }
+}
+
+@-webkit-keyframes snow /*Safari and Chrome*/ {
+  0% {
+    background-position-y: 0;
+  }
+  100% {
+    background-position-y: 10000px;
+  }
 }
 </style>

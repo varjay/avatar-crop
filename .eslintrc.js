@@ -6,6 +6,7 @@ module.exports = {
     state: true,
     Vue: true,
     em: true,
+    rem: true,
   },
   env: {
     node: true,
