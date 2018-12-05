@@ -2,12 +2,11 @@
   <div class="search-container">
     <div class="sort">
       <ul class="fix">
-        <li @click="changeSort('girl',0)" :class="{curr: currentSort == 'girl'}"><em :style="'background: url('+baseurl+'/img/btn/option-girl.png) center no-repeat;'"></em></li>
-        <!-- <li @click="changeSort('furniture')" :class="{curr: currentSort == 'furniture'}">家具</li> -->
-        <li @click="changeSort('boy',1)" :class="{curr: currentSort == 'boy'}"><em :style="'background: url('+baseurl+'/img/btn/option-boy.png) center no-repeat;'"></em></li>
+        <!-- <li @click="changeSort('girl',0)" :class="{curr: currentSort == 'girl'}"><em :style="'background: url('+baseurl+'/img/btn/option-girl.png) center no-repeat;'"></em></li>
+        <li @click="changeSort('furniture')" :class="{curr: currentSort == 'furniture'}">家具</li><li @click="changeSort('boy',1)" :class="{curr: currentSort == 'boy'}"><em :style="'background: url('+baseurl+'/img/btn/option-boy.png) center no-repeat;'"></em></li>
         <li @click="changeSort('bg')" :class="{curr: currentSort == 'bg'}"><em :style="'background: url('+baseurl+'/img/btn/option-bg.png) center no-repeat;'"></em></li>
         <li @click="changeSort('furniture')" :class="{curr: currentSort == 'furniture'}"><em :style="'background: url('+baseurl+'/img/btn/option-moon.png) center no-repeat;'"></em></li>
-        <li @click="changeSort('others')" :class="{curr: currentSort == 'others'}"><em :style="'background: url('+baseurl+'/img/btn/option-others.png) center no-repeat;'"></em></li>
+        <li @click="changeSort('others')" :class="{curr: currentSort == 'others'}"><em :style="'background: url('+baseurl+'/img/btn/option-others.png) center no-repeat;'"></em></li> -->
         <li><em @click="toEnd" class="service-icon" :style="'background: url('+baseurl+'/img/btn/option-done.png) center no-repeat;background-size: 100%;'"></em></li>
       </ul>
     </div>
@@ -210,7 +209,7 @@ export default {
 .sort {
   padding: 0 1vw;
   ul {
-    background: #8cc8e5;
+    background: white;
     border-radius: 3vw 3vw 0 0;
     position: relative;
     box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.7);

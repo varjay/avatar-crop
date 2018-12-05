@@ -29,7 +29,7 @@
       <div class="service-icon" :style="'background: url('+baseurl+'/img/takepicture.png) center;background-size: 100%;'"></div>
       </div> -->
     <!-- </transition> -->
-    <div v-show="showType !== 'ending'" :class="['music']" @click="setMusic">
+    <div v-show="0" :class="['music']" @click="setMusic">
       <div v-if="Play" :style="'background:url('+baseurl+'/img/FHome/sOpen.png) center no-repeat;background-size:auto 85%;'"></div>
       <div v-else :style="'background:url('+baseurl+'/img/FHome/sClose.png) center no-repeat;background-size:auto 100%;'"></div>
     </div>
@@ -133,7 +133,7 @@ export default {
   height: 113.96731vw;
   background-size: cover !important;
   position: relative;
-  background-position: center !important;
+  background-position: top !important;
   z-index: 1;
 }
 .app-ending {

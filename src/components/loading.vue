@@ -188,7 +188,7 @@ export default {
       // } catch (e) {
       //   1
       // }
-    }
+    },
   },
   beforeDestroy() {
     clearInterval(window.times)
@@ -230,12 +230,12 @@ export default {
     background-size: 100vw !important;
   }
   .bg1 {
-    background: url("/img/pr1/bg1.jpg");
+    background: url('/img/pr1/bg1.jpg');
   }
   .bg2 {
     transform: rotateX(180deg);
     .bg1 {
-      background: url("/img/pr1/bg2.jpg");
+      background: url('/img/pr1/bg2.jpg');
     }
     .midd {
       transform: rotateX(180deg);
@@ -245,7 +245,7 @@ export default {
 .bee {
   width: 8vw;
   height: 16vw;
-  background: url("/img/pr1/bee.png") no-repeat;
+  background: url('/img/pr1/bee.png') no-repeat;
   background-size: contain;
   position: absolute;
   transform: translateX(100vw);
