@@ -223,7 +223,6 @@ export default {
 .left {
   z-index: 99999;
   position: absolute;
-  background: #0f1f42;
 }
 .top {
   width: calc(100% + 4vw);

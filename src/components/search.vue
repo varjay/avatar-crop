@@ -180,12 +180,6 @@ export default {
       })
     },
     toEnd() {
-      if (this.$parent.mongs === -1) {
-        this.showMsg = 1
-        this.currentSort = 'furniture'
-        this.$parent.personSort = ''
-        return
-      }
       this.$parent.showType = 'ending'
     },
   },
