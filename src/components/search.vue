@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      currentSort: 'others',
+      currentSort: 'bee',
       persontype: 'hair',
       baseurl: '',
       showMsg: 0,

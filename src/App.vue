@@ -12,7 +12,7 @@ export default {
   },
   methods: {
     test(e) {
-      e.preventDefault()
+      // e.preventDefault()
     },
   },
 }
