@@ -69,7 +69,7 @@ export default {
       normalMax: 0,
       backMax: 0,
       currentTieTu: '',
-      currentBg: 1,
+      currentBg: 0,
       personSort: '',
       showType: 'main',
       msg: '',
@@ -80,7 +80,6 @@ export default {
       mySelfTxt: '',
       videoShow: 0,
       mongs: -1,
-      type: 1,
     }
   },
   created() {

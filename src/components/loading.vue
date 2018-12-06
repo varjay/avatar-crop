@@ -2,8 +2,8 @@
   <div id="load" class="loadPage" :class="{fly}">
     <div class="loadpage-container">
       <div class="choose" style="background:url(./img/pr1/choose.jpg) center no-repeat;">
-        <div @click="choose(1)" class="area1"></div>
-        <div @click="choose(2)" class="area2"></div>
+        <div @click="choose(0)" class="area1"></div>
+        <div @click="choose(1)" class="area2"></div>
       </div>
       <div v-if="bgShow" class="bg">
         <div class="bg1-container">
@@ -179,7 +179,7 @@ export default {
       }
     },
     choose(w) {
-      this.$parent.type = w
+      this.$parent.currentBg = w
       this.$parent.loading = false
       clearInterval(window.times)
       // try {
