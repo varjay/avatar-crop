@@ -1,13 +1,12 @@
 <template>
   <div class="search-container">
+    <div class="screenshot">
+      <em @click="toEnd" class="service-icon" :style="'background: url('+baseurl+'/img/btn/option-done.png) center no-repeat;background-size: 100%;'"></em>
+    </div>
     <div class="sort">
       <ul class="fix">
-        <!-- <li @click="changeSort('girl',0)" :class="{curr: currentSort == 'girl'}"><em :style="'background: url('+baseurl+'/img/btn/option-girl.png) center no-repeat;'"></em></li>
-        <li @click="changeSort('furniture')" :class="{curr: currentSort == 'furniture'}">家具</li><li @click="changeSort('boy',1)" :class="{curr: currentSort == 'boy'}"><em :style="'background: url('+baseurl+'/img/btn/option-boy.png) center no-repeat;'"></em></li>
-        <li @click="changeSort('bg')" :class="{curr: currentSort == 'bg'}"><em :style="'background: url('+baseurl+'/img/btn/option-bg.png) center no-repeat;'"></em></li>
-        <li @click="changeSort('furniture')" :class="{curr: currentSort == 'furniture'}"><em :style="'background: url('+baseurl+'/img/btn/option-moon.png) center no-repeat;'"></em></li>
-        <li @click="changeSort('others')" :class="{curr: currentSort == 'others'}"><em :style="'background: url('+baseurl+'/img/btn/option-others.png) center no-repeat;'"></em></li> -->
-        <li><em @click="toEnd" class="service-icon" :style="'background: url('+baseurl+'/img/btn/option-done.png) center no-repeat;background-size: 100%;'"></em></li>
+        <li><span><em>小蜜蜂</em></span></li>
+        <li><span><em>活动规则</em></span></li>
       </ul>
     </div>
     <div v-show="$parent.personSort !== ''" class="person-content-container">
@@ -43,7 +42,7 @@ export default {
   },
   data() {
     return {
-      currentSort: 'bg',
+      currentSort: 'others',
       persontype: 'hair',
       baseurl: '',
       showMsg: 0,
@@ -193,6 +192,13 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.screenshot {
+  right: 6vw;
+  top: -9vw;
+  height: 7vw;
+  width: 8vw;
+  position: absolute;
+}
 .upDownBtn {
   transition: 0.5s;
 }
@@ -204,52 +210,36 @@ export default {
   width: 100vw;
   height: calc(100vh - 113.96731vw);
   z-index: 20000;
-  background: #0c1f41;
 }
 .sort {
-  padding: 0 1vw;
+  background: white;
+  border-top-left-radius: 5vw;
+  border-top-right-radius: 5vw;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
   ul {
-    background: white;
     border-radius: 3vw 3vw 0 0;
     position: relative;
-    box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.7);
   }
   li {
     float: left;
-    text-align: center;
     height: 6vh;
-    width: 7vh;
-    padding: 0 1vh;
-    display: block;
-    em {
-      display: block;
-      width: 100%;
-      height: 100%;
-      background-size: contain !important;
-    }
-    &:last-child {
-      float: right;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+      border: 1px solid #d8eaf2;
+      border-radius: 6vh;
+      width: 22vw;
+      text-align: center;
       display: flex;
+      justify-content: center;
       align-items: center;
-      font-size: 2.6vh;
-      &:before {
-        content: '';
-        position: absolute;
-        background: #8cc8e6;
-        width: 2vw;
-        left: 0;
-        height: 2vw;
-        bottom: -2vw;
-      }
-      &:after {
-        content: '';
-        position: absolute;
-        background: #8cc8e6;
-        width: 2vw;
-        right: 0;
-        height: 2vw;
-        bottom: -2vw;
-      }
+      padding: 1vw;
+    }
+    em {
+      font-size: 4vw;
+      color: #aebcc3;
     }
   }
   // .curr{
@@ -257,17 +247,21 @@ export default {
   // }
 }
 .content {
-  background: #c9edf3;
-  // height: 44vw;
   height: calc(100% - 6vh);
-  border-radius: 5vw;
-  box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.7);
   position: relative;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 4vw;
+  background: white;
   ul {
+    background: #f6f9fa;
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 0 10%;
+    width: 92%;
+    border-radius: 3vw;
+    border: 1px solid #f3f5f6;
     li {
       float: left;
       width: 25%;
