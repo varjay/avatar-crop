@@ -1,17 +1,20 @@
 <template>
   <div id="app" class="app" @touchmove="test">
-    <router-view></router-view>
+    <index />
   </div>
 </template>
-
 <script>
+import index from '@/views/index'
 export default {
   name: 'app',
+  components: {
+    index
+  },
   created() {
     // console.log(this.$route)
   },
   methods: {
-    test(e) {
+    test() {
       // e.preventDefault()
     },
   },

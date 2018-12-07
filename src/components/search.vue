@@ -256,7 +256,7 @@ export default {
       color: #aebcc3;
     }
   }
-  .curr{
+  .curr {
     span {
       background: #d8eaf2;
       em {

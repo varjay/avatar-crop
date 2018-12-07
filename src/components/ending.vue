@@ -51,6 +51,10 @@ export default {
       setTimeout(() => {
         html2canvas(document.querySelector('#ending')).then(canvas => {
           this.img = canvas.toDataURL('image/png')
+          this.tips = 1
+          setTimeout(() => {
+            this.tips = 0
+          }, 13000)
         })
       }, 500)
     },
@@ -101,11 +105,20 @@ export default {
   height: 100%;
   div {
     height: 100%;
-    transform: translateY(24vw);
+    transform: translateY(0);
     background: white;
   }
   p {
     font-size: 4vw;
   }
+}
+.tips-enter-active,
+.tips-leave-active {
+  transform: translateY(0);
+  transition: 0.5s;
+}
+.tips-enter,
+.tips-leave-to {
+  transform: translateY(24vw);
 }
 </style>
