@@ -9,7 +9,7 @@
         <like v-show="showType === 'like'"/>
       </transition> -->
       <div ref="draw" @click="touchback" id="draw" class="draw" :style="'background:url('+baseurl+data.bg[currentBg].url+') no-repeat'">
-        <img class="full-moon" v-if="mongs > 0" :src="baseurl+'/img/petal.png'">
+        <!-- <img class="full-moon" v-if="mongs > 0" :src="baseurl+'/img/petal.png'"> -->
         <tietu v-for="(item , index) in tietus" v-bind:tietu='item' v-bind:tietuIndex='index' :z="item.z" :key="index"></tietu>
         <template v-if="showType === 'ending'">
           <div class="top"></div>
@@ -35,13 +35,13 @@
     </div>
     <!-- 手写内容 -->
     <!-- 输入内容 -->
-    <div class="inputMsg" v-if="inputShow">
+    <!-- <div class="inputMsg" v-if="inputShow">
       <textarea maxlength="14" v-model="mySelfTxt" placeholder="情话听不够，自已写一句!"></textarea>
       <div @click="myToMsg">确定</div>
-    </div>
-    <div class="videoBox" v-show="videoShow">
+    </div> -->
+    <!-- <div class="videoBox" v-show="videoShow">
       <video id="video" :src="baseurl+'/video/1334.mp4'"  x5-video-player-type="h5" x5-video-player-fullscreen="true" preload="auto"></video>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

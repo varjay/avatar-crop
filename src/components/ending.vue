@@ -1,9 +1,6 @@
 <template>
   <div class="ending">
-    <div class="text-container">
-      <div class="bgBox"></div>
-      <img v-if="toEnd" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
-    </div>
+    <img v-if="toEnd" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
     <img v-if="img" :src="img" class="end-img">
   </div>
 </template>
@@ -13,7 +10,7 @@ export default {
     return {
       baseurl: '',
       fontsize: 5.8,
-      toEnd: 0,
+      toEnd: 1,
       msg: '',
       img: '',
     }
@@ -55,21 +52,18 @@ export default {
 </script>
 <style lang="less" scoped>
 .ending {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
   z-index: 2;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 24vw;
+  overflow: hidden;
 }
 .text-container {
   position: absolute;
   width: 100%;
   top: calc((100vh - (100vw * 1.77)) / 2 + 100vw);
   > img {
-    -webkit-transform: translateY(-4vw);
-    -ms-transform: translateY(-4vw);
-    transform: translateY(-4vw);
   }
 }
 .line {
