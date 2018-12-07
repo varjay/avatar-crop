@@ -8,21 +8,7 @@
         <li class="curr"><span><em>{{sortName}}</em></span></li>
         <li><span @click="showRule = 1"><em>活动规则</em></span></li>
       </ul>
-      <div class="drawdown" @click="drawdown"></div>
-    </div>
-    <div v-show="$parent.personSort !== ''" class="person-content-container">
-      <ul class="person-sort">
-        <li @click="changePersontType('face')" :class="{curr:persontype === 'face'}"><em :style="'background: url('+baseurl+'/img/btn/person1.png) center no-repeat;'"></em></li>
-        <li @click="changePersontType('hair')" :class="{curr:persontype === 'hair'}"><em :style="'background: url('+baseurl+'/img/btn/person2.png) center no-repeat;'"></em></li>
-        <li @click="changePersontType('coat')" :class="{curr:persontype === 'coat'}"><em :style="'background: url('+baseurl+'/img/btn/person3.png) center no-repeat;'"></em></li>
-        <li @click="changePersontType('leg')" :class="{curr:persontype === 'leg'}"><em :style="'background: url('+baseurl+'/img/btn/person4.png) center no-repeat;'"></em></li>
-        <!-- <li @click="persontype=''" :class="{curr:persontype === ''}"><em>配饰</em></li> -->
-      </ul>
-      <ul ref="personContent" class="person-content fix">
-        <li v-for="(d,i) in personData" :key="'person'+i" @click="changePerson(i)">
-          <div class="personbox" :style="'background:url('+baseurl+d.url+') no-repeat center;'"></div>
-        </li>
-      </ul>
+      <div class="drawdown" @click="drawdown" style="background: url('./img/drawdown.png') center no-repeat;"></div>
     </div>
     <div class="content">
       <ul ref="content" class="fix" :class="currentSort">
@@ -32,7 +18,7 @@
         </li>
       </ul>
     </div>
-    <rule v-if="showRule" text="贺兰大人在等你晒月光哦~"></rule>
+    <rule v-if="showRule" />
   </div>
 </template>
 <script>
@@ -117,34 +103,6 @@ export default {
     changeBg(i) {
       this.$parent.currentBg = i
     },
-    changeSort(name, _i) {
-      this.$parent.personSort = ''
-      this.currentSort = name
-      this.$refs.content.scrollTop = 0 //回滚顶部
-      if (_i !== undefined) {
-        var d = this.$parent.data.person[_i]
-        this.addPerson(d, _i)
-        this.$parent.personSort = _i
-      }
-    },
-    addPerson(d, i) {
-      d = JSON.parse(JSON.stringify(d))
-      var normalMax = this.generatNormalMax()
-      var w = document.documentElement.clientWidth
-      this.$parent.tietus.push({
-        d,
-        i,
-        sort: this.currentSort,
-        z: normalMax,
-        scale: 1,
-        rotate: 0,
-        left: w / 2 - d.w / 2,
-        top: w / 2 - d.h / 2,
-      })
-      Vue.set(this.$parent, 'currentTieTu', normalMax)
-      this.$parent.personSort = i
-      this.$parent.tietuIndex = this.$parent.tietus.length - 1
-    },
     changePersontType(v) {
       this.persontype = v
       this.$refs.personContent.scrollTop = 0 //回滚顶部
@@ -193,7 +151,6 @@ export default {
       this.$parent.showType = 'ending'
     },
     drawdown() {
-      console.log('下拉')
       this.drawdownState = !this.drawdownState
     },
   },
@@ -266,8 +223,7 @@ export default {
   }
 }
 .drawdown {
-  background: url('/img/drawdown.png') center no-repeat;
-  background-size: 100%;
+  background-size: 100% !important;
   width: 8vw;
   height: 8vw;
   position: absolute;

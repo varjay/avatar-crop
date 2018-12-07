@@ -24,24 +24,6 @@
       </div>
       <search></search>
     </template>
-    <!-- <transition name="takepicture"> -->
-      <!-- <div v-if="tietus.length > 0" @click="showType = 'like'" class="take-picture" :style="'background: url('+baseurl+'/img/takepicture.png) center;background-size: 100%;'">
-      <div class="service-icon" :style="'background: url('+baseurl+'/img/takepicture.png) center;background-size: 100%;'"></div>
-      </div> -->
-    <!-- </transition> -->
-    <div v-show="0" :class="['music']" @click="setMusic">
-      <div v-if="Play" :style="'background:url('+baseurl+'/img/FHome/sOpen.png) center no-repeat;background-size:auto 85%;'"></div>
-      <div v-else :style="'background:url('+baseurl+'/img/FHome/sClose.png) center no-repeat;background-size:auto 100%;'"></div>
-    </div>
-    <!-- 手写内容 -->
-    <!-- 输入内容 -->
-    <!-- <div class="inputMsg" v-if="inputShow">
-      <textarea maxlength="14" v-model="mySelfTxt" placeholder="情话听不够，自已写一句!"></textarea>
-      <div @click="myToMsg">确定</div>
-    </div> -->
-    <!-- <div class="videoBox" v-show="videoShow">
-      <video id="video" :src="baseurl+'/video/1334.mp4'"  x5-video-player-type="h5" x5-video-player-fullscreen="true" preload="auto"></video>
-    </div> -->
   </div>
 </template>
 <script>
@@ -75,7 +57,6 @@ export default {
       msg: '',
       Play: 0,
       baseurl: '',
-      audio: null,
       inputShow: 0,
       mySelfTxt: '',
       videoShow: 0,
@@ -86,38 +67,12 @@ export default {
     if (process.env.NODE_ENV === 'production') {
       this.baseurl = window.baseurl
     }
-    this.audio = new Audio(this.baseurl + '/music/bgm.mp3')
-    this.audio.preload = 'auto'
-    this.audio.loop = true
-  },
-  mounted() {
-    document.addEventListener(
-      'WeixinJSBridgeReady',
-      function() {
-        this.audio.play()
-        this.Play = 1
-      },
-      false,
-    )
   },
   methods: {
     touchback() {
       this.currentTieTu = ''
       this.target = -1
       this.personSort = ''
-    },
-    setMusic() {
-      if (this.Play) {
-        this.audio.pause()
-        this.Play = 0
-      } else {
-        this.audio.play()
-        this.Play = 1
-      }
-    },
-    audioStop() {
-      this.audio.pause()
-      this.Play = 0
     },
     myToMsg() {
       this.mySelfTxt && (this.msg = this.mySelfTxt)

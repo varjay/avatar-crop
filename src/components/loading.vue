@@ -7,10 +7,10 @@
       </div>
       <div v-if="bgShow" class="bg">
         <div class="bg1-container">
-          <div class="bg1"></div>
+          <div class="bg1" style="background: url('./img/pr1/bg1.jpg');"></div>
         </div>
         <div class="bg1-container bg2">
-          <div class="bg1">
+          <div class="bg1" style="background: url('./img/pr1/bg2.jpg');">
             <div class="midd">
               <div class="loadline">
                 <!-- 进渡条 -->
@@ -30,10 +30,10 @@
         </div>
       </div>
       <div v-if="bgShow" class="snow">
-        <div class="snowimg homeImg"></div>
+        <div class="snowimg homeImg" style="background: url('./img/pr1/snow.png');"></div>
       </div>
     </div>
-    <div class="bee"></div>
+    <div class="bee" style="background: url('./img/pr1/bee.png') no-repeat;"></div>
   </div>
 </template>
 <script>
@@ -228,15 +228,11 @@ export default {
     height: 100%;
     overflow: hidden;
     background-size: 100vw !important;
-  }
-  .bg1 {
-    background: url('/img/pr1/bg1.jpg');
+    transform: translateY(1px);
+    box-shadow: 0 -1px 0 #f3f1f2;
   }
   .bg2 {
     transform: rotateX(180deg);
-    .bg1 {
-      background: url('/img/pr1/bg2.jpg');
-    }
     .midd {
       transform: rotateX(180deg);
     }
@@ -245,8 +241,7 @@ export default {
 .bee {
   width: 8vw;
   height: 16vw;
-  background: url('/img/pr1/bee.png') no-repeat;
-  background-size: contain;
+  background-size: contain !important;
   position: absolute;
   transform: translateX(100vw);
 }
@@ -383,9 +378,8 @@ export default {
   pointer-events: none;
   .snowimg {
     height: 100%;
-    background: url('/img/pr1/snow.png');
-    background-size: cover;
-    background-position-y: 0;
+    background-size: cover !important;
+    background-position-y: 0 !important;
     animation: snow 80s infinite cubic-bezier(1, 1, 0, 0);
   }
 }
@@ -396,7 +390,7 @@ export default {
     width: 100%;
     height: 100%;
   }
-  30% {
+  22% {
     border-bottom-right-radius: 100%;
     width: 100%;
     height: 100%;

@@ -26,7 +26,7 @@
         <p># 以上活动解释权归OliviaBurton天猫旗舰店所有</p>
       </div>
       <div class="btn-content">
-        <a @click="$parent.showRule = 0"></a>
+        <a style="background: url('./img/X.png') center no-repeat;" @click="$parent.showRule = 0"></a>
       </div>
     </div>
   </div>
@@ -102,8 +102,7 @@ export default {
     display: block;
     width: 4.5vw;
     height: 4.5vw;
-    background: url('/img/X.png') center no-repeat;
-    background-size: contain;
+    background-size: contain !important;
   }
 }
 </style>

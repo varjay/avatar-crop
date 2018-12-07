@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
   window.baseurl = ''
 } else {
   console.log('生产环境')
-  window.baseurl = '/h5/first-date/'
+  window.baseurl = '/h5/ob/'
 }
 
 window.func = require('./js/func.js')
