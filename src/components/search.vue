@@ -5,7 +5,7 @@
     </div>
     <div class="sort">
       <ul class="fix">
-        <li class="curr"><span><em>小蜜蜂</em></span></li>
+        <li class="curr"><span><em>{{sortName}}</em></span></li>
         <li><span @click="showRule = 1"><em>活动规则</em></span></li>
       </ul>
       <div class="drawdown" @click="drawdown"></div>
@@ -48,6 +48,7 @@ export default {
       baseurl: '',
       showRule: 0,
       drawdownState: 0,
+      sortName: '',
     }
   },
   computed: {
@@ -67,8 +68,10 @@ export default {
   created() {
     if (this.$parent.currentBg === 0) {
       this.currentSort = 'bee'
+      this.sortName = '小蜜蜂'
     } else {
       this.currentSort = 'snow'
+      this.sortName = '雪球'
     }
     if (process.env.NODE_ENV === 'production') {
       this.baseurl = window.baseurl
