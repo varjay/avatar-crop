@@ -65,6 +65,11 @@ export default {
     },
   },
   created() {
+    if (this.$parent.currentBg === 0) {
+      this.currentSort = 'bee'
+    } else {
+      this.currentSort = 'snow'
+    }
     if (process.env.NODE_ENV === 'production') {
       this.baseurl = window.baseurl
     }
