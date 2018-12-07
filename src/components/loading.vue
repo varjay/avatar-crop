@@ -253,7 +253,7 @@ export default {
 .fly {
   .bee {
     transition: 0.9s cubic-bezier(1, 1, 0, 0);
-    transform: translateX(-5vw);
+    transform: translateX(-10vw);
   }
   .bg1 {
     animation: pr1bg1 3s cubic-bezier(1, 1, 0, 0);
