@@ -1,13 +1,14 @@
 <template>
-  <div class="search-container">
+  <div class="search-container" :class="{'drawdown-state': drawdownState}">
     <div class="screenshot">
       <em @click="toEnd" class="service-icon" :style="'background: url('+baseurl+'/img/btn/option-done.png) center no-repeat;background-size: 100%;'"></em>
     </div>
     <div class="sort">
       <ul class="fix">
-        <li><span><em>小蜜蜂</em></span></li>
-        <li><span><em>活动规则</em></span></li>
+        <li class="curr"><span><em>小蜜蜂</em></span></li>
+        <li><span @click="showRule = 1"><em>活动规则</em></span></li>
       </ul>
+      <div class="drawdown" @click="drawdown"></div>
     </div>
     <div v-show="$parent.personSort !== ''" class="person-content-container">
       <ul class="person-sort">
@@ -31,21 +32,22 @@
         </li>
       </ul>
     </div>
-    <message v-if="showMsg" text="贺兰大人在等你晒月光哦~"></message>
+    <rule v-if="showRule" text="贺兰大人在等你晒月光哦~"></rule>
   </div>
 </template>
 <script>
-import message from './message'
+import rule from './rule'
 export default {
   components: {
-    message,
+    rule,
   },
   data() {
     return {
       currentSort: 'bee',
       persontype: 'hair',
       baseurl: '',
-      showMsg: 0,
+      showRule: 0,
+      drawdownState: 0,
     }
   },
   computed: {
@@ -182,6 +184,10 @@ export default {
     toEnd() {
       this.$parent.showType = 'ending'
     },
+    drawdown() {
+      console.log('下拉')
+      this.drawdownState = !this.drawdownState
+    },
   },
 }
 </script>
@@ -204,6 +210,12 @@ export default {
   width: 100vw;
   height: calc(100vh - 113.96731vw);
   z-index: 20000;
+  &.drawdown-state {
+    height: 10vw;
+    .drawdown {
+      transform: rotate(180deg);
+    }
+  }
 }
 .sort {
   background: white;
@@ -236,9 +248,23 @@ export default {
       color: #aebcc3;
     }
   }
-  // .curr{
-  //   background: #c9edf3;
-  // }
+  .curr{
+    span {
+      background: #d8eaf2;
+      em {
+        color: white;
+      }
+    }
+  }
+}
+.drawdown {
+  background: url('/img/drawdown.png') center no-repeat;
+  background-size: 100%;
+  width: 8vw;
+  height: 8vw;
+  position: absolute;
+  margin-left: calc(50% - 4vw);
+  top: 0;
 }
 .content {
   height: calc(100% - 6vh);
