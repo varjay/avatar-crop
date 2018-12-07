@@ -37,28 +37,10 @@ export default {
     // else if(length > 44){
     //   this.fontsize = 6
     // }
+    this.endImg()
   },
   methods: {
-    toEndPage() {
-      if (this.$parent.mongs > 0) {
-        this.$parent.videoShow = 1
-        this.$parent.audioStop()
-        var dom = document.getElementById('video')
-        dom.play()
-        dom.addEventListener('ended', () => {
-          this.$parent.videoShow = 0
-          this.EndImg()
-        })
-        dom.addEventListener('pause', () => {
-          this.$parent.videoShow = 0
-          this.EndImg()
-        })
-      } else {
-        this.EndImg()
-      }
-      this.toEnd = 1
-    },
-    EndImg() {
+    endImg() {
       setTimeout(() => {
         html2canvas(document.querySelector('#ending')).then(canvas => {
           this.img = canvas.toDataURL('image/png')
@@ -83,7 +65,7 @@ export default {
 .text-container {
   position: absolute;
   width: 100%;
-  top: calc((100vh - (100vw * 1.60933)) / 2 + 100vw);
+  top: calc((100vh - (100vw * 1.77)) / 2 + 100vw);
   > img {
     -webkit-transform: translateY(-4vw);
     -ms-transform: translateY(-4vw);
