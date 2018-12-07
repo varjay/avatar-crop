@@ -16,8 +16,8 @@
                 <!-- 进渡条 -->
                 <div class="loading" v-if="!showBtn">
                   <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
-                  <div class="loadbg homeImg" :style="'background:url(./img/FHome/loading.png) center no-repeat;background-size:auto 100%;'"></div>
-                  <div class="upFlower" :style="'background: url(./img/FHome/h1.png) center no-repeat;background-size:100% auto;'"></div>
+                  <div class="loadbg homeImg"></div>
+                  <div class="upFlower"></div>
                 </div>
                 <!-- 按钮 -->
                 <div class="button" @click="inPage" v-else>
@@ -327,11 +327,9 @@ export default {
       left: 8vw;
       div {
         display: block;
-        background: #db0428;
-        height: 6.5vw;
+        background: #bfbfbf;
+        height: 1vw;
         border-radius: 2vh;
-        -webkit-box-shadow: 3px 3px 3px #333 inset; /* For Chrome5+, Safari5+ */
-        box-shadow: 3px 3px 3px #333 inset; /* For Latest Opera */
       }
     }
   }
@@ -403,12 +401,12 @@ export default {
     width: 100%;
     height: 100%;
   }
-  // 80% {
-  //   width: 100%;
-  //   width: 0;
-  //   height: 50%;
-  //   border-bottom-right-radius: 100%;
-  // }
+  60% {
+    width: 100%;
+    width: 0;
+    height: 0;
+    border-bottom-right-radius: 100%;
+  }
   100% {
     width: 0;
     height: 0;
@@ -426,12 +424,12 @@ export default {
     width: 100%;
     height: 100%;
   }
-  // 80% {
-  //   width: 100%;
-  //   width: 0;
-  //   height: 50%;
-  //   border-bottom-right-radius: 100%;
-  // }
+  60% {
+    width: 100%;
+    width: 0;
+    height: 0;
+    border-bottom-right-radius: 100%;
+  }
   100% {
     width: 0;
     height: 0;
