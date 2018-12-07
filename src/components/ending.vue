@@ -75,7 +75,7 @@ export default {
 .text-container {
   position: absolute;
   width: 100%;
-  top: calc((100vh - (100vw * 1.77)) / 2 + 100vw);
+  top: calc((100vh - (100vw * 1.608)) / 2 + 100vw);
   > img {
   }
 }

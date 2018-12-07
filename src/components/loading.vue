@@ -197,7 +197,7 @@ export default {
 </script>
 <style lang="less" scoped>
 .choose {
-  height: calc(100vw * 1.77);
+  height: calc(100vw * 1.608);
   width: 100%;
   position: absolute;
   background-size: 100% !important;
@@ -215,7 +215,7 @@ export default {
   }
 }
 .loadpage-container {
-  height: calc(100vw * 1.77);
+  height: calc(100vw * 1.608);
   width: 100%;
 }
 .bg {

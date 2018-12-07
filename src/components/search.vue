@@ -216,7 +216,7 @@ export default {
   bottom: 0;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 113.96731vw);
+  height: 70vw;
   z-index: 20000;
   &.drawdown-state {
     height: 10vw;

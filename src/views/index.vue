@@ -129,7 +129,7 @@ export default {
 <style lang="less" scoped>
 .draw {
   width: 100%;
-  height: calc(100vw * 1.77);
+  height: calc(100vw * 1.36);
   background-size: cover !important;
   position: relative;
   background-position: top !important;

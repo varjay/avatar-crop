@@ -35,6 +35,6 @@ body > img {
   left: 0;
   width: 100vw;
   top: 0;
-  margin-top: calc((100vh - (100vw * 1.77)) / 2);
+  margin-top: calc((100vh - (100vw * 1.608)) / 2);
 }
 </style>
