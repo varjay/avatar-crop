@@ -89,6 +89,7 @@ export default {
   position: relative;
   background-position: top !important;
   z-index: 1;
+  overflow: hidden;
 }
 .app-ending {
   .draw {

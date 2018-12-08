@@ -157,7 +157,7 @@ export default {
       this.fly = 1
       setTimeout(() => {
         this.bgShow = 0
-      }, 3000)
+      }, 2500)
     },
     getLoadImg(arr) {
       var onloadarr = []
@@ -255,7 +255,7 @@ export default {
   }
   .snow {
     opacity: 0;
-    transition: 3s;
+    transition: 2.5s;
   }
 }
 .loadbg {
