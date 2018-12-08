@@ -4,9 +4,9 @@ export default {
     {name: '2', url: '/img/pr2/bg2.png'},
   ],
   bee: [
-    {name: '', url: '/img/bee/3.png', w: 300, h: 300},
     {name: '', url: '/img/bee/1.png', w: 300, h: 300},
     {name: '', url: '/img/bee/2.png', w: 300, h: 300},
+    {name: '', url: '/img/bee/3.png', w: 300, h: 300},
     {name: '', url: '/img/bee/4.png', w: 300, h: 300},
     {name: '', url: '/img/bee/5.png', w: 300, h: 300},
     {name: '', url: '/img/bee/6.png', w: 300, h: 300},
@@ -57,5 +57,6 @@ export default {
     {name: '', url: '/img/snow/16.png', w: 300, h: 300},
     {name: '', url: '/img/snow/17.png', w: 300, h: 300},
     {name: '', url: '/img/snow/18.png', w: 300, h: 300},
+    {name: '', url: '/img/snow/19.png', w: 300, h: 300},
   ],
 }

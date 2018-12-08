@@ -1,6 +1,6 @@
 <template>
   <div class="search-container" :class="{'drawdown-state': drawdownState}">
-    <div class="screenshot">
+    <div v-if="sum > 0" class="screenshot">
       <em @click="toEnd" class="service-icon" :style="'background: url('+baseurl+'/img/btn/option-done.png) center no-repeat;background-size: 100%;'"></em>
     </div>
     <div class="sort">
@@ -49,6 +49,9 @@ export default {
       } catch (e) {
         return []
       }
+    },
+    sum() {
+      return this.$parent.tietus.length
     },
   },
   created() {

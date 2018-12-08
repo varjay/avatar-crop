@@ -19,8 +19,6 @@ if (process.env.NODE_ENV !== 'production') {
   window.baseurl = '/h5/ob/'
 }
 
-window.func = require('./js/func.js')
-
 Vue.config.productionTip = false
 window.RootApp = new Vue({
   render: h => h(App),

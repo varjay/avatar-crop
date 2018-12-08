@@ -8,7 +8,7 @@ import index from '@/views/index'
 export default {
   name: 'app',
   components: {
-    index
+    index,
   },
   created() {
     // console.log(this.$route)
