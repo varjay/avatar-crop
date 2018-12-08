@@ -70,7 +70,7 @@ export default {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 24vw;
+  height: 25vw;
   overflow: hidden;
   img {
     height: 100%;
