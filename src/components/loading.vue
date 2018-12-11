@@ -234,7 +234,7 @@ export default {
     top: 59.3vw;
     width: 100%;
     height: 42vw;
-    animation: button 2s infinite cubic-bezier(1, 1, 0, 0);
+    animation: button 2s infinite linear;
   }
 }
 .loadPage {
@@ -280,14 +280,15 @@ export default {
   background-size: contain !important;
   position: absolute;
   transform: translateX(100vw);
+  top: calc(100% / 2 - 8vw);
 }
 .fly {
   .bee {
-    transition: 0.9s cubic-bezier(1, 1, 0, 0);
+    transition: 0.9s linear;
     transform: translateX(-10vw);
   }
   .bg1 {
-    animation: pr1bg1 3s cubic-bezier(1, 1, 0, 0);
+    animation: pr1bg1 3s linear;
   }
   .snow {
     opacity: 0;
@@ -416,7 +417,7 @@ export default {
   &.button-anime {
     span {
       display: block;
-      animation: button 2s infinite cubic-bezier(1, 1, 0, 0);
+      animation: button 2s infinite linear;
     }
   }
 }
@@ -430,7 +431,7 @@ export default {
     height: 100%;
     background-size: cover !important;
     background-position-y: 0 !important;
-    animation: snow 80s infinite cubic-bezier(1, 1, 0, 0);
+    animation: snow 80s infinite linear;
   }
 }
 // 蜜蜂背景

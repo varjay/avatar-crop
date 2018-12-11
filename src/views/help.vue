@@ -56,7 +56,7 @@ export default {
   position: absolute;
   margin-left: calc(50% - 4vw);
   top: 0;
-  animation: button 2s infinite cubic-bezier(1, 1, 0, 0);
+  animation: button 2s infinite linear;
 }
 .text {
   position: absolute;
