@@ -29,7 +29,6 @@
 </template>
 <script>
 import loading from '@/components/loading'
-// import like from "@/components/like";
 import tietu from '@/components/tie-tu'
 import search from '@/components/search'
 import ending from '@/components/ending'
@@ -38,9 +37,9 @@ import data from '@/js/data'
 export default {
   components: {
     loading,
-    // like,
     tietu,
     search,
+    ending,
     help,
   },
   data() {
