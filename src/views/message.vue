@@ -15,7 +15,7 @@
 export default {
   data() {
     return {
-      baseurl: window.baseurl
+      baseurl: window.baseurl,
     }
   },
   methods: {

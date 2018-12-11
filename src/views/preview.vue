@@ -10,17 +10,17 @@
 export default {
   data() {
     return {
-      baseurl: window.baseurl
+      baseurl: window.baseurl,
     }
   },
-  beforeCreate(){
+  beforeCreate() {
     let app = document.getElementById('app')
     app.style = "background: url('./img/preview/bg.jpg') no-repeat;"
   },
   beforeDestroy() {
     let app = document.getElementById('app')
-    app.style = ""
-  }
+    app.style = ''
+  },
 }
 </script>
 <style lang="less" scoped>

@@ -414,7 +414,7 @@ export default {
     position: absolute;
     font-size: 6vw;
     color: #ae726d;
-    white-space:nowrap;
+    white-space: nowrap;
   }
   &.button-anime {
     span {
@@ -513,11 +513,13 @@ export default {
   position: absolute;
   bottom: 0;
 }
-.loading-enter-active, .loading-leave-active {
+.loading-enter-active,
+.loading-leave-active {
   transition: 2s;
   opacity: 1;
 }
-.loading-enter, .loading-leave-to{
+.loading-enter,
+.loading-leave-to {
   opacity: 0;
 }
 </style>
