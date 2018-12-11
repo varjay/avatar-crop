@@ -14,15 +14,19 @@
             <div class="midd">
               <div class="loadline">
                 <!-- 进渡条 -->
-                <div class="loading" v-if="!showBtn">
+                <!-- <div class="loading">
                   <div class="light"><div :style="'width:'+Percentage+'%'"></div></div>
                   <div class="loadbg homeImg"></div>
                   <div class="upFlower"></div>
-                </div>
+                </div> -->
                 <!-- 按钮 -->
-                <div class="button" @click="inPage" v-else>
-                  <em>定制你的OB圣诞贺卡</em><br><br>
-                  <span>&lt; START &gt;</span>
+                <div class="button" @click="inPage">
+                  <transition name="loading">
+                    <em v-if="buttonType==='loading'">{{loadingText}}</em>
+                  </transition>
+                  <transition name="loading">
+                    <span v-if="buttonType==='start'">&lt; START &gt;</span>
+                  </transition>
                 </div>
               </div>
             </div>
@@ -45,11 +49,12 @@ export default {
       loadFull: 100,
       imgKey: 0,
       imgList: ['man1', 'wom1', 'dog'],
-      showBtn: false,
       homeImg: false,
       baseurl: '',
       bgShow: 1,
       fly: 0,
+      loadingText: '',
+      buttonType: 'loading',
     }
   },
   computed: {
@@ -161,20 +166,38 @@ export default {
     },
     getLoadImg(arr) {
       var onloadarr = []
-      var vm = this
-      function BackFun() {
-        vm.loadNum += 1
-        if (vm.Percentage == 100) {
+      let backFun = () => {
+        this.loadNum += 1
+        if (this.Percentage == 100) {
+          this.loadingText = '定制你的 OB 圣诞贺卡'
           setTimeout(() => {
-            vm.showBtn = true
-          }, 1000)
+            this.buttonType = 'start'
+          }, 500)
+        } else if (this.Percentage > 90) {
+          this.loadingText = '定制你的 OB 圣诞贺'
+        } else if (this.Percentage > 80) {
+          this.loadingText = '定制你的 OB 圣诞'
+        } else if (this.Percentage > 70) {
+          this.loadingText = '定制你的 OB 圣'
+        } else if (this.Percentage > 60) {
+          this.loadingText = '定制你的 OB'
+        } else if (this.Percentage > 50) {
+          this.loadingText = '定制你的 O'
+        } else if (this.Percentage > 40) {
+          this.loadingText = '定制你的'
+        } else if (this.Percentage > 30) {
+          this.loadingText = '定制你'
+        } else if (this.Percentage > 20) {
+          this.loadingText = '定制'
+        } else if (this.Percentage > 10) {
+          this.loadingText = '定'
         }
       }
       for (var i = 0; i < arr.length; i++) {
         onloadarr[i] = new Image()
         onloadarr[i].src = arr[i]
         onloadarr[i].onload = () => {
-          BackFun()
+          backFun()
         }
       }
     },
@@ -235,6 +258,7 @@ export default {
     transform: rotateX(180deg);
     .midd {
       transform: rotateX(180deg);
+      height: calc(50vw * 1.608);
     }
   }
 }
@@ -296,10 +320,11 @@ export default {
   text-align: center;
 }
 .loadline {
-  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100vw;
-  z-index: 10;
-  bottom: 10vh;
+  height: 100%;
   .loading {
     position: relative;
     // overflow: hidden;
@@ -357,17 +382,24 @@ export default {
   }
 }
 .button {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin: 0 auto;
   width: 100%;
-  height: 13vh;
-  text-align: center;
+  height: 8vh;
+  font-size: 0.7em;
   em {
-    font-size: 4.5vw;
+    font-size: 1em;
+    display: block;
+    width: 10.2em;
+    text-align: left;
   }
   span {
+    position: absolute;
     font-size: 6vw;
     color: #ae726d;
+    white-space:nowrap;
   }
 }
 .snow {
@@ -457,5 +489,12 @@ export default {
 .area2 {
   position: absolute;
   bottom: 0;
+}
+.loading-enter-active, .loading-leave-active {
+  transition: 2s;
+  opacity: 1;
+}
+.loading-enter, .loading-leave-to{
+  opacity: 0;
 }
 </style>
