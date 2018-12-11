@@ -20,7 +20,7 @@
                   <div class="upFlower"></div>
                 </div> -->
                 <!-- 按钮 -->
-                <div class="button" @click="inPage">
+                <div class="button" @click="inPage" :class="{'button-anime': buttonType === 'start'}">
                   <transition name="loading">
                     <em v-if="buttonType==='loading'">{{loadingText}}</em>
                   </transition>
@@ -401,6 +401,12 @@ export default {
     color: #ae726d;
     white-space:nowrap;
   }
+  &.button-anime {
+    span {
+      display: block;
+      animation: button 2s infinite cubic-bezier(1, 1, 0, 0);
+    }
+  }
 }
 .snow {
   width: 100%;
@@ -474,6 +480,28 @@ export default {
 }
 
 @-webkit-keyframes snow /*Safari and Chrome*/ {
+  0% {
+    background-position-y: 0;
+  }
+  100% {
+    background-position-y: 10000px;
+  }
+}
+
+// button
+@keyframes button {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@-webkit-keyframes button /*Safari and Chrome*/ {
   0% {
     background-position-y: 0;
   }
