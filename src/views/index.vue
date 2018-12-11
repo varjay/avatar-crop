@@ -1,30 +1,38 @@
 <template>
-  <div :class="'app-'+showType" id="ending">
-    <transition name="ending">
-      <ending v-if="showType === 'ending'" class="ending"></ending>
-    </transition>
-    <loading v-if='loading'/>
-    <template v-else>
-      <!-- <transition name="like">
-        <like v-show="showType === 'like'"/>
-      </transition> -->
-      <div ref="draw" @click="touchback" id="draw" class="draw" :style="'background:url('+baseurl+data.bg[currentBg].url+') no-repeat'">
-        <!-- <img class="full-moon" v-if="mongs > 0" :src="baseurl+'/img/petal.png'"> -->
-        <tietu v-for="(item , index) in tietus" v-bind:tietu='item' v-bind:tietuIndex='index' :z="item.z" :key="index"></tietu>
-        <template v-if="showType === 'ending'">
-          <div class="top"></div>
-          <div class="right"></div>
-          <div class="bottom"></div>
-          <div class="left"></div>
-          <div class="top2"></div>
-          <div class="right2"></div>
-          <div class="bottom2"></div>
-          <div class="left2"></div>
-        </template>
-      </div>
-      <search></search>
-      <help v-if="showHelp" />
-    </template>
+  <div>
+    <input id="taokouling" style="position: absolute;border: 0;display: block;padding: 0;" type="text" readonly value="【oliviaburton旗舰店】，復·制这段描述￥RayhbNUl0YP￥后咑閞👉手机淘宝👈或者用浏览器咑閞https://m.tb.cn/h.3LaUpaN查看">
+    <div :class="'app-'+showType" id="ending">
+      <transition name="ending">
+        <ending v-if="showType === 'ending'" class="ending"></ending>
+      </transition>
+      <loading v-if='loading'/>
+      <template v-else>
+        <!-- <transition name="like">
+          <like v-show="showType === 'like'"/>
+        </transition> -->
+        <div ref="draw" @click="touchback" id="draw" class="draw" :style="'background:url('+baseurl+data.bg[currentBg].url+') no-repeat'">
+          <!-- <img class="full-moon" v-if="mongs > 0" :src="baseurl+'/img/petal.png'"> -->
+          <tietu v-for="(item , index) in tietus" v-bind:tietu='item' v-bind:tietuIndex='index' :z="item.z" :key="index"></tietu>
+          <template v-if="showType === 'ending'">
+            <div class="top"></div>
+            <div class="right"></div>
+            <div class="bottom"></div>
+            <div class="left"></div>
+            <div class="top2"></div>
+            <div class="right2"></div>
+            <div class="bottom2"></div>
+            <div class="left2"></div>
+          </template>
+        </div>
+        <search></search>
+        <help v-if="showHelp" />
+      </template>
+    </div>
+    <message v-if="(showType === 'ending') && show" v-model="show">
+      <p style="font-size: 4.3vw;">长按保存图片，晒图朋友圈集5个赞<br>
+      前往OliviaBurton天猫旗舰店<br>
+      联系客服获取抽奖链接</p>
+    </message>
   </div>
 </template>
 <script>
@@ -34,6 +42,7 @@ import search from '@/components/search'
 import ending from '@/components/ending'
 import help from '@/views/help'
 import data from '@/js/data'
+import message from '@/views/message'
 export default {
   components: {
     loading,
@@ -41,6 +50,7 @@ export default {
     search,
     ending,
     help,
+    message,
   },
   data() {
     return {
@@ -63,6 +73,8 @@ export default {
       videoShow: 0,
       mongs: -1,
       showHelp: 1,
+      // 截图后的提示
+      show: 1,
     }
   },
   created() {

@@ -19,7 +19,7 @@
         </li>
       </ul>
     </div>
-    <message v-if="showRule">
+    <message v-if="showRule" v-model="showRule">
       <h1>OB圣诞活动规则</h1>
       <p>选取喜爱的元素到画板上，定制专属的OB圣诞贺卡。<br>将圣诞贺卡分享至朋友圈，集满5个赞，即可参与抽奖。</p>
       <img :src="baseurl+'./img/rule.png'" width="100%" style="height: 85.21vw;" />

@@ -160,6 +160,10 @@ export default {
       //   },1000)
     },
     inPage() {
+      let input = document.getElementById('taokouling')
+      input.select()
+      input.setSelectionRange(0, input.value.length)
+      document.execCommand('copy')
       this.fly = 1
       setTimeout(() => {
         this.bgShow = 0

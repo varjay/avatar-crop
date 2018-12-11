@@ -2,15 +2,6 @@
   <div class="ending">
     <img v-if="toEnd" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
     <img v-if="img" :src="img" class="end-img">
-    <transition name="tips">
-      <div class="tips" v-if="tips">
-        <div>
-          <p>长按保存图片，晒图朋友圈集 5 个赞</p>
-          <p>前往 OliviaBurton 天猫旗舰店</p>
-          <p>联系客服获取抽奖链接</p>
-        </div>
-      </div>
-    </transition>
   </div>
 </template>
 <script>
@@ -23,6 +14,7 @@ export default {
       msg: '',
       img: '',
       tips: 0,
+      show: 1,
     }
   },
   // watch:{
@@ -95,30 +87,5 @@ export default {
   left: 2vw;
   background: #101e42;
   height: 135vw;
-}
-.tips {
-  text-align: center;
-  width: 100%;
-  line-height: 2;
-  position: absolute;
-  bottom: 0;
-  height: 100%;
-  div {
-    height: 100%;
-    transform: translateY(0);
-    background: white;
-  }
-  p {
-    font-size: 4vw;
-  }
-}
-.tips-enter-active,
-.tips-leave-active {
-  transform: translateY(0);
-  transition: 0.5s;
-}
-.tips-enter,
-.tips-leave-to {
-  transform: translateY(24vw);
 }
 </style>

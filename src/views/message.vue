@@ -6,7 +6,7 @@
         <slot />
       </div>
       <div class="btn-content">
-        <a style="background: url('./img/X.png') center no-repeat;" @click="$parent.showRule = 0"></a>
+        <a style="background: url('./img/X.png') center no-repeat;" @click="close"></a>
       </div>
     </div>
   </div>
@@ -17,6 +17,11 @@ export default {
     return {
       baseurl: window.baseurl
     }
+  },
+  methods: {
+    close() {
+      this.$emit('input', 0)
+    },
   },
 }
 </script>
