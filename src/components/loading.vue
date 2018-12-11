@@ -256,6 +256,7 @@ export default {
 .bg {
   height: 100%;
   position: relative;
+  z-index: 1;
   .bg1-container {
     height: 50%;
   }
@@ -281,6 +282,7 @@ export default {
   position: absolute;
   transform: translateX(100vw);
   top: calc(100% / 2 - 8vw);
+  z-index: 3;
 }
 .fly {
   .bee {
@@ -427,6 +429,7 @@ export default {
   position: absolute;
   top: 0;
   pointer-events: none;
+  z-index: 2;
   .snowimg {
     height: 100%;
     background-size: cover !important;
