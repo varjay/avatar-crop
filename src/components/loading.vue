@@ -4,6 +4,7 @@
       <div class="choose" style="background:url(./img/pr1/choose.jpg) center no-repeat;">
         <div @click="choose(0)" class="area1"></div>
         <div @click="choose(1)" class="area2"></div>
+        <div class="choose-warn" style="background: url('./img/pr1/choose_warn.png') center no-repeat;background-size: contain;"></div>
       </div>
       <div v-if="bgShow" class="bg">
         <div class="bg1-container">
@@ -224,6 +225,13 @@ export default {
   width: 100%;
   position: absolute;
   background-size: 100% !important;
+  .choose-warn {
+    position: absolute;
+    top: 59.3vw;
+    width: 100%;
+    height: 42vw;
+    animation: button 2s infinite cubic-bezier(1, 1, 0, 0);
+  }
 }
 .loadPage {
   position: fixed;
@@ -488,27 +496,6 @@ export default {
   }
 }
 
-// button
-@keyframes button {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
-@-webkit-keyframes button /*Safari and Chrome*/ {
-  0% {
-    background-position-y: 0;
-  }
-  100% {
-    background-position-y: 10000px;
-  }
-}
 .area1,
 .area2 {
   height: 39%;
