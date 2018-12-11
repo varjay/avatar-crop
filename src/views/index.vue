@@ -28,7 +28,7 @@
               <div class="left2"></div>
             </template>
           </div>
-          <img v-if="showType==='preview'" style="height: 24.8vw;" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
+          <img v-if="showType==='preview'" style="height: 24.8vw;display: block;" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
         </div>
         <search v-show="showType==='main'"></search>
         <help v-if="showHelp" />
