@@ -241,7 +241,7 @@ export default {
       align-items: center;
     }
     em {
-      font-size: 4vw;
+      font-size: 3.8vw;
       height: 3vh;
       display: flex;
       justify-content: center;
