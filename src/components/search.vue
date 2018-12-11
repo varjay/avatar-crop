@@ -19,14 +19,25 @@
         </li>
       </ul>
     </div>
-    <rule v-if="showRule" />
+    <message v-if="showRule">
+      <h1>OB圣诞活动规则</h1>
+      <p>选取喜爱的元素到画板上，定制专属的OB圣诞贺卡。<br>将圣诞贺卡分享至朋友圈，集满5个赞，即可参与抽奖。</p>
+      <img :src="baseurl+'./img/rule.png'" width="100%" style="height: 85.21vw;" />
+      <div class="des">
+        <h2>活动说明</h2>
+        <p>1. 朋友圈晒图需集满5个赞，不能设置分组可见，需至少保存7天；</p>
+        <p>2. 优惠券由客服确认后直接发放，实物奖品由快递寄出；</p>
+        <p>3. 每个淘宝账号仅有1次抽奖机会；活动仅限中国大陆地区。</p>
+      </div>
+      <p># 以上活动解释权归OliviaBurton天猫旗舰店所有</p>
+    </message>
   </div>
 </template>
 <script>
-import rule from './rule'
+import message from '@/views/message'
 export default {
   components: {
-    rule,
+    message,
   },
   data() {
     return {
