@@ -172,10 +172,12 @@ html {
   opacity: 0;
 }
 
-.app-ending{
+.app-ending,
+.app-preview {
   height: calc(100vw * 1.608);
   margin-top: calc((100vh - (100vw * 1.608)) / 2);
   position: relative;
+  transition: 0.3s;
   .draw{
     // -webkit-transform: scale(0.9);
     // transform: scale(.9);
@@ -194,6 +196,13 @@ html {
   }
   .target{
     box-shadow: none;
+  }
+}
+.app-preview {
+  .draw-container {
+    transform: scale(0.76) translateY(-12vw);
+    box-shadow: 0px 3px 7px rgba(0, 0, 0, 0.35);
+    transition: 0.3s;
   }
 }
 .app-like{

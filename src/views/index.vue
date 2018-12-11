@@ -1,30 +1,36 @@
 <template>
   <div>
-    <input id="taokouling" style="position: absolute;border: 0;display: block;padding: 0;" type="text" readonly value="【oliviaburton旗舰店】，復·制这段描述￥RayhbNUl0YP￥后咑閞👉手机淘宝👈或者用浏览器咑閞https://m.tb.cn/h.3LaUpaN查看">
+    <input id="taokouling" style="opacity: 0;position: absolute;border: 0;display: block;padding: 0;" type="text" readonly value="【oliviaburton旗舰店】，復·制这段描述￥RayhbNUl0YP￥后咑閞👉手机淘宝👈或者用浏览器咑閞https://m.tb.cn/h.3LaUpaN查看">
     <div :class="'app-'+showType" id="ending">
       <transition name="ending">
         <ending v-if="showType === 'ending'" class="ending"></ending>
       </transition>
+      <transition name="preview">
+        <preview v-if="showType === 'preview'" />
+      </transition>
       <loading v-if='loading'/>
       <template v-else>
-        <!-- <transition name="like">
-          <like v-show="showType === 'like'"/>
-        </transition> -->
-        <div ref="draw" @click="touchback" id="draw" class="draw" :style="'background:url('+baseurl+data.bg[currentBg].url+') no-repeat'">
-          <!-- <img class="full-moon" v-if="mongs > 0" :src="baseurl+'/img/petal.png'"> -->
-          <tietu v-for="(item , index) in tietus" v-bind:tietu='item' v-bind:tietuIndex='index' :z="item.z" :key="index"></tietu>
-          <template v-if="showType === 'ending'">
-            <div class="top"></div>
-            <div class="right"></div>
-            <div class="bottom"></div>
-            <div class="left"></div>
-            <div class="top2"></div>
-            <div class="right2"></div>
-            <div class="bottom2"></div>
-            <div class="left2"></div>
-          </template>
+        <div class="draw-container">
+          <!-- <transition name="like">
+            <like v-show="showType === 'like'"/>
+          </transition> -->
+          <div ref="draw" @click="touchback" id="draw" class="draw" :style="'background:url('+baseurl+data.bg[currentBg].url+') no-repeat'">
+            <!-- <img class="full-moon" v-if="mongs > 0" :src="baseurl+'/img/petal.png'"> -->
+            <tietu v-for="(item , index) in tietus" v-bind:tietu='item' v-bind:tietuIndex='index' :z="item.z" :key="index"></tietu>
+            <template v-if="showType === 'ending'">
+              <div class="top"></div>
+              <div class="right"></div>
+              <div class="bottom"></div>
+              <div class="left"></div>
+              <div class="top2"></div>
+              <div class="right2"></div>
+              <div class="bottom2"></div>
+              <div class="left2"></div>
+            </template>
+          </div>
+          <img v-if="showType==='preview'" style="height: 24.8vw;" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
         </div>
-        <search></search>
+        <search v-show="showType==='main'"></search>
         <help v-if="showHelp" />
       </template>
     </div>
@@ -43,6 +49,7 @@ import ending from '@/components/ending'
 import help from '@/views/help'
 import data from '@/js/data'
 import message from '@/views/message'
+import preview from '@/views/preview'
 export default {
   components: {
     loading,
@@ -51,6 +58,7 @@ export default {
     ending,
     help,
     message,
+    preview,
   },
   data() {
     return {

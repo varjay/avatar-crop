@@ -163,7 +163,7 @@ export default {
       })
     },
     toEnd() {
-      this.$parent.showType = 'ending'
+      this.$parent.showType = 'preview'
     },
     drawdown() {
       this.drawdownState = !this.drawdownState
