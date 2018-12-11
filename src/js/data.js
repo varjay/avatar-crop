@@ -29,14 +29,6 @@ export default {
     {name: '', url: '/img/bee/23.png', w: 300, h: 300},
     {name: '', url: '/img/bee/24.png', w: 300, h: 300},
     {name: '', url: '/img/bee/25.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/26.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/27.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/28.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/29.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/30.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/31.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/32.png', w: 300, h: 300},
-    {name: '', url: '/img/bee/33.png', w: 300, h: 300},
   ],
   snow: [
     {name: '', url: '/img/snow/1.png', w: 300, h: 300},
@@ -58,5 +50,6 @@ export default {
     {name: '', url: '/img/snow/17.png', w: 300, h: 300},
     {name: '', url: '/img/snow/18.png', w: 300, h: 300},
     {name: '', url: '/img/snow/19.png', w: 300, h: 300},
+    {name: '', url: '/img/snow/20.png', w: 300, h: 300},
   ],
 }
