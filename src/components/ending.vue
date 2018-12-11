@@ -1,6 +1,6 @@
 <template>
   <div class="ending">
-    <img v-if="toEnd" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
+    <!-- <img v-if="toEnd" :src="baseurl+'/img/FHome/footer.jpg'" width="100%"> -->
     <img v-if="img" :src="img" class="end-img">
   </div>
 </template>
