@@ -23,6 +23,7 @@
         </template>
       </div>
       <search></search>
+      <help v-if="showHelp" />
     </template>
   </div>
 </template>
@@ -32,6 +33,7 @@ import loading from '@/components/loading'
 import tietu from '@/components/tie-tu'
 import search from '@/components/search'
 import ending from '@/components/ending'
+import help from '@/views/help'
 import data from '@/js/data'
 export default {
   components: {
@@ -39,7 +41,7 @@ export default {
     // like,
     tietu,
     search,
-    ending,
+    help,
   },
   data() {
     return {
@@ -61,6 +63,7 @@ export default {
       mySelfTxt: '',
       videoShow: 0,
       mongs: -1,
+      showHelp: 1,
     }
   },
   created() {
