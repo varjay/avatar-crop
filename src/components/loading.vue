@@ -22,7 +22,7 @@
                 </div> -->
                 <!-- 按钮 -->
                 <div class="button" @click="inPage" :class="{'button-anime': buttonType === 'start'}">
-                  <em v-if="buttonType==='loading'">{{loadingText}}</em>
+                  <em v-if="(buttonType==='loading') || (buttonType==='start')">{{loadingText}}</em>
                   <transition name="loading">
                     <span v-if="buttonType==='start'">&lt; START &gt;</span>
                   </transition>

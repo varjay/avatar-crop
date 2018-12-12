@@ -3,7 +3,7 @@
    ref="tietu"
    @click.stop=""
    :class="{[select]:1}"
-   :style="{top:tietu.top>-9999?tietu.top+'px':tietu.top,left:tietu.left>-9999?tietu.left+'px':tietu.left,'z-index':z,transform:'scale('+tietu.scale+') rotate('+tietu.rotate+'deg)'}"
+   :style="{top:tietu.top>-9999?tietu.top+'px':tietu.top,left:tietu.left>-9999?tietu.left+'px':tietu.left,'z-index':z,transform:`scale(${tietu.scale},${tietu.scale}) rotate(${tietu.rotate}deg)`}"
    class="tietu">
     <div
      :id="'tietu'+tietuIndex"
@@ -12,7 +12,7 @@
      @touchend="touchend"
      :class="{target:tietu.z == $parent.currentTieTu}">
        <template v-if="!tietu.d.hairs">
-        <img :src="baseurl+tietu.d.url" :width="tietu.d.w/3" :height="tietu.d.h/3" :style="tietu.d.s">
+        <img :src="baseurl+tietu.d.url" :width="tietu.d.w/3" :height="tietu.d.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
        </template>
       <div v-else :style="{width:tietu.d.w+'px', height:tietu.d.h+'px'}" class="body">
         <img class="face" :src="baseurl+body.face.url" :width="body.face.w/4" :height="body.face.h/4" :style="{top:body.face.t+tietu.d.offset+'px',left:body.face.l+'px'}" />
@@ -25,18 +25,26 @@
        :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-del.png)'}"
        class="del"
        @click.stop="del"></span>
-      <span
-       :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-scale.png)'}"
-       class="scale"
-       v-show="$parent.currentTieTu === tietu.z"
-       @touchstart.stop="scalestart"
-       @touchmove.stop="scalesmove"></span>
-      <span
-       :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-rotate.png)'}"
-       class="rotate"
-       v-show="$parent.currentTieTu === tietu.z"
-       @touchstart.stop="rotatetart"
-       @touchmove.stop="rotatemove"></span>
+      <template>
+        <span
+         :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-scale.png)'}"
+         class="scale"
+         v-show="$parent.currentTieTu === tietu.z"
+         @touchstart.stop="scalestart"
+         @touchmove.stop="scalesmove"></span>
+        <span
+         :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-rotate.png)'}"
+         class="rotate"
+         v-show="$parent.currentTieTu === tietu.z"
+         @touchstart.stop="rotatetart"
+         @touchmove.stop="rotatemove"></span>
+         <span
+         :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-mirror.png)'}"
+         v-show="$parent.currentTieTu === tietu.z"
+         @click="mirror"
+         class="mirror"
+         ></span>
+       </template>
     </div>
   </div>
 </template>
@@ -59,6 +67,9 @@ export default {
       coat: 0,
       offsetAngle: 0,
       baseurl: '',
+
+      // 镜像
+      scaleMirror: 1,
     }
   },
   computed: {
@@ -86,6 +97,13 @@ export default {
     this.defaulthypotenuse = Math.sqrt(x * x + y * y)
   },
   methods: {
+    mirror() {
+      if (this.scaleMirror === 1) {
+        this.scaleMirror = -1
+      } else {
+        this.scaleMirror = 1
+      }
+    },
     del: function() {
       if (this.tietu.sort === 'furniture') {
         this.$parent.mongs = -1

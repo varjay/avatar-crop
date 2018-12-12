@@ -1,5 +1,5 @@
 <template>
-  <div class="preview">
+  <div class="preview" :class="{type2: $parent.currentBg === 1}">
     <div class="button">
       <div class="back" @click="$parent.showType='main'"><em>返回编辑</em></div>
       <div class="done" @click="$parent.showType='ending'"><em>生成贺卡</em></div>
@@ -29,6 +29,13 @@ export default {
   z-index: 2;
   width: 100%;
   height: calc(100vw * 1.608);
+  &.type2 {
+    .button {
+      div {
+        background: #c4e0ec;
+      }
+    }
+  }
 }
 .button {
   position: absolute;
