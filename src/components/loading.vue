@@ -403,9 +403,8 @@ export default {
   margin: 0 auto;
   width: 100%;
   height: 8vh;
-  font-size: 0.7em;
   em {
-    font-size: 1em;
+    font-size: 4.4vw;
     display: block;
     width: 10.2em;
     text-align: left;
