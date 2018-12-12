@@ -276,6 +276,7 @@ export default {
   position: absolute;
   margin-left: calc(50% - 4vw);
   top: 0;
+  animation: button 2s infinite linear;
 }
 .content {
   height: calc(70vw - 12vw);
