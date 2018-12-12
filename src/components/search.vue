@@ -191,7 +191,7 @@ export default {
   height: 70vw;
   z-index: 20000;
   &.drawdown-state {
-    height: 6vh;
+    height: 12vw;
     .drawdown {
       transform: rotate(180deg);
     }
@@ -238,7 +238,7 @@ export default {
   }
   li {
     float: left;
-    height: 6vh;
+    height: 12vw;
     width: 50%;
     display: flex;
     align-items: center;
@@ -278,7 +278,7 @@ export default {
   top: 0;
 }
 .content {
-  height: calc(100% - 6vh);
+  height: calc(70vw - 12vw);
   position: relative;
   display: flex;
   justify-content: center;

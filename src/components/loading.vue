@@ -22,9 +22,7 @@
                 </div> -->
                 <!-- 按钮 -->
                 <div class="button" @click="inPage" :class="{'button-anime': buttonType === 'start'}">
-                  <transition name="loading">
-                    <em v-if="buttonType==='loading'">{{loadingText}}</em>
-                  </transition>
+                  <em v-if="buttonType==='loading'">{{loadingText}}</em>
                   <transition name="loading">
                     <span v-if="buttonType==='start'">&lt; START &gt;</span>
                   </transition>
@@ -408,12 +406,14 @@ export default {
     display: block;
     width: 10.2em;
     text-align: left;
+    transform: translateY(-5vw);
   }
   span {
     position: absolute;
     font-size: 6vw;
     color: #ae726d;
     white-space: nowrap;
+    transform: translateY(5vw);
   }
   &.button-anime {
     span {
