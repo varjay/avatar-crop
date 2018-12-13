@@ -10,7 +10,7 @@
       </transition>
       <loading v-if='loading'/>
       <template v-else>
-        <div class="draw-container">
+        <div class="draw-container" :class="{overhidden: showType==='preview'}">
           <!-- <transition name="like">
             <like v-show="showType === 'like'"/>
           </transition> -->
@@ -28,7 +28,9 @@
               <div class="left2"></div>
             </template>
           </div>
-          <img v-if="(showType==='preview') || (showType==='ending')" style="height: 24.8vw;display: block;" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
+          <div v-if="(showType==='ending') || (showType==='main')" style="width: 100%;position: absolute;height: calc(100vh - 100vw * 1.36);background: white;z-index: 2;"></div>
+          <img v-if="(showType==='preview') || (showType==='ending')" style="height: 24.8vw;display: block;position: absolute;z-index: 3;" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
+          <div style="height: 24.8vw;"></div>
         </div>
         <search v-show="showType==='main'"></search>
         <help v-if="showHelp" />
@@ -104,6 +106,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.draw-container {
+  &.overhidden {
+    overflow: hidden;
+  }
+}
 .draw {
   width: 100%;
   height: calc(100vw * 1.36);
@@ -111,7 +118,6 @@ export default {
   position: relative;
   background-position: top !important;
   z-index: 1;
-  overflow: hidden;
 }
 .app-ending {
   .draw {
