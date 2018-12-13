@@ -240,14 +240,14 @@ export default {
   width: 100vw;
   height: 100%;
   z-index: 21000;
-  display: flex;
-  align-items: center;
   background: #f3f1f2;
   h3 {
     text-align: center;
   }
 }
 .loadpage-container {
+  position: absolute;
+  top: calc((100vh - 100vw * 1.608) / 2);
   height: calc(100vw * 1.608);
   width: 100%;
 }
@@ -277,10 +277,10 @@ export default {
   width: 8vw;
   height: 16vw;
   background-size: contain !important;
-  position: absolute;
   transform: translateX(100vw);
-  top: calc(100% / 2 - 8vw);
+  top: calc((100% - 16vw) / 2);
   z-index: 3;
+  position: absolute;
 }
 .fly {
   .bee {
@@ -398,6 +398,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-flow: column;
   margin: 0 auto;
   width: 100%;
   height: 8vh;
@@ -409,7 +410,7 @@ export default {
     transform: translateY(-5vw);
   }
   span {
-    position: absolute;
+    height: 0;
     font-size: 6vw;
     color: #ae726d;
     white-space: nowrap;
