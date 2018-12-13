@@ -2,6 +2,9 @@ export default {
   bg: [
     {name: '1', url: '/img/pr2/bg1.png'},
     {name: '2', url: '/img/pr2/bg2.png'},
+    {url: '/img/pr1/bg1.jpg'},
+    {url: '/img/pr1/bg2.jpg'},
+    {url: '/img/pr1/snow.png'},
   ],
   bee: [
     {name: '', url: '/img/bee/1.png', w: 300, h: 300},
@@ -65,12 +68,9 @@ export default {
     {url: '/img/btn/option-done-white.png'},
     {url: '/img/btn/option-done.png'},
     {url: '/img/FHome/footer.jpg'},
-    {url: '/img/pr1/bg1.jpg'},
-    {url: '/img/pr1/bg2.jpg'},
     {url: '/img/pr1/bee.png'},
     {url: '/img/pr1/choose_warn.png'},
     {url: '/img/pr1/choose.jpg'},
-    {url: '/img/pr1/snow.png'},
     {url: '/img/preview/bg.jpg'},
   ],
 }
