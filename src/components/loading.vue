@@ -406,7 +406,7 @@ export default {
   em {
     font-size: 4.4vw;
     display: block;
-    width: 10.2em;
+    width: 10.5em;
     text-align: left;
     transform: translateY(-5vw);
   }

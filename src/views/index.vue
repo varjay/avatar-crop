@@ -39,7 +39,8 @@
     <message v-if="(showType === 'ending') && show" v-model="show">
       <p style="font-size: 4.3vw;">长按保存图片，晒图朋友圈集5个赞<br>
       前往OliviaBurton天猫旗舰店<br>
-      联系客服获取抽奖链接</p>
+      联系客服获取抽奖链接<br>
+      (已为你复制淘口令）</p>
     </message>
   </div>
 </template>

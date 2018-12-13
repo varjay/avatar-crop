@@ -38,7 +38,7 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 20001;
 }
 .done {
@@ -101,7 +101,7 @@ export default {
   position: absolute;
   bottom: 0;
   width: 92%;
-  height: calc(100% - 6vh - 4vw);
+  height: calc(70vw - 12vw - 4vw);
   margin-left: 4%;
   margin-bottom: 4vw;
   border-radius: 3vw;
