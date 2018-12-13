@@ -240,14 +240,14 @@ export default {
   width: 100vw;
   height: 100%;
   z-index: 21000;
+  display: flex;
+  align-items: center;
   background: #f3f1f2;
   h3 {
     text-align: center;
   }
 }
 .loadpage-container {
-  position: absolute;
-  top: calc((100vh - 100vw * 1.608) / 2);
   height: calc(100vw * 1.608);
   width: 100%;
 }
@@ -277,10 +277,11 @@ export default {
   width: 8vw;
   height: 16vw;
   background-size: contain !important;
-  transform: translateX(100vw);
-  top: calc((100% - 16vw) / 2);
-  z-index: 3;
   position: absolute;
+  transform: translateX(100vw);
+  top: calc(100% / 2 - 8vw);
+  left: 0;
+  z-index: 3;
 }
 .fly {
   .bee {
