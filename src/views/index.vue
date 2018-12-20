@@ -5,11 +5,7 @@
       <transition name="ending">
         <ending v-if="showType === 'ending'" class="ending"></ending>
       </transition>
-      <transition name="preview">
-        <preview v-if="showType === 'preview'" />
-      </transition>
-      <loading v-if='loading'/>
-      <template v-else>
+      <template>
         <div class="draw-container" :class="{overhidden: showType==='preview'}">
           <!-- <transition name="like">
             <like v-show="showType === 'like'"/>
@@ -33,40 +29,25 @@
           <div style="height: 24.8vw;"></div>
         </div>
         <search v-show="showType==='main'"></search>
-        <help v-if="showHelp" />
       </template>
     </div>
-    <message v-if="(showType === 'ending') && show" v-model="show">
-      <p style="font-size: 4.3vw;">长按保存图片，晒图朋友圈集5个赞<br>
-      前往OliviaBurton天猫旗舰店<br>
-      联系客服获取抽奖链接<br>
-      (已为你复制淘口令）</p>
-    </message>
   </div>
 </template>
 <script>
-import loading from '@/components/loading'
 import tietu from '@/components/tie-tu'
 import search from '@/components/search'
 import ending from '@/components/ending'
-import help from '@/views/help'
 import data from '@/js/data'
-import message from '@/views/message'
-import preview from '@/views/preview'
 export default {
   components: {
-    loading,
     tietu,
     search,
     ending,
-    help,
-    message,
-    preview,
   },
   data() {
     return {
       data: data,
-      loading: true,
+      loading: false,
       tietus: [],
       tietuIndex: '',
       target: 0,
@@ -83,7 +64,6 @@ export default {
       mySelfTxt: '',
       videoShow: 0,
       mongs: -1,
-      showHelp: 1,
       // 截图后的提示
       show: 1,
     }
