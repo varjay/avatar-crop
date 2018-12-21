@@ -1,32 +1,37 @@
 <template>
-  <div ref="draw" @click="touchback" id="draw" class="draw">
-    <div
-     ref="tietu"
-     @click.stop=""
-     :class="{[select]:1}"
-     :style="{top:tietu.top+'px',left:tietu.left+'px',transform:`scale(${tietu.scale},${tietu.scale}) rotate(${tietu.rotate}deg)`}"
-     class="tietu">
+  <div>
+    <div class="draw">
       <div
-       @touchstart="touchstart"
-       @touchmove="touchmove"
-       @touchend="touchend"
-       class="target">
-        <img :src="tietu.d.url" :width="tietu.d.w/3" :height="tietu.d.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
-        <span
-         :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-scale.png)'}"
-         class="scale"
-         @touchmove.stop="scalesmove"></span>
-        <span
-         :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-rotate.png)'}"
-         class="rotate"
-         @touchstart.stop="rotatetart"
-         @touchmove.stop="rotatemove"></span>
-         <span
-         :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-mirror.png)'}"
-         @click="mirror"
-         class="mirror"
-         ></span>
+       ref="tietu"
+       @click.stop=""
+       :class="{[select]:1}"
+       :style="{top:tietu.top+'px',left:tietu.left+'px',transform:`scale(${tietu.scale},${tietu.scale}) rotate(${tietu.rotate}deg)`}"
+       class="tietu">
+        <div
+         @touchstart="touchstart"
+         @touchmove="touchmove"
+         @touchend="touchend"
+         class="target">
+          <img :src="tietu.d.url" :width="tietu.d.w/3" :height="tietu.d.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
+          <span
+           :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-scale.png)'}"
+           class="scale"
+           @touchmove.stop="scalesmove"></span>
+          <span
+           :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-rotate.png)'}"
+           class="rotate"
+           @touchstart.stop="rotatetart"
+           @touchmove.stop="rotatemove"></span>
+           <span
+           :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-mirror.png)'}"
+           @click="mirror"
+           class="mirror"
+           ></span>
+        </div>
       </div>
+    </div>
+    <div>
+      <input type="file">
     </div>
   </div>
 </template>
@@ -35,19 +40,12 @@ export default {
   data() {
     return {
       tietu: {
-          d: {name: '', url: '/img/img.jpg', w: 300, h: 300},
-          i: 1,
-          sort: 'bee',
+          d: {url: '/img/img.jpg', w: 300, h: 300},
           scale: 1,
           rotate: 0,
           left: 118.73828125,
           top: 134.6796875,
         },
-      target: 0,
-      normalMax: 0,
-      backMax: 0,
-      msg: '',
-      zoon: 1,
       offsettop: 0,
       offsetleft: 0,
       defaulthypotenuse: 0, // 默认斜边长度
@@ -65,9 +63,6 @@ export default {
     this.defaulthypotenuse = Math.sqrt(x * x + y * y)
   },
   methods: {
-    touchback() {
-      this.target = -1
-    },
     mirror() {
       if (this.scaleMirror === 1) {
         this.scaleMirror = -1
