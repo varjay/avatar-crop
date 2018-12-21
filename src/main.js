@@ -11,14 +11,6 @@ window.em = Math.sqrt((rem - 20) * 0.9) + 20
 document.querySelector('html').style.fontSize = rem + 'px'
 document.body.style.fontSize = em + 'px'
 
-if (process.env.NODE_ENV !== 'production') {
-  console.log('开发环境')
-  window.baseurl = ''
-} else {
-  console.log('生产环境')
-  window.baseurl = '/h5/ob/'
-}
-
 Vue.config.productionTip = false
 window.RootApp = new Vue({
   render: h => h(App),

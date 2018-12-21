@@ -35,7 +35,7 @@ export default {
   data() {
     return {
       tietu: {
-          d: {name: '', url: '/img/bee/2.png', w: 300, h: 300},
+          d: {name: '', url: '/img/img.jpg', w: 300, h: 300},
           i: 1,
           sort: 'bee',
           scale: 1,
@@ -216,6 +216,9 @@ export default {
 }
 .target {
   box-shadow: 0 0 0 1px white;
+  img {
+    display: block;
+  }
 }
 .tietu .scale{
   bottom: 0;
