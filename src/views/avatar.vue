@@ -63,11 +63,6 @@ export default {
     console.log(this.file)
     this.getSize(this.file)
   },
-  mounted() {
-    // let x = this.$refs.tietu.offsetWidth / 2
-    // let y = this.$refs.tietu.offsetHeight / 2
-    // this.defaulthypotenuse = Math.sqrt(x * x + y * y)
-  },
   methods: {
     // 获得图片尺寸
     getSize(file) {
@@ -83,6 +78,9 @@ export default {
         image.onload = function() {
           that.sourceImg.w = this.width
           that.sourceImg.h = this.height
+          let x = this.width / 2
+          let y = this.height / 2
+          that.defaulthypotenuse = Math.sqrt(x * x + y * y)
         }
       }
     },
@@ -210,10 +208,14 @@ export default {
 </script>
 <style lang="less" scoped>
 .draw {
-  width: 100%;
-  height: calc(100vw * 1.36);
+  position: relative;
+  margin-top: 1rem;
+  margin-left: 1rem;
+  width: 14rem;
+  height: 14rem;
   background-color: black;
   z-index: 1;
+  overflow: hidden;
 }
 .tietu {
   position: absolute;
@@ -241,7 +243,6 @@ export default {
   margin: -2.5vw -2.5vw;
 }
 .target {
-  box-shadow: 0 0 0 1px white;
   img {
     display: block;
   }
