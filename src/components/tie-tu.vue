@@ -1,56 +1,8 @@
 <template>
-  <div
-   ref="tietu"
-   @click.stop=""
-   :class="{[select]:1}"
-   :style="{top:tietu.top>-9999?tietu.top+'px':tietu.top,left:tietu.left>-9999?tietu.left+'px':tietu.left,'z-index':z,transform:`scale(${tietu.scale},${tietu.scale}) rotate(${tietu.rotate}deg)`}"
-   class="tietu">
-    <div
-     :id="'tietu'+tietuIndex"
-     @touchstart="touchstart"
-     @touchmove="touchmove"
-     @touchend="touchend"
-     :class="{target:tietu.z == $parent.currentTieTu}">
-       <template v-if="!tietu.d.hairs">
-        <img :src="baseurl+tietu.d.url" :width="tietu.d.w/3" :height="tietu.d.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
-       </template>
-      <div v-else :style="{width:tietu.d.w+'px', height:tietu.d.h+'px'}" class="body">
-        <img class="face" :src="baseurl+body.face.url" :width="body.face.w/4" :height="body.face.h/4" :style="{top:body.face.t+tietu.d.offset+'px',left:body.face.l+'px'}" />
-        <img class="hair" :src="baseurl+body.hair.url" :width="body.hair.w/4" :height="body.hair.h/4" :style="{top:body.hair.t+tietu.d.offset+'px',left:body.hair.l+'px'}"  />
-        <img class="leg" :src="baseurl+body.leg.url" :width="body.leg.w/4" :height="body.leg.h/4" :style="{top:body.leg.t+tietu.d.offset+'px',left:body.leg.l+'px'}" />
-        <img class="coat" :src="baseurl+body.coat.url" :width="body.coat.w/4" :height="body.coat.h/4" :style="{top:body.coat.t+tietu.d.offset+'px',left:body.coat.l+'px'}" />
-      </div>
-      <span
-       v-show="$parent.currentTieTu === tietu.z"
-       :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-del.png)'}"
-       class="del"
-       @click.stop="del"></span>
-      <template>
-        <span
-         :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-scale.png)'}"
-         class="scale"
-         v-show="$parent.currentTieTu === tietu.z"
-         @touchstart.stop="scalestart"
-         @touchmove.stop="scalesmove"></span>
-        <span
-         :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-rotate.png)'}"
-         class="rotate"
-         v-show="$parent.currentTieTu === tietu.z"
-         @touchstart.stop="rotatetart"
-         @touchmove.stop="rotatemove"></span>
-         <span
-         :style="{transform:'scale('+1/tietu.scale+')',background: 'url('+baseurl+'/img/ico-mirror.png)'}"
-         v-show="$parent.currentTieTu === tietu.z"
-         @click="mirror"
-         class="mirror"
-         ></span>
-       </template>
-    </div>
-  </div>
 </template>
 <script>
 export default {
-  props: ['tietuIndex', 'tietu', 'z'],
+  props: ['tietuIndex', 'tietu'],
   data() {
     return {
       zoon: 1,
@@ -59,36 +11,10 @@ export default {
       defaulthypotenuse: 0, // 默认斜边长度
       select: '',
       t: null,
-
       // 身体部件
-      face: 0,
-      hair: 0,
-      leg: 0,
-      coat: 0,
       offsetAngle: 0,
-      baseurl: '',
-
       // 镜像
       scaleMirror: 1,
-    }
-  },
-  computed: {
-    body: function() {
-      return {
-        face: this.$parent.data.person[this.tietu.i].faces[this.face],
-        hair: this.$parent.data.person[this.tietu.i].hairs[this.hair],
-        leg: this.$parent.data.person[this.tietu.i].legs[this.leg],
-        coat: this.$parent.data.person[this.tietu.i].coats[this.coat],
-      }
-    },
-  },
-  created() {
-    this.face = this.tietu.d.face
-    this.hair = this.tietu.d.hair
-    this.leg = this.tietu.d.leg
-    this.coat = this.tietu.d.coat
-    if (process.env.NODE_ENV === 'production') {
-      this.baseurl = window.baseurl
     }
   },
   mounted() {
@@ -104,15 +30,6 @@ export default {
         this.scaleMirror = 1
       }
     },
-    del: function() {
-      if (this.tietu.sort === 'furniture') {
-        this.$parent.mongs = -1
-      }
-      this.$parent.tietus.splice(this.tietuIndex, 1)
-      this.$parent.target = -1
-      this.select = ''
-      this.$parent.personSort = ''
-    },
     touchstart: function(e) {
       this.select = 'select-create'
       this.t = setTimeout(() => {
@@ -121,15 +38,6 @@ export default {
       this.offsettop = e.touches[0].clientY - this.$refs.tietu.offsetTop
       this.offsetleft = e.touches[0].clientX - this.$refs.tietu.offsetLeft
       this.$parent.target = this.tietuIndex
-
-      // 层级修改
-      if (this.$parent.tietus[this.tietuIndex].sort !== 'furniture') {
-        this.$parent.normalMax = this.$parent.tietus[this.tietuIndex].z =
-          this.$parent.normalMax + 1
-      } else {
-        this.$parent.backMax = this.$parent.tietus[this.tietuIndex].z =
-          this.$parent.backMax + 1
-      }
 
       //设定当前的贴图
       this.$parent.currentTieTu = this.$parent.tietus[this.tietuIndex].z
@@ -161,7 +69,6 @@ export default {
         this.select = ''
       }, 200)
     },
-    scalestart() {},
     scalesmove(e) {
       // 计算 中心x轴 到 e的x轴 值
       var x =
@@ -237,17 +144,6 @@ export default {
       }
       Vue.set(this.$parent.tietus[this.tietuIndex], 'rotate', r)
       e.preventDefault()
-    },
-  },
-  watch: {
-    'tietu.d': {
-      handler: function(n) {
-        this.face = n.face
-        this.hair = n.hair
-        this.leg = n.leg
-        this.coat = n.coat
-      },
-      deep: true,
     },
   },
 }

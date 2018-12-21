@@ -1,249 +1,235 @@
 <template>
-  <div>
-    <input id="taokouling" style="opacity: 0;position: absolute;border: 0;display: block;padding: 0;" type="text" readonly value="【oliviaburton旗舰店】，復·制这段描述￥RayhbNUl0YP￥后咑閞👉手机淘宝👈或者用浏览器咑閞https://m.tb.cn/h.3LaUpaN查看">
-    <div :class="'app-'+showType" id="ending">
-      <transition name="ending">
-        <ending v-if="showType === 'ending'" class="ending"></ending>
-      </transition>
-      <template>
-        <div class="draw-container" :class="{overhidden: showType==='preview'}">
-          <!-- <transition name="like">
-            <like v-show="showType === 'like'"/>
-          </transition> -->
-          <div ref="draw" @click="touchback" id="draw" class="draw" :style="'background:url('+baseurl+data.bg[currentBg].url+') no-repeat'">
-            <!-- <img class="full-moon" v-if="mongs > 0" :src="baseurl+'/img/petal.png'"> -->
-            <tietu v-for="(item , index) in tietus" v-bind:tietu='item' v-bind:tietuIndex='index' :z="item.z" :key="index"></tietu>
-            <template v-if="showType === 'ending'">
-              <div class="top"></div>
-              <div class="right"></div>
-              <div class="bottom"></div>
-              <div class="left"></div>
-              <div class="top2"></div>
-              <div class="right2"></div>
-              <div class="bottom2"></div>
-              <div class="left2"></div>
-            </template>
-          </div>
-          <div v-if="(showType==='ending') || (showType==='main')" style="width: 100%;position: absolute;height: calc(100vh - 100vw * 1.36);background: white;z-index: 2;"></div>
-          <img v-if="(showType==='preview') || (showType==='ending')" style="height: 24.8vw;display: block;position: absolute;z-index: 3;" :src="baseurl+'/img/FHome/footer.jpg'" width="100%">
-          <div style="height: 24.8vw;"></div>
-        </div>
-        <search v-show="showType==='main'"></search>
-      </template>
+  <div ref="draw" @click="touchback" id="draw" class="draw">
+    <div
+     ref="tietu"
+     @click.stop=""
+     :class="{[select]:1}"
+     :style="{top:tietu.top+'px',left:tietu.left+'px',transform:`scale(${tietu.scale},${tietu.scale}) rotate(${tietu.rotate}deg)`}"
+     class="tietu">
+      <div
+       @touchstart="touchstart"
+       @touchmove="touchmove"
+       @touchend="touchend"
+       class="target">
+        <img :src="tietu.d.url" :width="tietu.d.w/3" :height="tietu.d.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
+        <span
+         :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-scale.png)'}"
+         class="scale"
+         @touchmove.stop="scalesmove"></span>
+        <span
+         :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-rotate.png)'}"
+         class="rotate"
+         @touchstart.stop="rotatetart"
+         @touchmove.stop="rotatemove"></span>
+         <span
+         :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-mirror.png)'}"
+         @click="mirror"
+         class="mirror"
+         ></span>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import tietu from '@/components/tie-tu'
-import search from '@/components/search'
-import ending from '@/components/ending'
-import data from '@/js/data'
 export default {
-  components: {
-    tietu,
-    search,
-    ending,
-  },
   data() {
     return {
-      data: data,
-      loading: false,
-      tietus: [],
-      tietuIndex: '',
+      tietu: {
+          d: {name: '', url: '/img/bee/2.png', w: 300, h: 300},
+          i: 1,
+          sort: 'bee',
+          scale: 1,
+          rotate: 0,
+          left: 118.73828125,
+          top: 134.6796875,
+        },
       target: 0,
       normalMax: 0,
       backMax: 0,
-      currentTieTu: '',
-      currentBg: 0,
-      personSort: '',
-      showType: 'main',
       msg: '',
-      Play: 0,
-      baseurl: '',
-      inputShow: 0,
-      mySelfTxt: '',
-      videoShow: 0,
-      mongs: -1,
-      // 截图后的提示
-      show: 1,
+      zoon: 1,
+      offsettop: 0,
+      offsetleft: 0,
+      defaulthypotenuse: 0, // 默认斜边长度
+      select: '',
+      t: null,
+      // 身体部件
+      offsetAngle: 0,
+      // 镜像
+      scaleMirror: 1,
     }
   },
-  created() {
-    if (process.env.NODE_ENV === 'production') {
-      this.baseurl = window.baseurl
-    }
+  mounted() {
+    var x = this.$refs.tietu.offsetWidth / 2
+    var y = this.$refs.tietu.offsetHeight / 2
+    this.defaulthypotenuse = Math.sqrt(x * x + y * y)
   },
   methods: {
     touchback() {
-      this.currentTieTu = ''
       this.target = -1
-      this.personSort = ''
     },
-    myToMsg() {
-      this.mySelfTxt && (this.msg = this.mySelfTxt)
-      this.inputShow = 0
+    mirror() {
+      if (this.scaleMirror === 1) {
+        this.scaleMirror = -1
+      } else {
+        this.scaleMirror = 1
+      }
+    },
+    touchstart: function(e) {
+      this.select = 'select-create'
+      this.t = setTimeout(() => {
+        this.select = 'select-created'
+      }, 200)
+      this.offsettop = e.touches[0].clientY - this.$refs.tietu.offsetTop
+      this.offsetleft = e.touches[0].clientX - this.$refs.tietu.offsetLeft
+    },
+    touchmove: function(e) {
+      if (this.t) {
+        clearTimeout(this.t)
+      }
+      this.select = 'select-created'
+      this.tietu.top =
+        e.touches[0].clientY - this.offsettop
+      this.tietu.left =
+        e.touches[0].clientX - this.offsetleft
+      e.preventDefault()
+    },
+    touchend() {
+      if (this.t) {
+        clearTimeout(this.t)
+      }
+      this.select = 'select-destroy'
+      setTimeout(() => {
+        this.select = ''
+      }, 200)
+    },
+    scalesmove(e) {
+      // 计算 中心x轴 到 e的x轴 值
+      var x =
+        e.touches[0].clientX -
+        this.$refs.tietu.offsetWidth / 2 -
+        this.$refs.tietu.offsetLeft
+      // 计算 中心y轴 到 e的y轴 值
+      var y =
+        e.touches[0].clientY -
+        this.$refs.tietu.offsetHeight / 2 -
+        this.$refs.tietu.offsetTop
+      //斜边长度
+      var hypotenuse = Math.sqrt(x * x + y * y)
+      this.tietu.scale =
+        hypotenuse / this.defaulthypotenuse
+      e.preventDefault()
+    },
+    rotatetart() {
+      this.offsetAngle =
+        (Math.atan(
+          this.$refs.tietu.offsetWidth /
+            2 /
+            (this.$refs.tietu.offsetHeight / 2),
+        ) *
+          180) /
+        Math.PI
+    },
+    rotatemove(e) {
+      //对比y值，当前位置是否在中心点下方
+      //Y值
+      var y = this.$refs.tietu.offsetHeight / 2 + this.$refs.tietu.offsetTop
+      var ye = e.touches[0].clientY
+      var x = this.$refs.tietu.offsetWidth / 2 + this.$refs.tietu.offsetLeft
+      var xe = e.touches[0].clientX
+      var r
+
+      //偏移角度
+
+      if (ye < y) {
+        if (xe > x) {
+          //对边长度
+          let opposite = y - ye
+          //临边长度
+          let border = xe - x
+          r = (Math.atan(border / opposite) * 180) / Math.PI
+          r = r + 270 - this.offsetAngle + 90
+        } else {
+          //对边长度
+          let opposite =
+            ye - this.$refs.tietu.offsetHeight / 2 - this.$refs.tietu.offsetTop
+          //临边长度
+          let border = e.touches[0].clientX - x
+          r = (Math.atan(opposite / border) * 180) / Math.PI
+          r = r + 180 - this.offsetAngle + 90
+        }
+      } else {
+        if (xe > x) {
+          //对边长度
+          let opposite =
+            ye - this.$refs.tietu.offsetHeight / 2 - this.$refs.tietu.offsetTop
+          //临边长度
+          let border = e.touches[0].clientX - x
+          r = (Math.atan(opposite / border) * 180) / Math.PI
+          r = r - this.offsetAngle + 90
+        } else {
+          //对边长度
+          let opposite = ye - y
+          //临边长度
+          let border = x - xe
+          r = (Math.atan(border / opposite) * 180) / Math.PI
+          r = r + 90 - this.offsetAngle + 90
+        }
+      }
+      this.tietu.rotate = r
+      e.preventDefault()
     },
   },
 }
 </script>
 <style lang="less" scoped>
-.draw-container {
-  &.overhidden {
-    overflow: hidden;
-  }
-}
 .draw {
   width: 100%;
   height: calc(100vw * 1.36);
-  background-size: cover !important;
-  position: relative;
-  background-position: top !important;
+  background-color: black;
   z-index: 1;
 }
-.app-ending {
-  .draw {
-    top: 0vw;
-  }
-}
-.take-picture {
-  position: fixed;
-  top: calc(100vw - 8vh);
-  right: 7vw;
-  width: 9vw;
-  height: 9vw;
-  line-height: 9vw;
-  text-align: center;
-  border-radius: 50%;
-  z-index: 99999;
-}
-.endingImg {
-  position: fixed;
-  width: 100vw;
-  left: 0;
-  top: 0;
-}
-.music {
+.tietu {
   position: absolute;
-  width: 10vw;
-  height: 10vw;
-  top: 5vw;
-  right: 5vw;
-  z-index: 20004;
-  div {
-    display: block;
-    width: 10vw;
-    height: 10vw;
+  &.select-create{
+    transition:.2s;
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  &.select-created{
+    -webkit-transform: scale(1.05);
+    transform: scale(1.05);
+  }
+  &.select-destroy{
+    transition:.2s;
+    -webkit-transform: scale(1);
+    transform: scale(1);
   }
 }
-.inputMsg {
+.tietu span{
   position: absolute;
-  text-align: center;
-  background: rgba(209, 241, 255, 0.44);
-  width: 100%;
-  height: 100%;
-  z-index: 21000;
-  top: 0;
-  left: 0;
-  textarea {
-    background: #d1f1ff;
-    width: 80vw;
-    height: 35vh;
-    border: 0;
-    font-size: 5.8vw;
-    padding: 2vw;
-    border-radius: 3vw;
-    margin: 30vh auto 5vw auto;
-  }
-  div {
-    position: fixed;
-    color: #102e40;
-    background: #5fc6ff;
-    border: 0;
-    border-radius: 3vw;
-    margin: -21vw auto 0 39vw;
-    width: 20vw;
-    height: 10vw;
-    line-height: 10vw;
-  }
+  display: block;
+  width: 5vw;
+  height: 5vw;
+  color: #000;
+  margin: -2.5vw -2.5vw;
 }
-.videoBox {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 21100;
-  video {
-    width: 100%;
-  }
+.target {
+  box-shadow: 0 0 0 1px white;
 }
-.full-moon {
-  pointer-events: none;
-  position: absolute;
+.tietu .scale{
+  bottom: 0;
+  right: 0;
+  background-size: 100% !important;
+}
+.tietu .rotate{
   right: 0;
   top: 0;
-  width: 100vw;
+  background-size: 100% !important;
 }
-.top,
-.right,
-.bottom,
-.left {
-  z-index: 99999;
-  position: absolute;
-}
-.top {
-  width: calc(100% + 4vw);
-  height: 2vw;
-  top: -2vw;
-  left: -2vw;
-}
-.right {
-  width: 2vw;
-  right: -2vw;
-  height: calc(100% + 4vw);
-  top: -2vw;
-}
-.bottom {
-  width: calc(100% + 4vw);
-  height: 23vw;
-  bottom: -23vw;
-  left: -2vw;
-}
-.left {
-  width: 2vw;
-  left: -2vw;
-  height: calc(100% + 4vw);
-  top: -2vw;
-}
-.top2,
-.right2,
-.left2,
-.bottom2 {
-  z-index: 99999;
-  position: absolute;
-  background: white;
-}
-.top2 {
-  width: calc(100% + 4vw);
-  height: 80vw;
-  top: -82vw;
-  left: -2vw;
-}
-.right2 {
-  width: 20vw;
-  right: -21.9vw;
-  height: calc(100% + 40vw);
-  top: -20vw;
-}
-.left2 {
-  width: 20vw;
-  left: -21.9vw;
-  height: calc(100% + 40vw);
-  top: -20vw;
-}
-.bottom2 {
-  height: 50vw;
-  width: calc(100% + 4vw);
-  bottom: -72vw;
-  position: absolute;
-  left: -2vw;
+.tietu .mirror{
+  left: 0;
+  bottom: 0;
+  background-size: 100% !important;
 }
 </style>
