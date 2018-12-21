@@ -99,7 +99,10 @@ export default {
     positionCorrect() {
       let left = this.target.w - this.target.diffw * (this.target.scale - 1)
       console.log(left)
-      if (left > 0 || left < -(this.sourceImg.w * this.target.scale - this.clothW)) {
+      if (
+        left > 0 ||
+        left < -(this.sourceImg.w * this.target.scale - this.clothW)
+      ) {
         console.log('当前在错误的位置', left)
       }
     },
@@ -164,11 +167,11 @@ export default {
         mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]),
         n = bstr.length,
-        u8arr = new Uint8Array(n);
+        u8arr = new Uint8Array(n)
       while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
+        u8arr[n] = bstr.charCodeAt(n)
       }
-      return new Blob([u8arr], { type: mime });
+      return new Blob([u8arr], {type: mime})
     },
     mirror() {
       if (this.scaleMirror === 1) {
@@ -194,13 +197,25 @@ export default {
         clearTimeout(this.t)
       }
       this.select = 'select-created'
-      let top = e.touches[0].clientY - this.offsettop - this.target.diffh * (this.target.scale - 1)
-      if (top < 0 && top > -(this.sourceImg.h * this.target.scale - this.clothH)) {
+      let top =
+        e.touches[0].clientY -
+        this.offsettop -
+        this.target.diffh * (this.target.scale - 1)
+      if (
+        top < 0 &&
+        top > -(this.sourceImg.h * this.target.scale - this.clothH)
+      ) {
         this.target.top = e.touches[0].clientY - this.offsettop
       }
-      let left = e.touches[0].clientX - this.offsetleft - this.target.diffw * (this.target.scale - 1)
+      let left =
+        e.touches[0].clientX -
+        this.offsetleft -
+        this.target.diffw * (this.target.scale - 1)
       // console.log(left)
-      if (left < 0 && left > -(this.sourceImg.w * this.target.scale - this.clothW)) {
+      if (
+        left < 0 &&
+        left > -(this.sourceImg.w * this.target.scale - this.clothW)
+      ) {
         this.target.left = e.touches[0].clientX - this.offsetleft
       }
       e.preventDefault()
