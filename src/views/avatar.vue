@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="draw">
+    <div class="draw" id="myElement">
       <div
        v-if="target.url"
        ref="tietu"
@@ -33,7 +33,7 @@
     </div>
     <br>
     <div @click="generate" style="color: white;">确认</div>
-    <canvas :width="clothW" :height="clothH" ref="canvas"></canvas>
+    <canvas style="position: absolute;opacity: 0.5;" :width="clothW" :height="clothH" ref="canvas"></canvas>
   </div>
 </template>
 <script>
@@ -69,10 +69,28 @@ export default {
       },
       clothW: 14 * window.rem,
       clothH: 14 * window.rem,
+      hammerIncrement: 1,
     }
   },
   created() {
     this.getSize(this.file)
+  },
+  mounted() {
+    let that = this
+    let myElement = document.getElementById('myElement')
+    let mc = new Hammer.Manager(myElement)
+    let pinch = new Hammer.Pinch()
+    mc.add([pinch])
+    mc.on('pinch', function(ev) {
+      let newScale = that.target.scale + (ev.scale - that.hammerIncrement)
+      if (newScale >= 1) {
+        that.target.scale += ev.scale - that.hammerIncrement
+      }
+      that.hammerIncrement = ev.scale
+    })
+    mc.on('pinchend', function(ev) {
+      that.hammerIncrement = 1
+    })
   },
   methods: {
     generate() {
@@ -158,6 +176,10 @@ export default {
       this.offsetleft = e.touches[0].clientX - this.$refs.tietu.offsetLeft
     },
     touchmove: function(e) {
+      // 两个手指不操作
+      if (e.touches.length > 1) {
+        return
+      }
       if (this.t) {
         clearTimeout(this.t)
       }
