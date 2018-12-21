@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <div class="draw">
       <div
        v-if="sourceImg.url"
@@ -13,7 +13,7 @@
          @touchmove="touchmove"
          @touchend="touchend"
          class="target">
-          <img :src="sourceImg.url" :width="sourceImg.w/3" :height="sourceImg.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
+          <img :src="sourceImg.url" :width="sourceImg.w" :height="sourceImg.h" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
           <span
            :style="{transform:'scale('+1/sourceImg.scale+')',background: 'url(/img/ico-scale.png)'}"
            class="scale"
@@ -31,6 +31,9 @@
         </div>
       </div>
     </div>
+    <br>
+    <div @click="generate" style="color: white;">确认</div>
+    <canvas :width="clothW" :height="clothH" ref="canvas"></canvas>
   </div>
 </template>
 <script>
@@ -56,28 +59,49 @@ export default {
         rotate: 0,
         left: 118.73828125,
         top: 134.6796875,
-      }
+        Image: null,
+        diffw: 0,
+        diffh: 0,
+      },
+      clothW: 14 * window.rem,
+      clothH: 14 * window.rem,
     }
   },
   created() {
-    console.log(this.file)
     this.getSize(this.file)
   },
   methods: {
+    generate() {
+      console.log('生成图片')
+      let canvas = this.$refs.canvas
+      let ctx = canvas.getContext('2d')
+      ctx.clearRect(0, 0, this.clothW, this.clothH)
+      ctx.fillStyle = '#ffffff'
+      ctx.fillRect(0, 0, this.clothW, this.clothH)
+      ctx.drawImage(
+        this.sourceImg.Image,
+        this.sourceImg.left - this.sourceImg.diffw * (this.sourceImg.scale - 1),// 1倍 0， 2倍：63， 3倍： 126
+        this.sourceImg.top - this.sourceImg.diffh * (this.sourceImg.scale - 1),// 1倍 0， 2倍：63， 3倍： 126
+        this.sourceImg.w * this.sourceImg.scale,
+        this.sourceImg.h * this.sourceImg.scale,
+      )
+    },
     // 获得图片尺寸
     getSize(file) {
       let that = this
       let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = function(e) {
-        let image = new Image()
-        image.src = e.target.result
+        that.sourceImg.Image = new Image()
+        that.sourceImg.Image.src = e.target.result
         let blob = that.dataURLtoBlob(e.target.result)
         let url = URL.createObjectURL(blob)
         that.sourceImg.url = url
-        image.onload = function() {
+        that.sourceImg.Image.onload = function() {
           that.sourceImg.w = this.width
           that.sourceImg.h = this.height
+          that.sourceImg.diffw = this.width / 2
+          that.sourceImg.diffh = this.height / 2
           let x = this.width / 2
           let y = this.height / 2
           that.defaulthypotenuse = Math.sqrt(x * x + y * y)
@@ -207,13 +231,23 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #525252;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-flow: column;
+}
 .draw {
   position: relative;
-  margin-top: 1rem;
-  margin-left: 1rem;
   width: 14rem;
   height: 14rem;
-  background-color: black;
+  background-color: #1d1d1d;
   z-index: 1;
   overflow: hidden;
 }
