@@ -1,21 +1,27 @@
 <template>
-  <div id="app" class="app" @touchmove="test">
-    <index />
+  <div id="app" class="app">
+    <avatar v-if="file" :file="file" />
+    <div>
+      <input @change="changeUpload" id="avatar" type="file">
+    </div>
   </div>
 </template>
 <script>
-import index from '@/views/index'
+import avatar from '@/views/avatar'
 export default {
   name: 'app',
   components: {
-    index,
+    avatar,
   },
-  created() {
-    // console.log(this.$route)
+  data() {
+    return {
+      file: null,
+    }
   },
   methods: {
-    test() {
-      // e.preventDefault()
+    async changeUpload() {
+      let a = document.getElementById('avatar')
+      this.file = a.files[0]
     },
   },
 }

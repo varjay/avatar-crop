@@ -2,50 +2,42 @@
   <div>
     <div class="draw">
       <div
+       v-if="sourceImg.url"
        ref="tietu"
        @click.stop=""
        :class="{[select]:1}"
-       :style="{top:tietu.top+'px',left:tietu.left+'px',transform:`scale(${tietu.scale},${tietu.scale}) rotate(${tietu.rotate}deg)`}"
+       :style="{top:sourceImg.top+'px',left:sourceImg.left+'px',transform:`scale(${sourceImg.scale},${sourceImg.scale}) rotate(${sourceImg.rotate}deg)`}"
        class="tietu">
         <div
          @touchstart="touchstart"
          @touchmove="touchmove"
          @touchend="touchend"
          class="target">
-          <img :src="tietu.d.url" :width="tietu.d.w/3" :height="tietu.d.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
+          <img :src="sourceImg.url" :width="sourceImg.w/3" :height="sourceImg.h/3" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
           <span
-           :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-scale.png)'}"
+           :style="{transform:'scale('+1/sourceImg.scale+')',background: 'url(/img/ico-scale.png)'}"
            class="scale"
            @touchmove.stop="scalesmove"></span>
           <span
-           :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-rotate.png)'}"
+           :style="{transform:'scale('+1/sourceImg.scale+')',background: 'url(/img/ico-rotate.png)'}"
            class="rotate"
            @touchstart.stop="rotatetart"
            @touchmove.stop="rotatemove"></span>
            <span
-           :style="{transform:'scale('+1/tietu.scale+')',background: 'url(/img/ico-mirror.png)'}"
+           :style="{transform:'scale('+1/sourceImg.scale+')',background: 'url(/img/ico-mirror.png)'}"
            @click="mirror"
            class="mirror"
            ></span>
         </div>
       </div>
     </div>
-    <div>
-      <input type="file">
-    </div>
   </div>
 </template>
 <script>
 export default {
+  props: ['file'],
   data() {
     return {
-      tietu: {
-          d: {url: '/img/img.jpg', w: 300, h: 300},
-          scale: 1,
-          rotate: 0,
-          left: 118.73828125,
-          top: 134.6796875,
-        },
       offsettop: 0,
       offsetleft: 0,
       defaulthypotenuse: 0, // 默认斜边长度
@@ -55,14 +47,56 @@ export default {
       offsetAngle: 0,
       // 镜像
       scaleMirror: 1,
+      // 原始图片
+      sourceImg: {
+        w: 0,
+        h: 0,
+        url: '',
+        scale: 1,
+        rotate: 0,
+        left: 118.73828125,
+        top: 134.6796875,
+      }
     }
   },
+  created() {
+    console.log(this.file)
+    this.getSize(this.file)
+  },
   mounted() {
-    var x = this.$refs.tietu.offsetWidth / 2
-    var y = this.$refs.tietu.offsetHeight / 2
-    this.defaulthypotenuse = Math.sqrt(x * x + y * y)
+    // let x = this.$refs.tietu.offsetWidth / 2
+    // let y = this.$refs.tietu.offsetHeight / 2
+    // this.defaulthypotenuse = Math.sqrt(x * x + y * y)
   },
   methods: {
+    // 获得图片尺寸
+    getSize(file) {
+      let that = this
+      let reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = function(e) {
+        let image = new Image()
+        image.src = e.target.result
+        let blob = that.dataURLtoBlob(e.target.result)
+        let url = URL.createObjectURL(blob)
+        that.sourceImg.url = url
+        image.onload = function() {
+          that.sourceImg.w = this.width
+          that.sourceImg.h = this.height
+        }
+      }
+    },
+    dataURLtoBlob(dataurl) {
+      var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    },
     mirror() {
       if (this.scaleMirror === 1) {
         this.scaleMirror = -1
@@ -83,10 +117,8 @@ export default {
         clearTimeout(this.t)
       }
       this.select = 'select-created'
-      this.tietu.top =
-        e.touches[0].clientY - this.offsettop
-      this.tietu.left =
-        e.touches[0].clientX - this.offsetleft
+      this.sourceImg.top = e.touches[0].clientY - this.offsettop
+      this.sourceImg.left = e.touches[0].clientX - this.offsetleft
       e.preventDefault()
     },
     touchend() {
@@ -111,8 +143,7 @@ export default {
         this.$refs.tietu.offsetTop
       //斜边长度
       var hypotenuse = Math.sqrt(x * x + y * y)
-      this.tietu.scale =
-        hypotenuse / this.defaulthypotenuse
+      this.sourceImg.scale = hypotenuse / this.defaulthypotenuse
       e.preventDefault()
     },
     rotatetart() {
@@ -171,7 +202,7 @@ export default {
           r = r + 90 - this.offsetAngle + 90
         }
       }
-      this.tietu.rotate = r
+      this.sourceImg.rotate = r
       e.preventDefault()
     },
   },
@@ -186,22 +217,22 @@ export default {
 }
 .tietu {
   position: absolute;
-  &.select-create{
-    transition:.2s;
+  &.select-create {
+    transition: 0.2s;
     -webkit-transform: scale(1.05);
     transform: scale(1.05);
   }
-  &.select-created{
+  &.select-created {
     -webkit-transform: scale(1.05);
     transform: scale(1.05);
   }
-  &.select-destroy{
-    transition:.2s;
+  &.select-destroy {
+    transition: 0.2s;
     -webkit-transform: scale(1);
     transform: scale(1);
   }
 }
-.tietu span{
+.tietu span {
   position: absolute;
   display: block;
   width: 5vw;
@@ -215,17 +246,17 @@ export default {
     display: block;
   }
 }
-.tietu .scale{
+.tietu .scale {
   bottom: 0;
   right: 0;
   background-size: 100% !important;
 }
-.tietu .rotate{
+.tietu .rotate {
   right: 0;
   top: 0;
   background-size: 100% !important;
 }
-.tietu .mirror{
+.tietu .mirror {
   left: 0;
   bottom: 0;
   background-size: 100% !important;
