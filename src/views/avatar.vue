@@ -2,29 +2,29 @@
   <div class="container">
     <div class="draw">
       <div
-       v-if="sourceImg.url"
+       v-if="target.url"
        ref="tietu"
        @click.stop=""
        :class="{[select]:1}"
-       :style="{top:sourceImg.top+'px',left:sourceImg.left+'px',transform:`scale(${sourceImg.scale},${sourceImg.scale}) rotate(${sourceImg.rotate}deg)`}"
+       :style="{top:target.top+'px',left:target.left+'px',transform:`scale(${target.scale},${target.scale}) rotate(${target.rotate}deg)`}"
        class="tietu">
         <div
          @touchstart="touchstart"
          @touchmove="touchmove"
          @touchend="touchend"
          class="target">
-          <img :src="sourceImg.url" :width="sourceImg.w" :height="sourceImg.h" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
+          <img :src="target.url" :width="target.w" :height="target.h" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
           <span
-           :style="{transform:'scale('+1/sourceImg.scale+')',background: 'url(/img/ico-scale.png)'}"
+           :style="{transform:'scale('+1/target.scale+')',background: 'url(/img/ico-scale.png)'}"
            class="scale"
            @touchmove.stop="scalesmove"></span>
           <span
-           :style="{transform:'scale('+1/sourceImg.scale+')',background: 'url(/img/ico-rotate.png)'}"
+           :style="{transform:'scale('+1/target.scale+')',background: 'url(/img/ico-rotate.png)'}"
            class="rotate"
            @touchstart.stop="rotatetart"
            @touchmove.stop="rotatemove"></span>
            <span
-           :style="{transform:'scale('+1/sourceImg.scale+')',background: 'url(/img/ico-mirror.png)'}"
+           :style="{transform:'scale('+1/target.scale+')',background: 'url(/img/ico-mirror.png)'}"
            @click="mirror"
            class="mirror"
            ></span>
@@ -51,7 +51,7 @@ export default {
       // 镜像
       scaleMirror: 1,
       // 原始图片
-      sourceImg: {
+      target: {
         w: 0,
         h: 0,
         url: '',
@@ -63,6 +63,10 @@ export default {
         diffw: 0,
         diffh: 0,
       },
+      sourceImg: {
+        w: 0,
+        h: 0,
+      },
       clothW: 14 * window.rem,
       clothH: 14 * window.rem,
     }
@@ -72,18 +76,17 @@ export default {
   },
   methods: {
     generate() {
-      console.log('生成图片')
       let canvas = this.$refs.canvas
       let ctx = canvas.getContext('2d')
       ctx.clearRect(0, 0, this.clothW, this.clothH)
       ctx.fillStyle = '#ffffff'
       ctx.fillRect(0, 0, this.clothW, this.clothH)
       ctx.drawImage(
-        this.sourceImg.Image,
-        this.sourceImg.left - this.sourceImg.diffw * (this.sourceImg.scale - 1),
-        this.sourceImg.top - this.sourceImg.diffh * (this.sourceImg.scale - 1),
-        this.sourceImg.w * this.sourceImg.scale,
-        this.sourceImg.h * this.sourceImg.scale,
+        this.target.Image,
+        this.target.left - this.target.diffw * (this.target.scale - 1),
+        this.target.top - this.target.diffh * (this.target.scale - 1),
+        this.target.w * this.target.scale,
+        this.target.h * this.target.scale,
       )
     },
     // 获得图片尺寸
@@ -92,18 +95,38 @@ export default {
       let reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = function(e) {
-        that.sourceImg.Image = new Image()
-        that.sourceImg.Image.src = e.target.result
+        that.target.Image = new Image()
+        that.target.Image.src = e.target.result
         let blob = that.dataURLtoBlob(e.target.result)
         let url = URL.createObjectURL(blob)
-        that.sourceImg.url = url
-        that.sourceImg.Image.onload = function() {
-          that.sourceImg.w = this.width
-          that.sourceImg.h = this.height
-          that.sourceImg.diffw = this.width / 2
-          that.sourceImg.diffh = this.height / 2
-          let x = this.width / 2
-          let y = this.height / 2
+        that.target.url = url
+        that.target.Image.onload = function() {
+          let width = this.width
+          let height = this.height
+
+          // 计算出适当的尺寸和位置
+          let scale
+          if (width > height) {
+            scale = height / that.clothH
+            height = height / scale
+            width = width / scale
+            that.target.top = 0
+            that.target.left = -(width - that.clothW) / 2
+          } else {
+            scale = width / that.clothH
+            width = width / scale
+            height = height / scale
+            that.target.top = -(height - that.clothH) / 2
+            that.target.left = 0
+          }
+          that.sourceImg.w = width
+          that.sourceImg.h = height
+          that.target.w = width
+          that.target.h = height
+          that.target.diffw = width / 2
+          that.target.diffh = height / 2
+          let x = width / 2
+          let y = height / 2
           that.defaulthypotenuse = Math.sqrt(x * x + y * y)
         }
       }
@@ -139,8 +162,14 @@ export default {
         clearTimeout(this.t)
       }
       this.select = 'select-created'
-      this.sourceImg.top = e.touches[0].clientY - this.offsettop
-      this.sourceImg.left = e.touches[0].clientX - this.offsetleft
+      let top = e.touches[0].clientY - this.offsettop - this.target.diffh * (this.target.scale - 1)
+      if (top < 0 && top > -(this.sourceImg.h - this.clothH)) {
+        this.target.top = e.touches[0].clientY - this.offsettop
+      }
+      let left = e.touches[0].clientX - this.offsetleft - this.target.diffw * (this.target.scale - 1)
+      if (left < 0 && left > -(this.sourceImg.w - this.clothW)) {
+        this.target.left = e.touches[0].clientX - this.offsetleft
+      }
       e.preventDefault()
     },
     touchend() {
@@ -165,7 +194,7 @@ export default {
         this.$refs.tietu.offsetTop
       //斜边长度
       var hypotenuse = Math.sqrt(x * x + y * y)
-      this.sourceImg.scale = hypotenuse / this.defaulthypotenuse
+      this.target.scale = hypotenuse / this.defaulthypotenuse
       e.preventDefault()
     },
     rotatetart() {
@@ -224,7 +253,7 @@ export default {
           r = r + 90 - this.offsetAngle + 90
         }
       }
-      this.sourceImg.rotate = r
+      this.target.rotate = r
       e.preventDefault()
     },
   },
