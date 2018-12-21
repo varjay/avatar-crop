@@ -90,9 +90,19 @@ export default {
     })
     mc.on('pinchend', function(ev) {
       that.hammerIncrement = 1
+      // 缩放完位置校正
+      that.positionCorrect()
     })
   },
   methods: {
+    // 位置校正
+    positionCorrect() {
+      let left = this.target.w - this.target.diffw * (this.target.scale - 1)
+      console.log(left)
+      if (left > 0 || left < -(this.sourceImg.w * this.target.scale - this.clothW)) {
+        console.log('当前在错误的位置', left)
+      }
+    },
     generate() {
       let canvas = this.$refs.canvas
       let ctx = canvas.getContext('2d')
@@ -185,11 +195,12 @@ export default {
       }
       this.select = 'select-created'
       let top = e.touches[0].clientY - this.offsettop - this.target.diffh * (this.target.scale - 1)
-      if (top < 0 && top > -(this.sourceImg.h - this.clothH)) {
+      if (top < 0 && top > -(this.sourceImg.h * this.target.scale - this.clothH)) {
         this.target.top = e.touches[0].clientY - this.offsettop
       }
       let left = e.touches[0].clientX - this.offsetleft - this.target.diffw * (this.target.scale - 1)
-      if (left < 0 && left > -(this.sourceImg.w - this.clothW)) {
+      // console.log(left)
+      if (left < 0 && left > -(this.sourceImg.w * this.target.scale - this.clothW)) {
         this.target.left = e.touches[0].clientX - this.offsetleft
       }
       e.preventDefault()
