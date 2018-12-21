@@ -80,8 +80,8 @@ export default {
       ctx.fillRect(0, 0, this.clothW, this.clothH)
       ctx.drawImage(
         this.sourceImg.Image,
-        this.sourceImg.left - this.sourceImg.diffw * (this.sourceImg.scale - 1),// 1倍 0， 2倍：63， 3倍： 126
-        this.sourceImg.top - this.sourceImg.diffh * (this.sourceImg.scale - 1),// 1倍 0， 2倍：63， 3倍： 126
+        this.sourceImg.left - this.sourceImg.diffw * (this.sourceImg.scale - 1),
+        this.sourceImg.top - this.sourceImg.diffh * (this.sourceImg.scale - 1),
         this.sourceImg.w * this.sourceImg.scale,
         this.sourceImg.h * this.sourceImg.scale,
       )
