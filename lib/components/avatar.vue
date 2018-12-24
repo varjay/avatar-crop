@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="draw" id="myElement">
+    <div class="draw" id="myElement" :style="{width: clothW+'px', height: clothH+'px'}">
       <div
        v-if="target.url"
        ref="tietu"
@@ -56,8 +56,8 @@ export default {
         w: 0,
         h: 0,
       },
-      clothW: 14 * window.rem,
-      clothH: 14 * window.rem,
+      clothW: screen.width * 0.875,
+      clothH: screen.width * 0.875,
       hammerIncrement: 1,
       touchmoveActive: 0,
     }
@@ -321,8 +321,6 @@ export default {
 }
 .draw {
   position: relative;
-  width: 14rem;
-  height: 14rem;
   background-color: #1d1d1d;
   z-index: 1;
   overflow: hidden;
