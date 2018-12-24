@@ -1,18 +1,29 @@
-# obu
+# avatar-crop
 
-## Project setup
+### 安装
 ```
-npm install
-```
-
-### Compiles and hot-reloads for development
-```
-npm run serve
+npm i vue-avatar-crop-wechat --save
 ```
 
-### Compiles and minifies for production
+### 如何使用
+``` js
+// 导入
+import avatar from 'vue-avatar-crop-wechat'
+Vue.use(avatar)
+
+// 使用
+<vue-avatar @cancel="cancel" @done="done" :file="file" />
 ```
-npm run build
+
+### 参数
+``` js
+// cancel: 取消操作，没有参数。
+// done: 返回
+{
+  base64: 'base64图片',
+  img: 'blob图片',
+  url: 'blob的url地址',
+}
 ```
 
 ### Lints and fixes files
