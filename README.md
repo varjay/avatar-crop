@@ -1,5 +1,5 @@
 # avatar-crop
-
+![image](https://https://github.com/varjay/avatar-crop/public/img/demo.gif)
 ### 安装
 ```
 npm i vue-avatar-crop-wechat --save
