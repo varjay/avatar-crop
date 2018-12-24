@@ -6,7 +6,7 @@
        ref="tietu"
        @click.stop=""
        :class="{[select]:1}"
-       :style="{top:target.top+'px',left:target.left+'px',transform:`scale(${target.scale},${target.scale}) rotate(${target.rotate}deg)`}"
+       :style="{top:target.top+'px',left:target.left+'px',transform:`scale(${target.scale}) rotate(${target.rotate}deg)`}"
        class="tietu">
         <div
          @touchstart="touchstart"
@@ -14,15 +14,6 @@
          @touchend="touchend"
          class="target">
           <img :src="target.url" :width="target.w" :height="target.h" :style="{transition: '0.3s'}">
-          <span
-           :style="{transform:'scale('+1/target.scale+')',background: 'url(/img/ico-scale.png)'}"
-           class="scale"
-           @touchmove.stop="scalesmove"></span>
-          <span
-           :style="{transform:'scale('+1/target.scale+')',background: 'url(/img/ico-rotate.png)'}"
-           class="rotate"
-           @touchstart.stop="rotatetart"
-           @touchmove.stop="rotatemove"></span>
         </div>
       </div>
     </div>
@@ -51,11 +42,15 @@ export default {
         url: '',
         scale: 1,
         rotate: 0,
-        left: 118.73828125,
-        top: 134.6796875,
+        left: 0,
+        top: 0,
         Image: null,
         diffw: 0,
         diffh: 0,
+        difforiginw: 0,
+        difforiginh: 0,
+        originw: 0,
+        originh: 0,
       },
       sourceImg: {
         w: 0,
@@ -87,7 +82,8 @@ export default {
     mc.on('pinch', function(ev) {
       let newScale = that.target.scale + (ev.scale - that.hammerIncrement)
       if (newScale >= 1) {
-        that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement) * that.target.scale
+        // that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement) * that.target.scale
+        that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement)
       }
       that.hammerIncrement = ev.scale
     })
@@ -177,6 +173,10 @@ export default {
           that.target.h = height
           that.target.diffw = width / 2
           that.target.diffh = height / 2
+          that.target.difforiginw = that.target.diffw - that.target.left
+          that.target.difforiginh = that.target.diffh - that.target.top
+          that.target.originw = width / 2
+          that.target.originh = height / 2
           let x = width / 2
           let y = height / 2
           that.defaulthypotenuse = Math.sqrt(x * x + y * y)
@@ -213,7 +213,6 @@ export default {
       if (e.touches.length > 1 || !this.touchmoveActive) {
         return
       }
-      console.log('执行了touchmove')
       if (this.t) {
         clearTimeout(this.t)
       }
@@ -232,6 +231,8 @@ export default {
       if (left < 0 && left > this.maxWidth) {
         this.target.left = e.touches[0].clientX - this.offsetleft
       }
+      this.target.originw = this.sourceImg.w - (this.target.left + this.target.difforiginw)
+      this.target.originh = this.sourceImg.h - (this.target.top + this.target.difforiginh)
       e.preventDefault()
     },
     touchend() {
@@ -242,22 +243,6 @@ export default {
       setTimeout(() => {
         this.select = ''
       }, 200)
-    },
-    scalesmove(e) {
-      // 计算 中心x轴 到 e的x轴 值
-      var x =
-        e.touches[0].clientX -
-        this.$refs.tietu.offsetWidth / 2 -
-        this.$refs.tietu.offsetLeft
-      // 计算 中心y轴 到 e的y轴 值
-      var y =
-        e.touches[0].clientY -
-        this.$refs.tietu.offsetHeight / 2 -
-        this.$refs.tietu.offsetTop
-      //斜边长度
-      var hypotenuse = Math.sqrt(x * x + y * y)
-      this.target.scale = hypotenuse / this.defaulthypotenuse
-      e.preventDefault()
     },
     rotatetart() {
       this.offsetAngle =
@@ -371,11 +356,6 @@ export default {
   img {
     display: block;
   }
-}
-.tietu .scale {
-  bottom: 0;
-  right: 0;
-  background-size: 100% !important;
 }
 .tietu .rotate {
   right: 0;
