@@ -437,6 +437,9 @@ export default {
     display: block;
     height: 100%;
     line-height: 16vw;
+    em {
+      font-size: 4.2vw;
+    }
   }
 }
 </style>
