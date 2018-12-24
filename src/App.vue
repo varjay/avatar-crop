@@ -1,6 +1,8 @@
 <template>
   <div id="app" class="app">
-    <vue-avatar v-if="file" @cancel="cancel" @done="done" :file="file" />
+    <div style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;">
+      <vue-avatar v-if="file" @cancel="cancel" @done="done" :file="file" />
+    </div>
     <div>
       <input @change="changeUpload" id="avatar" type="file">
     </div>
