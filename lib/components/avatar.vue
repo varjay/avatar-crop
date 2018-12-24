@@ -16,9 +16,16 @@
           <img :src="target.url" :width="target.w" :height="target.h" :style="{transition: '0.3s'}">
         </div>
       </div>
+      <div class="shadow bottom"></div>
+      <div class="shadow top"></div>
+      <div class="shadow left"></div>
+      <div class="shadow right"></div>
     </div>
     <br>
-    <div @click="generate" style="color: white;">确认</div>
+    <div class="operate">
+      <div @click="$emit('cancel')"><em>取消</em></div>
+      <div @click="generate"><em>确认</em></div>
+    </div>
     <canvas style="position: absolute;opacity: 0.5;" :width="clothW" :height="clothH" ref="canvas"></canvas>
   </div>
 </template>
@@ -55,6 +62,7 @@ export default {
       sourceImg: {
         w: 0,
         h: 0,
+        type: '',
       },
       clothW: screen.width * 0.875,
       clothH: screen.width * 0.875,
@@ -136,9 +144,18 @@ export default {
         this.target.w * this.target.scale,
         this.target.h * this.target.scale,
       )
+      let imgurl = canvas.toDataURL(this.sourceImg.type)
+      let blob = this.dataURLtoBlob(imgurl)
+      let url = URL.createObjectURL(blob)
+      this.$emit('done', {
+        base64: imgurl,
+        img: blob,
+        url,
+      })
     },
     // 获得图片尺寸
     getSize(file) {
+      this.sourceImg.type = file.type
       let that = this
       let reader = new FileReader()
       reader.readAsDataURL(file)
@@ -313,7 +330,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #525252;
+  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -323,7 +340,6 @@ export default {
   position: relative;
   background-color: #1d1d1d;
   z-index: 1;
-  overflow: hidden;
 }
 .tietu {
   position: absolute;
@@ -359,5 +375,71 @@ export default {
   right: 0;
   top: 0;
   background-size: 100% !important;
+}
+.shadow {
+  position: absolute;
+  width: 87.5vw;
+  background: rgba(0, 0, 0, 0.7);
+  height: 100vh;
+  &.top {
+    top: -100vh;
+    border-bottom: 1px solid white;
+    &:before {
+      content: '';
+      display: block;
+      width: 1px;
+      background-color: white;
+      height: 87.5vw;
+      position: absolute;
+      top: 100vh;
+      left: 0;
+    }
+    &:after {
+      content: '';
+      display: block;
+      width: 1px;
+      background-color: white;
+      height: 87.5vw;
+      position: absolute;
+      top: 100vh;
+      right: 0;
+    }
+  }
+  &.bottom {
+    top: 87.5vw;
+    border-top: 1px solid white;
+  }
+  &.left,
+  &.right {
+    height: 200vh;
+  }
+  &.left {
+    top: -50vh;
+    left: -87.5vw;
+  }
+  &.right {
+    right: -87.5vw;
+    top: -50vw;
+  }
+}
+.operate {
+  height: 16vw;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.1);
+  > div {
+    width: 24%;
+    text-align: center;
+    display: block;
+    height: 100%;
+    line-height: 16vw;
+  }
 }
 </style>

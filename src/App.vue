@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="app">
-    <vue-avatar v-if="file" :file="file" />
+    <vue-avatar v-if="file" @cancel="cancel" @done="done" :file="file" />
     <div>
       <input @change="changeUpload" id="avatar" type="file">
     </div>
@@ -18,6 +18,12 @@ export default {
     async changeUpload() {
       let a = document.getElementById('avatar')
       this.file = a.files[0]
+    },
+    cancel() {
+      this.file = null
+    },
+    done(arg) {
+      console.log(arg)
     },
   },
 }
