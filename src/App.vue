@@ -1,18 +1,14 @@
 <template>
   <div id="app" class="app">
-    <avatar v-if="file" :file="file" />
+    <vue-avatar v-if="file" :file="file" />
     <div>
       <input @change="changeUpload" id="avatar" type="file">
     </div>
   </div>
 </template>
 <script>
-import avatar from '@/views/avatar'
 export default {
   name: 'app',
-  components: {
-    avatar,
-  },
   data() {
     return {
       file: null,

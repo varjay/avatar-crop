@@ -1,10 +1,9 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
-import html2canvas from 'html2canvas'
+import avatar from '../lib/'
+Vue.use(avatar)
+
 window.Vue = Vue
-window.html2canvas = html2canvas
 
 window.rem = document.documentElement.clientWidth / 16
 window.em = Math.sqrt((rem - 20) * 0.9) + 20
