@@ -13,7 +13,7 @@
          @touchmove="touchmove"
          @touchend="touchend"
          class="target">
-          <img :src="target.url" :width="target.w" :height="target.h" :style="{transform: `scale(${scaleMirror},1)`, transition: '0.3s'}">
+          <img :src="target.url" :width="target.w" :height="target.h" :style="{transition: '0.3s'}">
           <span
            :style="{transform:'scale('+1/target.scale+')',background: 'url(/img/ico-scale.png)'}"
            class="scale"
@@ -23,11 +23,6 @@
            class="rotate"
            @touchstart.stop="rotatetart"
            @touchmove.stop="rotatemove"></span>
-           <span
-           :style="{transform:'scale('+1/target.scale+')',background: 'url(/img/ico-mirror.png)'}"
-           @click="mirror"
-           class="mirror"
-           ></span>
         </div>
       </div>
     </div>
@@ -49,7 +44,6 @@ export default {
       // 身体部件
       offsetAngle: 0,
       // 镜像
-      scaleMirror: 1,
       // 原始图片
       target: {
         w: 0,
@@ -70,6 +64,7 @@ export default {
       clothW: 14 * window.rem,
       clothH: 14 * window.rem,
       hammerIncrement: 1,
+      touchmoveActive: 0,
     }
   },
   computed: {
@@ -92,7 +87,7 @@ export default {
     mc.on('pinch', function(ev) {
       let newScale = that.target.scale + (ev.scale - that.hammerIncrement)
       if (newScale >= 1) {
-        that.target.scale += ev.scale - that.hammerIncrement
+        that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement) * that.target.scale
       }
       that.hammerIncrement = ev.scale
     })
@@ -112,8 +107,10 @@ export default {
         ) {
           this.target.top =
             this.maxHeight + this.target.diffh * (this.target.scale - 1)
+          console.log('在错误的位置：上 = 下')
         } else {
           this.target.top = 0 + this.target.diffh * (this.target.scale - 1)
+          console.log('在错误的位置：上 = 上')
         }
       }
       let left = this.target.left - this.target.diffw * (this.target.scale - 1)
@@ -123,8 +120,10 @@ export default {
         ) {
           this.target.left =
             this.maxWidth + this.target.diffw * (this.target.scale - 1)
+          console.log('在错误的位置：左 = 右')
         } else {
           this.target.left = 0 + this.target.diffw * (this.target.scale - 1)
+          console.log('在错误的位置：左 = 左')
         }
       }
     },
@@ -195,13 +194,6 @@ export default {
       }
       return new Blob([u8arr], {type: mime})
     },
-    mirror() {
-      if (this.scaleMirror === 1) {
-        this.scaleMirror = -1
-      } else {
-        this.scaleMirror = 1
-      }
-    },
     touchstart: function(e) {
       this.select = 'select-create'
       this.t = setTimeout(() => {
@@ -209,12 +201,19 @@ export default {
       }, 200)
       this.offsettop = e.touches[0].clientY - this.$refs.tietu.offsetTop
       this.offsetleft = e.touches[0].clientX - this.$refs.tietu.offsetLeft
+      // 超过1个手指触摸时，去掉touchmove
+      if (e.touches.length > 1) {
+        this.touchmoveActive = 0
+      } else {
+        this.touchmoveActive = 1
+      }
     },
     touchmove: function(e) {
       // 两个手指不操作
-      if (e.touches.length > 1) {
+      if (e.touches.length > 1 || !this.touchmoveActive) {
         return
       }
+      console.log('执行了touchmove')
       if (this.t) {
         clearTimeout(this.t)
       }
@@ -381,11 +380,6 @@ export default {
 .tietu .rotate {
   right: 0;
   top: 0;
-  background-size: 100% !important;
-}
-.tietu .mirror {
-  left: 0;
-  bottom: 0;
   background-size: 100% !important;
 }
 </style>
