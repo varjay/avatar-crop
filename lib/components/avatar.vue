@@ -26,7 +26,7 @@
       <div @click="$emit('cancel')"><em>取消</em></div>
       <div @click="generate"><em>确认</em></div>
     </div>
-    <canvas style="position: absolute;opacity: 0.5;" :width="clothW" :height="clothH" ref="canvas"></canvas>
+    <canvas style="display: none;" :width="clothW" :height="clothH" ref="canvas"></canvas>
   </div>
 </template>
 <script>

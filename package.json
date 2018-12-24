@@ -1,7 +1,6 @@
 {
-  "name": "obu",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue-avatar-crop-wechat",
+  "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -25,5 +24,18 @@
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.17"
-  }
+  },
+  "description": "## Project setup ``` npm install ```",
+  "main": "/lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [
+    "avatar-crop",
+    "头像裁剪",
+    "微信头像裁剪",
+    "wechat"
+  ],
+  "author": "virjay",
+  "license": "ISC"
 }
