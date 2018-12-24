@@ -72,6 +72,14 @@ export default {
       hammerIncrement: 1,
     }
   },
+  computed: {
+    maxWidth() {
+      return -(this.sourceImg.w * this.target.scale - this.clothW)
+    },
+    maxHeight() {
+      return -(this.sourceImg.h * this.target.scale - this.clothH)
+    },
+  },
   created() {
     this.getSize(this.file)
   },
@@ -88,7 +96,7 @@ export default {
       }
       that.hammerIncrement = ev.scale
     })
-    mc.on('pinchend', function(ev) {
+    mc.on('pinchend', function() {
       that.hammerIncrement = 1
       // 缩放完位置校正
       that.positionCorrect()
@@ -97,13 +105,27 @@ export default {
   methods: {
     // 位置校正
     positionCorrect() {
-      let left = this.target.w - this.target.diffw * (this.target.scale - 1)
-      console.log(left)
-      if (
-        left > 0 ||
-        left < -(this.sourceImg.w * this.target.scale - this.clothW)
-      ) {
-        console.log('当前在错误的位置', left)
+      let top = this.target.top - this.target.diffh * (this.target.scale - 1)
+      if (top > 0 || top < this.maxHeight) {
+        if (
+          Math.abs(top) > Math.abs(Math.abs(top) - Math.abs(this.maxHeight))
+        ) {
+          this.target.top =
+            this.maxHeight + this.target.diffh * (this.target.scale - 1)
+        } else {
+          this.target.top = 0 + this.target.diffh * (this.target.scale - 1)
+        }
+      }
+      let left = this.target.left - this.target.diffw * (this.target.scale - 1)
+      if (left > 0 || left < this.maxWidth) {
+        if (
+          Math.abs(left) > Math.abs(Math.abs(left) - Math.abs(this.maxWidth))
+        ) {
+          this.target.left =
+            this.maxWidth + this.target.diffw * (this.target.scale - 1)
+        } else {
+          this.target.left = 0 + this.target.diffw * (this.target.scale - 1)
+        }
       }
     },
     generate() {
@@ -201,21 +223,14 @@ export default {
         e.touches[0].clientY -
         this.offsettop -
         this.target.diffh * (this.target.scale - 1)
-      if (
-        top < 0 &&
-        top > -(this.sourceImg.h * this.target.scale - this.clothH)
-      ) {
+      if (top < 0 && top > this.maxHeight) {
         this.target.top = e.touches[0].clientY - this.offsettop
       }
       let left =
         e.touches[0].clientX -
         this.offsetleft -
         this.target.diffw * (this.target.scale - 1)
-      // console.log(left)
-      if (
-        left < 0 &&
-        left > -(this.sourceImg.w * this.target.scale - this.clothW)
-      ) {
+      if (left < 0 && left > this.maxWidth) {
         this.target.left = e.touches[0].clientX - this.offsetleft
       }
       e.preventDefault()
