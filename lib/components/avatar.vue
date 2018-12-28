@@ -13,7 +13,7 @@
          @touchmove="touchmove"
          @touchend="touchend"
          class="target">
-          <img :src="target.url" :width="target.w" :height="target.h" :style="{transition: '0.3s'}">
+          <img :src="target.url" :width="target.w" :height="target.h">
         </div>
       </div>
       <div class="shadow bottom"></div>
