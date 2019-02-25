@@ -77,8 +77,8 @@ export default {
         h: 0,
         type: '',
       },
-      clothW: screen.width * 0.875,
-      clothH: screen.width * 0.875,
+      clothW: document.documentElement.clientWidth * 0.875,
+      clothH: document.documentElement.clientWidth * 0.875,
       hammerIncrement: 1,
       touchmoveActive: 0,
     }
@@ -93,7 +93,7 @@ export default {
   },
   created() {
     if (!this.edit) {
-      this.clothW = screen.width
+      this.clothW = document.documentElement.clientWidth
       this.clothH = document.documentElement.clientHeight
     }
     this.getSize(this.file)
