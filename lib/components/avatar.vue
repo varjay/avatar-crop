@@ -173,7 +173,7 @@ export default {
     // 获得图片尺寸
     getSize(file) {
       let that = this
-      if (file === 'object') {
+      if (typeof file === 'object') {
         this.sourceImg.type = file.type
         let reader = new FileReader()
         reader.readAsDataURL(file)
