@@ -200,7 +200,7 @@ export default {
     computedSize(width, height) {
       // 计算出适当的尺寸和位置
       let scale
-      if (width > height) {
+      if (width > height && this.edit) {
         scale = height / this.clothH
         height = height / scale
         width = width / scale
@@ -210,6 +210,9 @@ export default {
         scale = width / this.clothW
         width = width / scale
         height = height / scale
+        if (width > height && height < this.clothH) {
+          this.clothH = height
+        }
         this.target.top = -(height - this.clothH) / 2
         this.target.left = 0
       }

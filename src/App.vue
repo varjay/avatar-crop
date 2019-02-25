@@ -13,7 +13,7 @@
     <br>
     <button @click="review=!review">现在图片预览</button>
     <div v-if="review" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;">
-      <vue-avatar file="http://192.168.101.252:5050/uInfo?token=0252beb9f73c17c63aedcc11934186dd8d4f784ddd05b98d48b5d0addabc3e13&image_type=thumbs&file_id=i26621094bccab18450f074381d42e4df" :edit="false" @touch="touch" />
+      <vue-avatar file="http://192.168.101.252:5050/uInfo?token=c446af4ebd64a620080a8e22808c820729f5b98ad32fdc8b3e9b86b989ee61ee&image_type=thumbs&file_id=if1957082a6ec7f82c7a763909043a2cf" :edit="false" @touch="touch" />
     </div>
   </div>
 </template>
