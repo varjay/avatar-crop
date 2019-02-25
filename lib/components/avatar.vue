@@ -13,16 +13,23 @@
          @touchmove="touchmove"
          @touchend="touchend"
          class="target">
-          <img :src="target.url" :width="target.w" :height="target.h">
+          <img
+           :src="target.url"
+           :width="target.w"
+           :height="target.h"
+           @click="$emit('touch')"
+          >
         </div>
       </div>
-      <div class="shadow bottom"></div>
-      <div class="shadow top"></div>
-      <div class="shadow left"></div>
-      <div class="shadow right"></div>
+      <template v-if="edit">
+        <div class="shadow bottom"></div>
+        <div class="shadow top"></div>
+        <div class="shadow left"></div>
+        <div class="shadow right"></div>
+      </template>
     </div>
-    <br>
-    <div class="operate">
+    <br v-if="edit">
+    <div v-if="edit" class="operate">
       <div @click="$emit('cancel')"><em>取消</em></div>
       <div @click="generate"><em>确认</em></div>
     </div>
@@ -31,7 +38,13 @@
 </template>
 <script>
 export default {
-  props: ['file'],
+  props: {
+    file: null,
+    edit: {
+      type: Boolean,
+      default: true,
+    },
+  },
   data() {
     return {
       offsettop: 0,
@@ -79,6 +92,10 @@ export default {
     },
   },
   created() {
+    if (!this.edit) {
+      this.clothW = screen.width
+      this.clothH = document.documentElement.clientHeight
+    }
     this.getSize(this.file)
   },
   mounted() {
@@ -155,50 +172,60 @@ export default {
     },
     // 获得图片尺寸
     getSize(file) {
-      this.sourceImg.type = file.type
       let that = this
-      let reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = function(e) {
-        that.target.Image = new Image()
-        that.target.Image.src = e.target.result
-        let blob = that.dataURLtoBlob(e.target.result)
-        let url = URL.createObjectURL(blob)
-        that.target.url = url
-        that.target.Image.onload = function() {
-          let width = this.width
-          let height = this.height
-
-          // 计算出适当的尺寸和位置
-          let scale
-          if (width > height) {
-            scale = height / that.clothH
-            height = height / scale
-            width = width / scale
-            that.target.top = 0
-            that.target.left = -(width - that.clothW) / 2
-          } else {
-            scale = width / that.clothH
-            width = width / scale
-            height = height / scale
-            that.target.top = -(height - that.clothH) / 2
-            that.target.left = 0
+      if (file === 'object') {
+        this.sourceImg.type = file.type
+        let reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = function(e) {
+          that.target.Image = new Image()
+          that.target.Image.src = e.target.result
+          let blob = that.dataURLtoBlob(e.target.result)
+          let url = URL.createObjectURL(blob)
+          that.target.url = url
+          that.target.Image.onload = function() {
+            that.computedSize(this.width, this.height)
           }
-          that.sourceImg.w = width
-          that.sourceImg.h = height
-          that.target.w = width
-          that.target.h = height
-          that.target.diffw = width / 2
-          that.target.diffh = height / 2
-          that.target.difforiginw = that.target.diffw - that.target.left
-          that.target.difforiginh = that.target.diffh - that.target.top
-          that.target.originw = width / 2
-          that.target.originh = height / 2
-          let x = width / 2
-          let y = height / 2
-          that.defaulthypotenuse = Math.sqrt(x * x + y * y)
+        }
+      } else {
+        that.target.url = file
+        let img = new Image()
+        img.src = file
+        img.onload = function(e) {
+          console.log(img.width, img.height)
+          that.computedSize(img.width, img.height)
         }
       }
+    },
+    computedSize(width, height) {
+      // 计算出适当的尺寸和位置
+      let scale
+      if (width > height) {
+        scale = height / this.clothH
+        height = height / scale
+        width = width / scale
+        this.target.top = 0
+        this.target.left = -(width - this.clothW) / 2
+      } else {
+        scale = width / this.clothW
+        width = width / scale
+        height = height / scale
+        this.target.top = -(height - this.clothH) / 2
+        this.target.left = 0
+      }
+      this.sourceImg.w = width
+      this.sourceImg.h = height
+      this.target.w = width
+      this.target.h = height
+      this.target.diffw = width / 2
+      this.target.diffh = height / 2
+      this.target.difforiginw = this.target.diffw - this.target.left
+      this.target.difforiginh = this.target.diffh - this.target.top
+      this.target.originw = width / 2
+      this.target.originh = height / 2
+      let x = width / 2
+      let y = height / 2
+      this.defaulthypotenuse = Math.sqrt(x * x + y * y)
     },
     dataURLtoBlob(dataurl) {
       var arr = dataurl.split(','),

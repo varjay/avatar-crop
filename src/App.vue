@@ -1,10 +1,19 @@
 <template>
   <div id="app" class="app">
     <div v-if="file" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;">
-      <vue-avatar @cancel="cancel" @done="done" :file="file" />
+      <vue-avatar @cancel="cancel" @done="done" :file="file" @touch="touch" />
     </div>
     <div>
       <input @change="changeUpload" id="avatar" type="file">
+    </div>
+    <br>
+    <br>
+    <br>
+    ==================
+    <br>
+    <button @click="review=!review">现在图片预览</button>
+    <div v-if="review" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;">
+      <vue-avatar file="http://192.168.101.252:5050/uInfo?token=0252beb9f73c17c63aedcc11934186dd8d4f784ddd05b98d48b5d0addabc3e13&image_type=thumbs&file_id=i26621094bccab18450f074381d42e4df" :edit="false" @touch="touch" />
     </div>
   </div>
 </template>
@@ -14,6 +23,7 @@ export default {
   data() {
     return {
       file: null,
+      review: false,
     }
   },
   methods: {
@@ -26,6 +36,9 @@ export default {
     },
     done(arg) {
       console.log(arg)
+    },
+    touch() {
+      console.log('点击了')
     },
   },
 }
