@@ -9,9 +9,9 @@
        :style="{top:target.top+'px',left:target.left+'px',transform:`scale(${target.scale}) rotate(${target.rotate}deg)`}"
        class="tietu">
         <div
-         @touchstart="touchstart"
-         @touchmove="touchmove"
-         @touchend="touchend"
+         @touchstart.prevent="touchstart"
+         @touchmove.prevent="touchmove"
+         @touchend.prevent="touchend"
          class="target">
           <img
            :src="target.url"
@@ -81,6 +81,8 @@ export default {
       clothH: document.documentElement.clientWidth * 0.875,
       hammerIncrement: 1,
       touchmoveActive: 0,
+      firstTwoTouch: false,
+      firstTwoTouchSize: 0,
     }
   },
   computed: {
@@ -99,24 +101,24 @@ export default {
     this.getSize(this.file)
   },
   mounted() {
-    let that = this
-    let myElement = document.getElementById('myElement')
-    let mc = new Hammer.Manager(myElement)
-    let pinch = new Hammer.Pinch()
-    mc.add([pinch])
-    mc.on('pinch', function(ev) {
-      let newScale = that.target.scale + (ev.scale - that.hammerIncrement)
-      if (newScale >= 1) {
-        // that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement) * that.target.scale
-        that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement)
-      }
-      that.hammerIncrement = ev.scale
-    })
-    mc.on('pinchend', function() {
-      that.hammerIncrement = 1
-      // 缩放完位置校正
-      that.positionCorrect()
-    })
+    // let that = this
+    // let myElement = document.getElementById('myElement')
+    // let mc = new Hammer.Manager(myElement)
+    // let pinch = new Hammer.Pinch()
+    // mc.add([pinch])
+    // mc.on('pinch', function(ev) {
+    //   let newScale = that.target.scale + (ev.scale - that.hammerIncrement)
+    //   if (newScale >= 1) {
+    //     // that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement) * that.target.scale
+    //     that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement)
+    //   }
+    //   that.hammerIncrement = ev.scale
+    // })
+    // mc.on('pinchend', function() {
+    //   that.hammerIncrement = 1
+    //   // 缩放完位置校正
+    //   that.positionCorrect()
+    // })
   },
   methods: {
     // 位置校正
@@ -258,8 +260,10 @@ export default {
     touchmove: function(e) {
       // 两个手指不操作
       if (e.touches.length > 1 || !this.touchmoveActive) {
+        this.pinch(e)
         return
       }
+      this.firstTwoTouch = true
       if (this.t) {
         clearTimeout(this.t)
       }
@@ -282,7 +286,10 @@ export default {
       this.target.originh = this.sourceImg.h - (this.target.top + this.target.difforiginh)
       e.preventDefault()
     },
-    touchend() {
+    touchend(e) {
+      if (e.touches.length < 2) {
+        this.firstTwoTouchSize = 0
+      }
       if (this.t) {
         clearTimeout(this.t)
       }
@@ -349,6 +356,17 @@ export default {
       }
       this.target.rotate = r
       e.preventDefault()
+    },
+    pinch(e) {
+      let x = Math.abs(e.touches[0].clientX - e.touches[1].clientX)
+      let y = Math.abs(e.touches[0].clientY - e.touches[1].clientY)
+      let long = Math.sqrt(x * x + y * y)
+      if (this.firstTwoTouchSize === 0) {
+        this.firstTwoTouchSize = long
+      }
+      let scale = long / this.firstTwoTouchSize
+      this.target.scale = this.target.scale * scale
+      console.log(scale)
     },
   },
 }
