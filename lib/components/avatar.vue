@@ -1,24 +1,26 @@
 <template>
   <div class="container">
-    <div class="draw" id="myElement" :style="{width: clothW+'px', height: clothH+'px'}">
+    <div class="draw" :style="{width: clothW + 'px', height: clothH + 'px'}">
       <div
-       v-if="target.url"
-       ref="tietu"
-       @click.stop=""
-       :class="{[select]:1}"
-       :style="{top:target.top+'px',left:target.left+'px',transform:`scale(${target.scale}) rotate(${target.rotate}deg)`}"
-       class="tietu">
+        v-if="target.url"
+        ref="tietu"
+        @click.stop=""
+        :class="{[select]: 1}"
+        :style="{top: target.top + 'px', left: target.left + 'px'}"
+        class="tietu"
+      >
         <div
-         @touchstart.prevent="touchstart"
-         @touchmove.prevent="touchmove"
-         @touchend.prevent="touchend"
-         class="target">
-          <img
-           :src="target.url"
-           :width="target.w"
-           :height="target.h"
-           @click="$emit('touch')"
-          >
+          @mousedown.prevent="mousedown"
+          @mousemove.prevent="mousemove"
+          @mouseup.prevent="mouseup"
+          @touchstart.prevent="touchstart"
+          @mouseout.prevent="mouseup"
+          @touchmove.prevent="touchmove"
+          @touchend.prevent="touchend"
+          class="target"
+          :style="{transform: `scale(${target.scale})`}"
+        >
+          <img :src="target.url" :width="target.w" :height="target.h" @click="$emit('touch')" />
         </div>
       </div>
       <template v-if="edit">
@@ -28,7 +30,13 @@
         <div class="shadow right"></div>
       </template>
     </div>
-    <br v-if="edit">
+    <div class="ac-slider-container" :style="{width: `${clothW}px`}">
+      <div class="ac-slider" @touchmove="sliderMove" @touchend="sliderEnd" @mousemove="sliderMove">
+        <div class="ac-slider-bar" :style="{width: `${pecent * 100}%`}">
+          <div class="ac-slider-button"></div>
+        </div>
+      </div>
+    </div>
     <div v-if="edit" class="operate">
       <div @click="$emit('cancel')"><em>取消</em></div>
       <div @click="generate"><em>确认</em></div>
@@ -54,14 +62,12 @@ export default {
       t: null,
       // 身体部件
       offsetAngle: 0,
-      // 镜像
       // 原始图片
       target: {
         w: 0,
         h: 0,
         url: '',
         scale: 1,
-        rotate: 0,
         left: 0,
         top: 0,
         Image: null,
@@ -79,10 +85,13 @@ export default {
       },
       clothW: document.documentElement.clientWidth * 0.875,
       clothH: document.documentElement.clientWidth * 0.875,
-      hammerIncrement: 1,
       touchmoveActive: 0,
-      firstTwoTouch: false,
       firstTwoTouchSize: 0,
+      firstScale: 1,
+      mouse: {
+        hold: false,
+      },
+      pecent: 0,
     }
   },
   computed: {
@@ -100,53 +109,27 @@ export default {
     }
     this.getSize(this.file)
   },
-  mounted() {
-    // let that = this
-    // let myElement = document.getElementById('myElement')
-    // let mc = new Hammer.Manager(myElement)
-    // let pinch = new Hammer.Pinch()
-    // mc.add([pinch])
-    // mc.on('pinch', function(ev) {
-    //   let newScale = that.target.scale + (ev.scale - that.hammerIncrement)
-    //   if (newScale >= 1) {
-    //     // that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement) * that.target.scale
-    //     that.target.scale = that.target.scale + (ev.scale - that.hammerIncrement)
-    //   }
-    //   that.hammerIncrement = ev.scale
-    // })
-    // mc.on('pinchend', function() {
-    //   that.hammerIncrement = 1
-    //   // 缩放完位置校正
-    //   that.positionCorrect()
-    // })
-  },
   methods: {
     // 位置校正
     positionCorrect() {
       let top = this.target.top - this.target.diffh * (this.target.scale - 1)
       if (top > 0 || top < this.maxHeight) {
-        if (
-          Math.abs(top) > Math.abs(Math.abs(top) - Math.abs(this.maxHeight))
-        ) {
-          this.target.top =
-            this.maxHeight + this.target.diffh * (this.target.scale - 1)
-          console.log('在错误的位置：上 = 下')
+        if (Math.abs(top) > Math.abs(Math.abs(top) - Math.abs(this.maxHeight))) {
+          this.target.top = this.maxHeight + this.target.diffh * (this.target.scale - 1)
+          // console.log('在错误的位置：上 = 下')
         } else {
           this.target.top = 0 + this.target.diffh * (this.target.scale - 1)
-          console.log('在错误的位置：上 = 上')
+          // console.log('在错误的位置：上 = 上')
         }
       }
       let left = this.target.left - this.target.diffw * (this.target.scale - 1)
       if (left > 0 || left < this.maxWidth) {
-        if (
-          Math.abs(left) > Math.abs(Math.abs(left) - Math.abs(this.maxWidth))
-        ) {
-          this.target.left =
-            this.maxWidth + this.target.diffw * (this.target.scale - 1)
-          console.log('在错误的位置：左 = 右')
+        if (Math.abs(left) > Math.abs(Math.abs(left) - Math.abs(this.maxWidth))) {
+          this.target.left = this.maxWidth + this.target.diffw * (this.target.scale - 1)
+          // console.log('在错误的位置：左 = 右')
         } else {
           this.target.left = 0 + this.target.diffw * (this.target.scale - 1)
-          console.log('在错误的位置：左 = 左')
+          // console.log('在错误的位置：左 = 左')
         }
       }
     },
@@ -193,8 +176,8 @@ export default {
         that.target.url = file
         let img = new Image()
         img.src = file
-        img.onload = function(e) {
-          console.log(img.width, img.height)
+        img.onload = function() {
+          // console.log(img.width, img.height)
           that.computedSize(img.width, img.height)
         }
       }
@@ -243,13 +226,40 @@ export default {
       }
       return new Blob([u8arr], {type: mime})
     },
-    touchstart: function(e) {
+    moveImg(touchs) {
+      // Y 轴移动处理
+      let top = touchs.clientY - this.offsettop - this.target.diffh * (this.target.scale - 1)
+      // console.log(top, this.maxHeight)
+      if (top > 0) {
+        this.target.top = ((this.maxHeight + (this.sourceImg.h - this.clothH)) / 2) * -1
+      } else if (top < this.maxHeight) {
+        this.target.top = (this.maxHeight - (this.sourceImg.h - this.clothH)) / 2
+      } else {
+        this.target.top = touchs.clientY - this.offsettop
+      }
+
+      // X 轴移动处理
+      let left = touchs.clientX - this.offsetleft - this.target.diffw * (this.target.scale - 1)
+      if (left > 0) {
+        this.target.left = ((this.maxWidth + (this.sourceImg.w - this.clothW)) / 2) * -1
+      } else if (left < this.maxWidth) {
+        this.target.left = (this.maxWidth - (this.sourceImg.w - this.clothW)) / 2
+      } else {
+        this.target.left = touchs.clientX - this.offsetleft
+      }
+      this.target.originw = this.sourceImg.w - (this.target.left + this.target.difforiginw)
+      this.target.originh = this.sourceImg.h - (this.target.top + this.target.difforiginh)
+    },
+    holdStart(touchs) {
       this.select = 'select-create'
       this.t = setTimeout(() => {
         this.select = 'select-created'
       }, 200)
-      this.offsettop = e.touches[0].clientY - this.$refs.tietu.offsetTop
-      this.offsetleft = e.touches[0].clientX - this.$refs.tietu.offsetLeft
+      this.offsettop = touchs.clientY - this.$refs.tietu.offsetTop
+      this.offsetleft = touchs.clientX - this.$refs.tietu.offsetLeft
+    },
+    touchstart(e) {
+      this.holdStart(e.touches[0])
       // 超过1个手指触摸时，去掉touchmove
       if (e.touches.length > 1) {
         this.touchmoveActive = 0
@@ -257,38 +267,26 @@ export default {
         this.touchmoveActive = 1
       }
     },
-    touchmove: function(e) {
+    touchmove(e) {
       // 两个手指不操作
       if (e.touches.length > 1 || !this.touchmoveActive) {
         this.pinch(e)
         return
       }
-      this.firstTwoTouch = true
       if (this.t) {
         clearTimeout(this.t)
       }
       this.select = 'select-created'
-      let top =
-        e.touches[0].clientY -
-        this.offsettop -
-        this.target.diffh * (this.target.scale - 1)
-      if (top < 0 && top > this.maxHeight) {
-        this.target.top = e.touches[0].clientY - this.offsettop
-      }
-      let left =
-        e.touches[0].clientX -
-        this.offsetleft -
-        this.target.diffw * (this.target.scale - 1)
-      if (left < 0 && left > this.maxWidth) {
-        this.target.left = e.touches[0].clientX - this.offsetleft
-      }
-      this.target.originw = this.sourceImg.w - (this.target.left + this.target.difforiginw)
-      this.target.originh = this.sourceImg.h - (this.target.top + this.target.difforiginh)
-      e.preventDefault()
+      this.moveImg(e.touches[0])
     },
     touchend(e) {
       if (e.touches.length < 2) {
         this.firstTwoTouchSize = 0
+        this.firstScale = 1
+        if (this.target.scale < 1) {
+          this.target.scale = 1
+        }
+        this.positionCorrect()
       }
       if (this.t) {
         clearTimeout(this.t)
@@ -298,64 +296,24 @@ export default {
         this.select = ''
       }, 200)
     },
-    rotatetart() {
-      this.offsetAngle =
-        (Math.atan(
-          this.$refs.tietu.offsetWidth /
-            2 /
-            (this.$refs.tietu.offsetHeight / 2),
-        ) *
-          180) /
-        Math.PI
+    mousedown(e) {
+      this.mouse.hold = true
+      this.holdStart(e)
     },
-    rotatemove(e) {
-      //对比y值，当前位置是否在中心点下方
-      //Y值
-      var y = this.$refs.tietu.offsetHeight / 2 + this.$refs.tietu.offsetTop
-      var ye = e.touches[0].clientY
-      var x = this.$refs.tietu.offsetWidth / 2 + this.$refs.tietu.offsetLeft
-      var xe = e.touches[0].clientX
-      var r
-
-      //偏移角度
-
-      if (ye < y) {
-        if (xe > x) {
-          //对边长度
-          let opposite = y - ye
-          //临边长度
-          let border = xe - x
-          r = (Math.atan(border / opposite) * 180) / Math.PI
-          r = r + 270 - this.offsetAngle + 90
-        } else {
-          //对边长度
-          let opposite =
-            ye - this.$refs.tietu.offsetHeight / 2 - this.$refs.tietu.offsetTop
-          //临边长度
-          let border = e.touches[0].clientX - x
-          r = (Math.atan(opposite / border) * 180) / Math.PI
-          r = r + 180 - this.offsetAngle + 90
-        }
-      } else {
-        if (xe > x) {
-          //对边长度
-          let opposite =
-            ye - this.$refs.tietu.offsetHeight / 2 - this.$refs.tietu.offsetTop
-          //临边长度
-          let border = e.touches[0].clientX - x
-          r = (Math.atan(opposite / border) * 180) / Math.PI
-          r = r - this.offsetAngle + 90
-        } else {
-          //对边长度
-          let opposite = ye - y
-          //临边长度
-          let border = x - xe
-          r = (Math.atan(border / opposite) * 180) / Math.PI
-          r = r + 90 - this.offsetAngle + 90
-        }
+    mousemove(e) {
+      if (this.mouse.hold) {
+        this.moveImg(e)
       }
-      this.target.rotate = r
-      e.preventDefault()
+    },
+    mouseup() {
+      this.mouse.hold = false
+      if (this.t) {
+        clearTimeout(this.t)
+      }
+      this.select = 'select-destroy'
+      setTimeout(() => {
+        this.select = ''
+      }, 200)
     },
     pinch(e) {
       let x = Math.abs(e.touches[0].clientX - e.touches[1].clientX)
@@ -363,10 +321,27 @@ export default {
       let long = Math.sqrt(x * x + y * y)
       if (this.firstTwoTouchSize === 0) {
         this.firstTwoTouchSize = long
+        this.firstScale = this.target.scale
       }
       let scale = long / this.firstTwoTouchSize
-      this.target.scale = this.target.scale * scale
-      console.log(scale)
+      this.target.scale = this.firstScale * scale
+    },
+    sliderMove(e) {
+      let clientWidth = document.documentElement.clientWidth
+      if (e.touches && e.touches[0]) {
+        e = e.touches[0]
+      }
+      let x = e.clientX - clientWidth * 0.0625
+      if (x < 0) {
+        x = 0
+      } else if (x > this.clothW) {
+        x = this.clothW
+      }
+      this.target.scale = 1 + x / this.clothW
+      this.pecent = x / this.clothW
+    },
+    sliderEnd() {
+      this.positionCorrect()
     },
   },
 }
@@ -380,6 +355,7 @@ export default {
   justify-content: center;
   align-items: center;
   flex-flow: column;
+  padding-bottom: 54px;
 }
 .draw {
   position: relative;
@@ -388,44 +364,29 @@ export default {
 }
 .tietu {
   position: absolute;
-  &.select-create {
-    transition: 0.2s;
-    -webkit-transform: scale(1.05);
-    transform: scale(1.05);
-  }
-  &.select-created {
-    -webkit-transform: scale(1.05);
-    transform: scale(1.05);
-  }
-  &.select-destroy {
-    transition: 0.2s;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-  }
-}
-.tietu span {
-  position: absolute;
-  display: block;
-  width: 5vw;
-  height: 5vw;
-  color: #000;
-  margin: -2.5vw -2.5vw;
-}
-.target {
-  img {
-    display: block;
-  }
-}
-.tietu .rotate {
   right: 0;
   top: 0;
   background-size: 100% !important;
+  &.select-create,
+  &.select-created {
+    .target {
+      cursor: grabbing;
+    }
+  }
+  .target {
+    cursor: grab;
+    display: inline-block;
+    img {
+      display: block;
+    }
+  }
 }
 .shadow {
   position: absolute;
   width: 87.5vw;
   background: rgba(0, 0, 0, 0.7);
   height: 100vh;
+  pointer-events: none;
   &.top {
     top: -100vh;
     border-bottom: 1px solid white;
@@ -456,19 +417,18 @@ export default {
   }
   &.left,
   &.right {
+    top: -50vh;
     height: 200vh;
   }
   &.left {
-    top: -50vh;
     left: -87.5vw;
   }
   &.right {
     right: -87.5vw;
-    top: -50vw;
   }
 }
 .operate {
-  height: 16vw;
+  height: 54px;
   position: absolute;
   bottom: 0;
   left: 0;
@@ -478,16 +438,59 @@ export default {
   align-items: center;
   justify-content: space-between;
   color: white;
-  box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 0px 0px 0px 1px rgba(255, 255, 255, 0.4);
   > div {
     width: 24%;
-    text-align: center;
-    display: block;
     height: 100%;
-    line-height: 16vw;
-    em {
-      font-size: 4.2vw;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &:active {
+      background: rgba(255, 255, 255, 0.2);
+      em {
+        color: rgba(255, 255, 255, 0.8);
+      }
     }
+    em {
+      font-size: 14px;
+    }
+  }
+}
+.ac-slider-container {
+  position: relative;
+  z-index: 2;
+  padding-top: 30px;
+}
+.ac-slider {
+  position: relative;
+  height: 2px;
+  background-color: #7d8084;
+  width: 100%;
+  &:before {
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    content: '';
+    display: block;
+    width: 100%;
+  }
+  .ac-slider-bar {
+    position: relative;
+    background-color: #1989fa;
+    height: 2px;
+  }
+  .ac-slider-button {
+    position: absolute;
+    top: -11px;
+    right: -12px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: white;
+    overflow: hidden;
   }
 }
 </style>

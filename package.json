@@ -1,10 +1,10 @@
 {
-  "name": "vue-avatar-crop-wechat",
-  "version": "1.0.8",
+  "name": "vuejs-avatar-crop",
+  "version": "1.0.9",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint --fix"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
     "less-loader": "^4.1.0",
     "vue-template-compiler": "^2.5.17"
   },
-  "description": "## Project setup ``` npm install ```",
+  "description": "Support cutting of avatars of PC and mobile phones.",
   "main": "/lib/index.js",
   "directories": {
     "lib": "lib"

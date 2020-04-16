@@ -7,7 +7,6 @@ module.exports = {
     Vue: true,
     em: true,
     rem: true,
-    Hammer: true,
   },
   env: {
     node: true,

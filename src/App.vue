@@ -1,9 +1,6 @@
 <template>
   <div id="app" class="app">
-    <div
-      v-if="file"
-      style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;"
-    >
+    <div v-if="file" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;">
       <vue-avatar @cancel="cancel" @done="done" :file="file" @touch="touch" />
     </div>
     <div>
@@ -15,10 +12,7 @@
     ==================
     <br />
     <button @click="review = !review">现在图片预览</button>
-    <div
-      v-if="review"
-      style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;"
-    >
+    <div v-if="review" style="position: fixed;left: 0;top: 0;width: 100%;height: 100%;">
       <vue-avatar
         file="http://192.168.101.252:5050/uInfo?token=c446af4ebd64a620080a8e22808c820729f5b98ad32fdc8b3e9b86b989ee61ee&image_type=thumbs&file_id=if1957082a6ec7f82c7a763909043a2cf"
         :edit="false"
@@ -28,6 +22,8 @@
   </div>
 </template>
 <script>
+import avatar from '../lib/'
+console.log(avatar)
 export default {
   name: 'app',
   data() {
