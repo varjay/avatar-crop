@@ -13,8 +13,8 @@
           @mousedown.prevent="mousedown"
           @mousemove.prevent="mousemove"
           @mouseup.prevent="mouseup"
-          @touchstart.prevent="touchstart"
           @mouseout.prevent="mouseup"
+          @touchstart.prevent="touchstart"
           @touchmove.prevent="touchmove"
           @touchend.prevent="touchend"
           class="target"
@@ -31,8 +31,16 @@
       </template>
     </div>
     <div class="ac-slider-container" :style="{width: `${clothW}px`}">
-      <div class="ac-slider" @touchmove="sliderMove" @touchend="sliderEnd" @mousemove="sliderMove">
-        <div class="ac-slider-bar" :style="{width: `${pecent * 100}%`}">
+      <div
+        class="ac-slider"
+        @touchmove="sliderMove"
+        @touchend="sliderEnd"
+        @mousedown.prevent="sliderDown"
+        @mousemove="sliderMove"
+        @mouseup.prevent="sliderEnd"
+        @mouseleave.prevent="sliderEnd"
+      >
+        <div class="ac-slider-bar" :style="{width: `${percent * 100}%`}">
           <div class="ac-slider-button"></div>
         </div>
       </div>
@@ -91,7 +99,8 @@ export default {
       mouse: {
         hold: false,
       },
-      pecent: 0,
+      percent: 0,
+      sliderMouseActive: false,
     }
   },
   computed: {
@@ -327,6 +336,9 @@ export default {
       this.target.scale = this.firstScale * scale
     },
     sliderMove(e) {
+      if (!e.touches && !this.sliderMouseActive) {
+        return
+      }
       let clientWidth = document.documentElement.clientWidth
       if (e.touches && e.touches[0]) {
         e = e.touches[0]
@@ -337,11 +349,16 @@ export default {
       } else if (x > this.clothW) {
         x = this.clothW
       }
-      this.target.scale = 1 + x / this.clothW
-      this.pecent = x / this.clothW
+      this.target.scale = 1 + 2 * (x / this.clothW)
+      this.percent = x / this.clothW
     },
-    sliderEnd() {
+    sliderEnd(e) {
+      console.log('end', e)
       this.positionCorrect()
+      this.sliderMouseActive = false
+    },
+    sliderDown() {
+      this.sliderMouseActive = true
     },
   },
 }
@@ -476,6 +493,7 @@ export default {
     content: '';
     display: block;
     width: 100%;
+    cursor: pointer;
   }
   .ac-slider-bar {
     position: relative;
@@ -491,6 +509,7 @@ export default {
     border-radius: 50%;
     background-color: white;
     overflow: hidden;
+    cursor: pointer;
   }
 }
 </style>
