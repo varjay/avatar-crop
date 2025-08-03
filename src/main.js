@@ -1,10 +1,9 @@
-import Vue from 'vue'
-import App from './App'
+import { createApp } from 'vue'
+import App from './App.vue'
 import avatar from '../lib/'
-Vue.use(avatar)
 
-window.Vue = Vue
+const app = createApp(App)
+app.use(avatar)
+app.mount('#app')
 
-window.RootApp = new Vue({
-  render: h => h(App),
-}).$mount('#app')
+window.RootApp = app

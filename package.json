@@ -2,32 +2,26 @@
   "name": "vuejs-avatar-crop",
   "version": "1.1.0",
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint --fix"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint --ext .js,.vue --fix src"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/varjay/avatar-crop.git"
   },
   "dependencies": {
-    "register-service-worker": "^1.5.2",
-    "vue": "^2.5.17",
-    "vue-router": "^3.0.1",
-    "vuex": "^3.0.1"
+    "vue": "^3.4.21",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.1",
-    "@vue/cli-plugin-eslint": "^3.0.1",
-    "@vue/cli-plugin-pwa": "^3.0.1",
-    "@vue/cli-service": "^3.0.1",
-    "@vue/eslint-config-prettier": "^4.0.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.8.0",
-    "eslint-plugin-vue": "^5.0.0-0",
-    "less": "^3.0.4",
-    "less-loader": "^4.1.0",
-    "vue-template-compiler": "^2.5.17"
+    "@vitejs/plugin-vue": "^5.0.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^8.46.0",
+    "eslint-plugin-vue": "^9.16.1",
+    "sass": "^1.72.0",
+    "vite": "^6.3.5"
   },
   "description": "Support cutting of avatars of PC and mobile phones.",
   "main": "/lib/index.js",

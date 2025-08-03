@@ -1,28 +1,37 @@
 <template>
   <div class="container">
-    <div class="draw" :style="{width: clothW + 'px', height: clothH + 'px'}">
+    <!-- 主要绘制区域 -->
+    <div class="draw" :style="drawStyle">
       <div
         v-if="target.url"
         ref="tietu"
         @click.stop=""
-        :class="{[select]: 1}"
-        :style="{top: target.top + 'px', left: target.left + 'px'}"
+        :class="selectClass"
+        :style="imageContainerStyle"
         class="tietu"
       >
         <div
-          @mousedown.prevent="mousedown"
-          @mousemove.prevent="mousemove"
-          @mouseup.prevent="mouseup"
-          @mouseout.prevent="mouseup"
-          @touchstart.prevent="touchstart"
-          @touchmove.prevent="touchmove"
-          @touchend.prevent="touchend"
+          @mousedown.prevent="handleMouseDown"
+          @mousemove.prevent="handleMouseMove"
+          @mouseup.prevent="handleMouseUp"
+          @mouseout.prevent="handleMouseUp"
+          @touchstart.prevent="handleTouchStart"
+          @touchmove.prevent="handleTouchMove"
+          @touchend.prevent="handleTouchEnd"
           class="target"
-          :style="{transform: `scale(${target.scale})`}"
+          :style="imageTransformStyle"
         >
-          <img :src="target.url" :width="target.w" :height="target.h" @click="$emit('touch')" />
+          <img 
+            :src="target.url" 
+            :width="target.w" 
+            :height="target.h" 
+            @click="$emit('touch')"
+            alt="头像预览"
+          />
         </div>
       </div>
+      
+      <!-- 遮罩层 -->
       <template v-if="edit">
         <div class="shadow bottom"></div>
         <div class="shadow top"></div>
@@ -30,339 +39,499 @@
         <div class="shadow right"></div>
       </template>
     </div>
-    <div class="ac-slider-container" :style="{width: `${clothW}px`}">
+    
+    <!-- 缩放滑块 -->
+    <div class="ac-slider-container" :style="sliderContainerStyle">
       <div
         class="ac-slider"
-        @touchmove="sliderMove"
-        @touchend="sliderEnd"
-        @mousedown.prevent="sliderDown"
-        @mousemove="sliderMove"
-        @mouseup.prevent="sliderEnd"
-        @mouseleave.prevent="sliderEnd"
+        @touchmove="handleSliderMove"
+        @touchend="handleSliderEnd"
+        @mousedown.prevent="handleSliderDown"
+        @mousemove="handleSliderMove"
+        @mouseup.prevent="handleSliderEnd"
+        @mouseleave.prevent="handleSliderEnd"
       >
-        <div class="ac-slider-bar" :style="{width: `${percent * 100}%`}">
+        <div class="ac-slider-bar" :style="sliderBarStyle">
           <div class="ac-slider-button"></div>
         </div>
       </div>
     </div>
+    
+    <!-- 操作按钮 -->
     <div v-if="edit" class="operate">
       <div @click="$emit('cancel')"><em>取消</em></div>
-      <div @click="generate"><em>确认</em></div>
+      <div @click="handleGenerate"><em>确认</em></div>
     </div>
-    <canvas style="display: none;" :width="clothW" :height="clothH" ref="canvas"></canvas>
+    
+    <!-- 隐藏的画布用于生成最终图片 -->
+    <canvas 
+      style="display: none;" 
+      :width="clothW" 
+      :height="clothH" 
+      ref="canvas"
+    ></canvas>
   </div>
 </template>
-<script>
-export default {
-  props: {
-    file: null,
-    edit: {
-      type: Boolean,
-      default: true,
-    },
-  },
-  data() {
-    return {
-      offsettop: 0,
-      offsetleft: 0,
-      defaulthypotenuse: 0, // 默认斜边长度
-      select: '',
-      t: null,
-      // 身体部件
-      offsetAngle: 0,
-      // 原始图片
-      target: {
-        w: 0,
-        h: 0,
-        url: '',
-        scale: 1,
-        left: 0,
-        top: 0,
-        Image: null,
-        diffw: 0,
-        diffh: 0,
-        difforiginw: 0,
-        difforiginh: 0,
-        originw: 0,
-        originh: 0,
-      },
-      sourceImg: {
-        w: 0,
-        h: 0,
-        type: '',
-      },
-      clothW: document.documentElement.clientWidth * 0.875,
-      clothH: document.documentElement.clientWidth * 0.875,
-      touchmoveActive: 0,
-      firstTwoTouchSize: 0,
-      firstScale: 1,
-      mouse: {
-        hold: false,
-      },
-      percent: 0,
-      sliderMouseActive: false,
-    }
-  },
-  computed: {
-    maxWidth() {
-      return -(this.sourceImg.w * this.target.scale - this.clothW)
-    },
-    maxHeight() {
-      return -(this.sourceImg.h * this.target.scale - this.clothH)
-    },
-  },
-  created() {
-    if (!this.edit) {
-      this.clothW = document.documentElement.clientWidth
-      this.clothH = document.documentElement.clientHeight
-    }
-    this.getSize(this.file)
-  },
-  methods: {
-    // 位置校正
-    positionCorrect() {
-      let top = this.target.top - this.target.diffh * (this.target.scale - 1)
-      if (top > 0 || top < this.maxHeight) {
-        if (Math.abs(top) > Math.abs(Math.abs(top) - Math.abs(this.maxHeight))) {
-          this.target.top = this.maxHeight + this.target.diffh * (this.target.scale - 1)
-          // console.log('在错误的位置：上 = 下')
-        } else {
-          this.target.top = 0 + this.target.diffh * (this.target.scale - 1)
-          // console.log('在错误的位置：上 = 上')
-        }
-      }
-      let left = this.target.left - this.target.diffw * (this.target.scale - 1)
-      if (left > 0 || left < this.maxWidth) {
-        if (Math.abs(left) > Math.abs(Math.abs(left) - Math.abs(this.maxWidth))) {
-          this.target.left = this.maxWidth + this.target.diffw * (this.target.scale - 1)
-          // console.log('在错误的位置：左 = 右')
-        } else {
-          this.target.left = 0 + this.target.diffw * (this.target.scale - 1)
-          // console.log('在错误的位置：左 = 左')
-        }
-      }
-    },
-    generate() {
-      let canvas = this.$refs.canvas
-      let ctx = canvas.getContext('2d')
-      ctx.clearRect(0, 0, this.clothW, this.clothH)
-      ctx.fillStyle = '#ffffff'
-      ctx.fillRect(0, 0, this.clothW, this.clothH)
-      ctx.drawImage(
-        this.target.Image,
-        this.target.left - this.target.diffw * (this.target.scale - 1),
-        this.target.top - this.target.diffh * (this.target.scale - 1),
-        this.target.w * this.target.scale,
-        this.target.h * this.target.scale,
-      )
-      let imgurl = canvas.toDataURL(this.sourceImg.type)
-      let blob = this.dataURLtoBlob(imgurl)
-      let url = URL.createObjectURL(blob)
-      this.$emit('done', {
-        base64: imgurl,
-        img: blob,
-        url,
-      })
-    },
-    // 获得图片尺寸
-    getSize(file) {
-      let that = this
-      if (typeof file === 'object') {
-        this.sourceImg.type = file.type
-        let reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = function(e) {
-          that.target.Image = new Image()
-          that.target.Image.src = e.target.result
-          let blob = that.dataURLtoBlob(e.target.result)
-          let url = URL.createObjectURL(blob)
-          that.target.url = url
-          that.target.Image.onload = function() {
-            that.computedSize(this.width, this.height)
-          }
-        }
-      } else {
-        that.target.url = file
-        let img = new Image()
-        img.src = file
-        img.onload = function() {
-          // console.log(img.width, img.height)
-          that.computedSize(img.width, img.height)
-        }
-      }
-    },
-    computedSize(width, height) {
-      // 计算出适当的尺寸和位置
-      let scale
-      if (width > height && this.edit) {
-        scale = height / this.clothH
-        height = height / scale
-        width = width / scale
-        this.target.top = 0
-        this.target.left = -(width - this.clothW) / 2
-      } else {
-        scale = width / this.clothW
-        width = width / scale
-        height = height / scale
-        if (width > height && height < this.clothH) {
-          this.clothH = height
-        }
-        this.target.top = -(height - this.clothH) / 2
-        this.target.left = 0
-      }
-      this.sourceImg.w = width
-      this.sourceImg.h = height
-      this.target.w = width
-      this.target.h = height
-      this.target.diffw = width / 2
-      this.target.diffh = height / 2
-      this.target.difforiginw = this.target.diffw - this.target.left
-      this.target.difforiginh = this.target.diffh - this.target.top
-      this.target.originw = width / 2
-      this.target.originh = height / 2
-      let x = width / 2
-      let y = height / 2
-      this.defaulthypotenuse = Math.sqrt(x * x + y * y)
-    },
-    dataURLtoBlob(dataurl) {
-      var arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n)
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
-      }
-      return new Blob([u8arr], {type: mime})
-    },
-    moveImg(touchs) {
-      // Y 轴移动处理
-      let top = touchs.clientY - this.offsettop - this.target.diffh * (this.target.scale - 1)
-      // console.log(top, this.maxHeight)
-      if (top > 0) {
-        this.target.top = ((this.maxHeight + (this.sourceImg.h - this.clothH)) / 2) * -1
-      } else if (top < this.maxHeight) {
-        this.target.top = (this.maxHeight - (this.sourceImg.h - this.clothH)) / 2
-      } else {
-        this.target.top = touchs.clientY - this.offsettop
-      }
+<script setup name="VueAvatar">
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 
-      // X 轴移动处理
-      let left = touchs.clientX - this.offsetleft - this.target.diffw * (this.target.scale - 1)
-      if (left > 0) {
-        this.target.left = ((this.maxWidth + (this.sourceImg.w - this.clothW)) / 2) * -1
-      } else if (left < this.maxWidth) {
-        this.target.left = (this.maxWidth - (this.sourceImg.w - this.clothW)) / 2
-      } else {
-        this.target.left = touchs.clientX - this.offsetleft
-      }
-      this.target.originw = this.sourceImg.w - (this.target.left + this.target.difforiginw)
-      this.target.originh = this.sourceImg.h - (this.target.top + this.target.difforiginh)
-    },
-    holdStart(touchs) {
-      this.select = 'select-create'
-      this.t = setTimeout(() => {
-        this.select = 'select-created'
-      }, 200)
-      this.offsettop = touchs.clientY - this.$refs.tietu.offsetTop
-      this.offsetleft = touchs.clientX - this.$refs.tietu.offsetLeft
-    },
-    touchstart(e) {
-      this.holdStart(e.touches[0])
-      // 超过1个手指触摸时，去掉touchmove
-      if (e.touches.length > 1) {
-        this.touchmoveActive = 0
-      } else {
-        this.touchmoveActive = 1
-      }
-    },
-    touchmove(e) {
-      // 两个手指不操作
-      if (e.touches.length > 1 || !this.touchmoveActive) {
-        this.pinch(e)
-        return
-      }
-      if (this.t) {
-        clearTimeout(this.t)
-      }
-      this.select = 'select-created'
-      this.moveImg(e.touches[0])
-    },
-    touchend(e) {
-      if (e.touches.length < 2) {
-        this.firstTwoTouchSize = 0
-        this.firstScale = 1
-        if (this.target.scale < 1) {
-          this.target.scale = 1
-        }
-        this.positionCorrect()
-      }
-      if (this.t) {
-        clearTimeout(this.t)
-      }
-      this.select = 'select-destroy'
-      setTimeout(() => {
-        this.select = ''
-      }, 200)
-    },
-    mousedown(e) {
-      this.mouse.hold = true
-      this.holdStart(e)
-    },
-    mousemove(e) {
-      if (this.mouse.hold) {
-        this.moveImg(e)
-      }
-    },
-    mouseup() {
-      this.mouse.hold = false
-      if (this.t) {
-        clearTimeout(this.t)
-      }
-      this.select = 'select-destroy'
-      setTimeout(() => {
-        this.select = ''
-      }, 200)
-    },
-    pinch(e) {
-      let x = Math.abs(e.touches[0].clientX - e.touches[1].clientX)
-      let y = Math.abs(e.touches[0].clientY - e.touches[1].clientY)
-      let long = Math.sqrt(x * x + y * y)
-      if (this.firstTwoTouchSize === 0) {
-        this.firstTwoTouchSize = long
-        this.firstScale = this.target.scale
-      }
-      let scale = long / this.firstTwoTouchSize
-      this.target.scale = this.firstScale * scale
-    },
-    sliderMove(e) {
-      if (!e.touches && !this.sliderMouseActive) {
-        return
-      }
-      let clientWidth = document.documentElement.clientWidth
-      if (e.touches && e.touches[0]) {
-        e = e.touches[0]
-      }
-      let x = e.clientX - clientWidth * 0.0625
-      if (x < 0) {
-        x = 0
-      } else if (x > this.clothW) {
-        x = this.clothW
-      }
-      this.target.scale = 1 + 2 * (x / this.clothW)
-      this.percent = x / this.clothW
-    },
-    sliderEnd(e) {
-      console.log('end', e)
-      this.positionCorrect()
-      this.sliderMouseActive = false
-    },
-    sliderDown() {
-      this.sliderMouseActive = true
-    },
+// Props 定义
+const props = defineProps({
+  file: {
+    type: [File, String],
+    default: null
   },
+  edit: {
+    type: Boolean,
+    default: true,
+  }
+})
+
+// 事件定义
+const emit = defineEmits(['cancel', 'done', 'touch'])
+
+// DOM 引用
+const tietu = ref(null)
+const canvas = ref(null)
+
+// 常量定义
+const VIEWPORT_RATIO = 0.875
+const MIN_SCALE = 1
+const MAX_SCALE = 3
+const ANIMATION_DURATION = 200
+
+// 状态管理
+const state = reactive({
+  // 拖拽相关
+  offsetTop: 0,
+  offsetLeft: 0,
+  selectState: '',
+  selectTimer: null,
+  
+  // 触摸相关
+  touchMoveActive: false,
+  firstTwoTouchSize: 0,
+  firstScale: 1,
+  
+  // 鼠标相关
+  mouseHold: false,
+  
+  // 滑块相关
+  sliderPercent: 0,
+  sliderMouseActive: false,
+})
+
+// 图片目标对象
+const target = reactive({
+  w: 0,
+  h: 0,
+  url: '',
+  scale: 1,
+  left: 0,
+  top: 0,
+  image: null,
+  centerX: 0,
+  centerY: 0,
+  originCenterX: 0,
+  originCenterY: 0,
+  originW: 0,
+  originH: 0,
+})
+
+// 源图片信息
+const sourceImg = reactive({
+  w: 0,
+  h: 0,
+  type: '',
+})
+
+// 画布尺寸
+const canvasSize = reactive({
+  width: document.documentElement.clientWidth * VIEWPORT_RATIO,
+  height: document.documentElement.clientWidth * VIEWPORT_RATIO,
+})
+
+// 计算属性
+const clothW = computed(() => canvasSize.width)
+const clothH = computed(() => canvasSize.height)
+
+// 计算属性 - 样式相关
+const drawStyle = computed(() => ({
+  width: `${clothW.value}px`,
+  height: `${clothH.value}px`
+}))
+
+const imageContainerStyle = computed(() => ({
+  top: `${target.top}px`,
+  left: `${target.left}px`
+}))
+
+const imageTransformStyle = computed(() => ({
+  transform: `scale(${target.scale})`
+}))
+
+const selectClass = computed(() => ({
+  [state.selectState]: state.selectState !== ''
+}))
+
+const sliderContainerStyle = computed(() => ({
+  width: `${clothW.value}px`
+}))
+
+const sliderBarStyle = computed(() => ({
+  width: `${state.sliderPercent * 100}%`
+}))
+
+// 计算属性 - 缩放限制
+const scaleRange = computed(() => ({
+  min: MIN_SCALE,
+  max: MAX_SCALE
+}))
+
+const maxWidth = computed(() => {
+  return -(sourceImg.w * target.scale - clothW.value)
+})
+
+const maxHeight = computed(() => {
+  return -(sourceImg.h * target.scale - clothH.value)
+})
+
+// 工具函数
+const utils = {
+  // 将 DataURL 转换为 Blob
+  dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(',')
+    const mime = arr[0].match(/:(.*?);/)[1]
+    const bstr = atob(arr[1])
+    const n = bstr.length
+    const u8arr = new Uint8Array(n)
+    for (let i = 0; i < n; i++) {
+      u8arr[i] = bstr.charCodeAt(i)
+    }
+    return new Blob([u8arr], { type: mime })
+  },
+
+  // 限制数值在指定范围内
+  clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max)
+  },
+
+  // 清理定时器
+  clearSelectTimer() {
+    if (state.selectTimer) {
+      clearTimeout(state.selectTimer)
+      state.selectTimer = null
+    }
+  }
 }
+
+// 位置校正函数
+function correctPosition() {
+  const scaledCenterX = target.centerX * (target.scale - 1)
+  const scaledCenterY = target.centerY * (target.scale - 1)
+  
+  // Y轴位置校正
+  const adjustedTop = target.top - scaledCenterY
+  if (adjustedTop > 0 || adjustedTop < maxHeight.value) {
+    const distanceToTop = Math.abs(adjustedTop)
+    const distanceToBottom = Math.abs(adjustedTop - maxHeight.value)
+    
+    if (distanceToTop < distanceToBottom) {
+      target.top = scaledCenterY
+    } else {
+      target.top = maxHeight.value + scaledCenterY
+    }
+  }
+  
+  // X轴位置校正
+  const adjustedLeft = target.left - scaledCenterX
+  if (adjustedLeft > 0 || adjustedLeft < maxWidth.value) {
+    const distanceToLeft = Math.abs(adjustedLeft)
+    const distanceToRight = Math.abs(adjustedLeft - maxWidth.value)
+    
+    if (distanceToLeft < distanceToRight) {
+      target.left = scaledCenterX
+    } else {
+      target.left = maxWidth.value + scaledCenterX
+    }
+  }
+}
+
+// 生成最终图片
+function handleGenerate() {
+  const canvasEl = canvas.value
+  const ctx = canvasEl.getContext('2d')
+  
+  // 清空画布并设置白色背景
+  ctx.clearRect(0, 0, clothW.value, clothH.value)
+  ctx.fillStyle = '#ffffff'
+  ctx.fillRect(0, 0, clothW.value, clothH.value)
+  
+  // 绘制缩放后的图片
+  const scaledCenterX = target.centerX * (target.scale - 1)
+  const scaledCenterY = target.centerY * (target.scale - 1)
+  
+  ctx.drawImage(
+    target.image,
+    target.left - scaledCenterX,
+    target.top - scaledCenterY,
+    target.w * target.scale,
+    target.h * target.scale,
+  )
+  
+  // 生成结果
+  const base64 = canvasEl.toDataURL(sourceImg.type)
+  const blob = utils.dataURLtoBlob(base64)
+  const url = URL.createObjectURL(blob)
+  
+  emit('done', {
+    base64,
+    img: blob,
+    url,
+  })
+}
+
+// 加载图片
+function loadImage(file) {
+  if (file instanceof File) {
+    // 处理文件对象
+    sourceImg.type = file.type
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = (e) => {
+      const img = new Image()
+      img.src = e.target.result
+      target.image = img
+      
+      const blob = utils.dataURLtoBlob(e.target.result)
+      target.url = URL.createObjectURL(blob)
+      
+      img.onload = () => {
+        calculateImageSize(img.width, img.height)
+      }
+    }
+  } else if (typeof file === 'string') {
+    // 处理URL字符串
+    target.url = file
+    const img = new Image()
+    img.src = file
+    target.image = img
+    img.onload = () => {
+      calculateImageSize(img.width, img.height)
+    }
+  }
+}
+
+// 计算图片尺寸和位置
+function calculateImageSize(originalWidth, originalHeight) {
+  let scale
+  let width = originalWidth
+  let height = originalHeight
+  
+  if (width > height && props.edit) {
+    // 横图处理
+    scale = height / clothH.value
+    height = height / scale
+    width = width / scale
+    target.top = 0
+    target.left = -(width - clothW.value) / 2
+  } else {
+    // 竖图或方图处理
+    scale = width / clothW.value
+    width = width / scale
+    height = height / scale
+    
+    if (width > height && height < clothH.value) {
+      canvasSize.height = height
+    }
+    
+    target.top = -(height - clothH.value) / 2
+    target.left = 0
+  }
+  
+  // 更新图片信息
+  sourceImg.w = width
+  sourceImg.h = height
+  target.w = width
+  target.h = height
+  target.centerX = width / 2
+  target.centerY = height / 2
+  target.originCenterX = target.centerX - target.left
+  target.originCenterY = target.centerY - target.top
+  target.originW = width / 2
+  target.originH = height / 2
+}
+
+// 图片移动处理
+function moveImage(event) {
+  const scaledCenterX = target.centerX * (target.scale - 1)
+  const scaledCenterY = target.centerY * (target.scale - 1)
+  
+  // Y轴移动处理
+  const newTop = event.clientY - state.offsetTop
+  const adjustedTop = newTop - scaledCenterY
+  
+  if (adjustedTop > 0) {
+    target.top = ((maxHeight.value + (sourceImg.h - clothH.value)) / 2) * -1
+  } else if (adjustedTop < maxHeight.value) {
+    target.top = (maxHeight.value - (sourceImg.h - clothH.value)) / 2
+  } else {
+    target.top = newTop
+  }
+
+  // X轴移动处理
+  const newLeft = event.clientX - state.offsetLeft
+  const adjustedLeft = newLeft - scaledCenterX
+  
+  if (adjustedLeft > 0) {
+    target.left = ((maxWidth.value + (sourceImg.w - clothW.value)) / 2) * -1
+  } else if (adjustedLeft < maxWidth.value) {
+    target.left = (maxWidth.value - (sourceImg.w - clothW.value)) / 2
+  } else {
+    target.left = newLeft
+  }
+  
+  // 更新原点位置
+  target.originW = sourceImg.w - (target.left + target.originCenterX)
+  target.originH = sourceImg.h - (target.top + target.originCenterY)
+}
+
+// 开始拖拽
+function startDrag(event) {
+  state.selectState = 'select-create'
+  state.selectTimer = setTimeout(() => {
+    state.selectState = 'select-created'
+  }, ANIMATION_DURATION)
+  
+  state.offsetTop = event.clientY - tietu.value.offsetTop
+  state.offsetLeft = event.clientX - tietu.value.offsetLeft
+}
+
+// 结束拖拽
+function endDrag() {
+  utils.clearSelectTimer()
+  state.selectState = 'select-destroy'
+  setTimeout(() => {
+    state.selectState = ''
+  }, ANIMATION_DURATION)
+}
+
+// 触摸事件处理
+function handleTouchStart(e) {
+  startDrag(e.touches[0])
+  state.touchMoveActive = e.touches.length === 1
+}
+
+function handleTouchMove(e) {
+  if (e.touches.length > 1 || !state.touchMoveActive) {
+    handlePinch(e)
+    return
+  }
+  
+  utils.clearSelectTimer()
+  state.selectState = 'select-created'
+  moveImage(e.touches[0])
+}
+
+function handleTouchEnd(e) {
+  if (e.touches.length < 2) {
+    state.firstTwoTouchSize = 0
+    state.firstScale = 1
+    target.scale = Math.max(target.scale, MIN_SCALE)
+    correctPosition()
+  }
+  endDrag()
+}
+
+// 鼠标事件处理
+function handleMouseDown(e) {
+  state.mouseHold = true
+  startDrag(e)
+}
+
+function handleMouseMove(e) {
+  if (state.mouseHold) {
+    moveImage(e)
+  }
+}
+
+function handleMouseUp() {
+  state.mouseHold = false
+  endDrag()
+}
+
+// 双指缩放处理
+function handlePinch(e) {
+  if (e.touches.length < 2) return
+  
+  const touch1 = e.touches[0]
+  const touch2 = e.touches[1]
+  const distance = Math.sqrt(
+    Math.pow(touch1.clientX - touch2.clientX, 2) + 
+    Math.pow(touch1.clientY - touch2.clientY, 2)
+  )
+  
+  if (state.firstTwoTouchSize === 0) {
+    state.firstTwoTouchSize = distance
+    state.firstScale = target.scale
+  }
+  
+  const scaleRatio = distance / state.firstTwoTouchSize
+  target.scale = utils.clamp(
+    state.firstScale * scaleRatio, 
+    scaleRange.value.min, 
+    scaleRange.value.max
+  )
+}
+
+// 滑块事件处理
+function handleSliderMove(e) {
+  if (!e.touches && !state.sliderMouseActive) {
+    return
+  }
+  
+  const clientWidth = document.documentElement.clientWidth
+  const touch = e.touches ? e.touches[0] : e
+  let x = touch.clientX - clientWidth * 0.0625
+  
+  x = utils.clamp(x, 0, clothW.value)
+  
+  const ratio = x / clothW.value
+  target.scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * ratio
+  state.sliderPercent = ratio
+}
+
+function handleSliderEnd() {
+  correctPosition()
+  state.sliderMouseActive = false
+}
+
+function handleSliderDown() {
+  state.sliderMouseActive = true
+}
+
+// 生命周期
+onMounted(() => {
+  if (!props.edit) {
+    canvasSize.width = document.documentElement.clientWidth
+    canvasSize.height = document.documentElement.clientHeight
+  }
+  
+  if (props.file) {
+    loadImage(props.file)
+  }
+})
+
+onUnmounted(() => {
+  utils.clearSelectTimer()
+  
+  // 清理创建的 URL 对象
+  if (target.url && target.url.startsWith('blob:')) {
+    URL.revokeObjectURL(target.url)
+  }
+})
 </script>
+
 <style lang="less" scoped>
 .container {
   width: 100%;

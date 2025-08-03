@@ -1,7 +1,11 @@
-import index from '@/views/index'
-// import notfound from "@/views/notfound";
+import index from '../views/index.vue'
+// import notfound from "../views/notfound";
+import Vue from 'vue'
+import VueRouter from 'vue-router'
 
-var routes = [
+Vue.use(VueRouter)
+
+const routes = [
   {
     path: '/',
     nav: true,
@@ -25,4 +29,9 @@ var routes = [
     redirect: '/notfound',
   },
 ]
-export default routes
+
+export default new VueRouter({
+  mode: 'history',
+  base: import.meta.env.BASE_URL,
+  routes
+})
