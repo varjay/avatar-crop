@@ -1,1 +1,38 @@
+# 开发环境和构建工具
+/src
+/node_modules
+/.vscode
+/.idea
+/.git
+
+# 配置文件
+/.browserslistrc
+/.eslintrc.js
+/postcss.config.js
+/prettier.config.js
+/vite.config.js
+/.env
+/.env.*
+
+# 构建和测试相关
+/dist
+/coverage
+/tests
+/test
+
+# 示例和演示文件
 /public/img/demo.gif
+/public/favicon.ico
+/public/index.html
+/public/manifest.json
+/public/robots.txt
+
+# 其他不需要发布的文件
+.gitignore
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+src

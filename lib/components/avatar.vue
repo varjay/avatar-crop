@@ -72,7 +72,7 @@
     ></canvas>
   </div>
 </template>
-<script setup name="VueAvatar">
+<script setup name="VAvatarCropper">
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 
 // Props 定义

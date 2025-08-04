@@ -2,7 +2,7 @@
   <div id="app" class="app">
     <!-- 头像裁剪区域 -->
     <div v-if="file" class="avatar-editor-container">
-      <vue-avatar @cancel="cancel" @done="done" :file="file" @touch="touch" />
+      <v-avatar-cropper @cancel="cancel" @done="done" :file="file" @touch="touch" />
     </div>
     
     <!-- 主界面 -->

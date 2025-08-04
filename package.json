@@ -1,6 +1,6 @@
 {
-  "name": "vuejs-avatar-crop",
-  "version": "1.1.0",
+  "name": "v-avatar-cropper",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -32,7 +32,17 @@
     "avatar-crop",
     "头像裁剪",
     "微信头像裁剪",
-    "wechat"
+    "wechat",
+    "vue3",
+    "vue-component",
+    "image-cropper",
+    "avatar-editor",
+    "mobile-friendly",
+    "touch-gestures",
+    "responsive",
+    "无依赖",
+    "移动端",
+    "轻量级"
   ],
   "author": "virjay",
   "license": "ISC"

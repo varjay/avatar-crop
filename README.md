@@ -1,4 +1,4 @@
-# Vue Avatar Crop
+# V Avatar Cropper
 
 ![演示动图](https://github.com/varjay/avatar-crop/raw/master/public/img/demo.gif)
 
@@ -16,7 +16,7 @@
 ## 📦 安装
 
 ```bash
-npm install vue-avatar-crop-wechat --save
+npm install v-avatar-cropper --save
 ```
 
 ## 🚀 快速开始
@@ -25,7 +25,7 @@ npm install vue-avatar-crop-wechat --save
 
 ```javascript
 import {createApp} from 'vue'
-import avatar from 'vue-avatar-crop-wechat'
+import avatar from 'v-avatar-cropper'
 import App from './App.vue'
 
 const app = createApp(App)
@@ -36,11 +36,11 @@ app.mount('#app')
 ### 局部引入
 
 ```javascript
-import VueAvatar from 'vue-avatar-crop-wechat'
+import VAvatarCropper from 'v-avatar-cropper'
 
 export default {
   components: {
-    VueAvatar,
+    VAvatarCropper,
   },
 }
 ```
@@ -54,7 +54,7 @@ export default {
     <input type="file" @change="handleFileChange" accept="image/*" />
 
     <!-- 头像裁剪组件 -->
-    <vue-avatar v-if="selectedFile" :file="selectedFile" @cancel="handleCancel" @done="handleDone" />
+    <v-avatar-cropper v-if="selectedFile" :file="selectedFile" @cancel="handleCancel" @done="handleDone" />
   </div>
 </template>
 
@@ -123,7 +123,7 @@ function handleDone(result) {
     </div>
 
     <!-- 裁剪组件 -->
-    <vue-avatar v-if="currentFile" :file="currentFile" @cancel="cancelCrop" @done="completeCrop" @touch="onImageTouch" />
+    <v-avatar-cropper v-if="currentFile" :file="currentFile" @cancel="cancelCrop" @done="completeCrop" @touch="onImageTouch" />
 
     <!-- 结果展示 -->
     <div v-if="croppedResult" class="result-area">
@@ -248,7 +248,7 @@ function resetDemo() {
 
 ```vue
 <template>
-  <vue-avatar :file="imageUrl" :edit="false" />
+  <v-avatar-cropper :file="imageUrl" :edit="false" />
 </template>
 
 <script setup>
