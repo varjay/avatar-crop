@@ -350,10 +350,6 @@ avatar-crop/
 
 **virjay** - [GitHub](https://github.com/varjay)
 
-## 🙏 致谢
-
-感谢所有为这个项目做出贡献的开发者！
-
 ---
 
 如果这个项目对你有帮助，请给个 ⭐️ 支持一下！
